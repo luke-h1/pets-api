@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 import dotenv from 'dotenv';
 import CreateServer from './server';
 import logger from './utils/logger';

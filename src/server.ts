@@ -28,6 +28,7 @@ class CreateServer {
     this.app.disable('x-powered-by');
     this.app.use(cors());
     this.app.use(express.json());
+    this.app.set('json spaces', 2);
     this.app.use(compression());
     this.routes.setupRoutes();
     this.handleNotFound();

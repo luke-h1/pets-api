@@ -1,0 +1,15 @@
+model Pet {
+  id    Int    @id @default(autoincrement())
+  name  String
+  description String
+  age   Int
+  breed String
+  available Boolean @default(true)
+
+  species String
+
+  tags String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
