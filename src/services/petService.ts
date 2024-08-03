@@ -1,30 +1,61 @@
-import { Pet, PrismaClient } from '@prisma/client';
-import prisma from '../db';
+import Database from '../db/database';
+import { Pet } from '../entities/Pet';
+import {
+  CreatePetInput,
+  DeletePetInput,
+  GetPetInput,
+  UpdatePetInput,
+} from '../schema/pet.schema';
+import logger from '../utils/logger';
 
 export default class PetService {
-  private readonly prisma: PrismaClient;
+  private readonly db: typeof Database;
 
   constructor() {
-    this.prisma = prisma;
+    this.db = Database;
   }
 
   async getPets() {
-    return this.prisma.pet.findMany();
+    const orm = await this.db.getInstance();
+
+    const pets = await orm.em.getRepository(Pet).findAll({
+      populate: ['creator', 'tags'],
+    });
+
+    return pets;
   }
 
-  async getPet(id: number) {
-    return this.prisma.pet.findUnique({ where: { id } });
+  async getPet(id: GetPetInput['params']['id']) {
+    const orm = await this.db.getInstance();
+    const pet = await orm.em.getRepository(Pet).findOne(
+      {
+        id: id.toString(),
+      },
+      {
+        populate: ['creator', 'tags'],
+      },
+    );
+
+    return pet;
   }
 
-  async createPet(pet: Pet) {
-    return this.prisma.pet.create({ data: pet });
+  async createPet(pet: CreatePetInput['body']) {}
+
+  async updatePet(
+    id: UpdatePetInput['params']['id'],
+    pet: UpdatePetInput['body'],
+  ) {
+    return null;
   }
 
-  async updatePet(id: number, pet: Pet) {
-    return this.prisma.pet.update({ where: { id }, data: pet });
-  }
+  async deletePet(id: DeletePetInput['params']['id']) {
+    const orm = await this.db.getInstance();
 
-  async deletePet(id: number) {
-    return this.prisma.pet.delete({ where: { id } });
+    const result = await orm.em.getRepository(Pet).nativeDelete({
+      id: id.toString(),
+    });
+
+    logger.info('delete result', result);
+    return null;
   }
 }

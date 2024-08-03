@@ -1,17 +1,49 @@
+import 'express-async-errors';
 import dotenv from 'dotenv';
+import Database from './db/database';
 import CreateServer from './server';
+import { envSchema } from './util/env';
 import logger from './utils/logger';
 
 dotenv.config();
-
 class Main {
-  public static start(): void {
+  private readonly db: typeof Database;
+
+  constructor() {
+    this.db = Database;
+  }
+
+  public async validateEnvironmentVariables() {
+    const environmentVariables = envSchema.safeParse({
+      PORT: process.env.PORT,
+      POSTGRES_DB_NAME: process.env.POSTGRES_DB_NAME,
+      POSTGRES_USER: process.env.POSTGRES_USER,
+      POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+
+      // redis
+      REDIS_HOTNAME: process.env.REDIS_HOTNAME,
+      REDIS_PORT: process.env.REDIS_PORT,
+      REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    });
+    if (!environmentVariables.success) {
+      logger.error(
+        `${JSON.stringify(environmentVariables.error.issues, null, 2)}`,
+      );
+      throw new Error('issue reading environment variables');
+    }
+  }
+
+  public async start() {
+    await this.validateEnvironmentVariables();
+    await this.db.runMigrations();
     const app = CreateServer.init();
     const port = process.env.PORT || 8000;
+
     app.listen(port, () => {
       logger.info(`Server running on http://localhost:${port}`);
     });
   }
 }
 
-Main.start();
+const main = new Main();
+main.start();
