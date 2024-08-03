@@ -35,7 +35,7 @@ class Main {
   public async start() {
     await this.validateEnvironmentVariables();
     await this.db.runMigrations();
-    const app = await CreateServer.init();
+    const app = CreateServer.init();
     const port = process.env.PORT || 8000;
 
     app.listen(port, () => {

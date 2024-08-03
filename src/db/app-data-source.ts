@@ -12,6 +12,6 @@ export const dataSource = new DataSource({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   entities: [Pet, Tag, User],
-  migrations: [],
+  migrations: [`${__dirname}/migrations/*{.ts,.js}`],
   logging: process.env.NODE_ENV === 'development',
 });

@@ -14,11 +14,12 @@
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx,css,scss,html}\"",
     "kill:port": "npx kill-port 8000",
     "typeorm": "typeorm-ts-node-commonjs",
-    "db:migration-revert": "typeorm migration:revert -- -d src/db/app-data-source",
-    "db:migration-generate": "pnpm typeorm migration:generate src/db/migrations -d src/db/app-data-source.ts",
-    "db:migration-create-empty": "pnpm typeorm migration:create src/db/migrations/init -- -d src/db/app-data-source",
-    "db:migration-up": "pnpm typeorm migration:run -- -d src/db/app-data-source",
-    "db:migration-show": "typeorm migration:show  -- -d src/db/app-data-source"
+    "db:migration-revert": "pnpm typeorm migration:revert -- -d src/db/app-data-source",
+    "db:migration-generate": "ts-node ./scripts/generate-migration.ts init",
+    "db:migration-create-empty": "pnpm typeorm migration:create src/db/migrations/init -d src/db/app-data-source.ts",
+    "db:migration-up": "ts-node ./scripts/run-migration.ts",
+    "db:drop": "ts-node ./scripts/drop-database.ts",
+    "db:migration-show": "typeorm migration:show -d src/db/app-data-source"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

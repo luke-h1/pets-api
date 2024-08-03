@@ -52,7 +52,7 @@ class CreateServer {
 
     const RedisStore = connectRedis(session);
 
-    // session middleware
+    // session authentication middleware
     this.app.use(
       session({
         store: new RedisStore({
