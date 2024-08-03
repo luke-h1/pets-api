@@ -18,8 +18,12 @@
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "baseUrl": ".",
+    "isolatedModules": true,
+    "noEmit": true,
+    "noImplicitReturns": true
   },
-  "include": ["src"],
+  "include": ["src", "test", "src/types/env.d.ts"],
   "exclude": ["node_modules"]
 }

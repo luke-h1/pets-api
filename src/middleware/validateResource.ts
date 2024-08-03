@@ -6,6 +6,8 @@ import logger from '../utils/logger';
  * Middleware to validate a request body, query, and params against a {@param schema} Zod schema
  */
 const validateResource = (schema: AnyZodObject) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   // eslint-disable-next-line consistent-return
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -19,6 +21,9 @@ const validateResource = (schema: AnyZodObject) => {
       logger.warn('validation exception caught', JSON.stringify(e));
 
       if (e instanceof z.ZodError) {
+        // throw new BadRequestError({
+
+        // })
         return res.status(400).json({
           status: 'error',
           message: 'Validation failed',

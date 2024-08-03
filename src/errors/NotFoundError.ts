@@ -1,12 +1,15 @@
 import ApiError from './ApiError';
 
 export default class NotFoundError extends ApiError {
-  constructor(err?: { title?: string; code?: ApiError['code'] }) {
+  constructor(err?: ApiError) {
     super({
       title: err?.title ?? 'The requested resource could not be found.',
       type: 'Not Found',
-      status: 404,
+      statusCode: 404,
       code: err?.code ?? 'NotFound',
+      message:
+        err?.message ??
+        'The requested resource could not be found. Please check your query and try again.',
     });
   }
 }

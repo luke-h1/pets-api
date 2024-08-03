@@ -1,6 +1,12 @@
-import { Express } from 'express';
+import { Express, Response } from 'express';
 import PetController from '../../controllers/petController';
 import validateResource from '../../middleware/validateResource';
+import {
+  CreatePetRequest,
+  DeletePetReqeust,
+  GetPetRequest,
+  UpdatePetRequest,
+} from '../../requests/pet';
 import {
   createPetSchema,
   deletePetSchema,
@@ -26,15 +32,14 @@ export default class PetRoutes {
     this.app.get(
       '/api/pets/:id',
       validateResource(getPetSchema),
-      (req, res) => {
-        return this.petController.getPet(req, res);
-      },
+      (req: GetPetRequest, res: Response) =>
+        this.petController.getPet(req, res),
     );
 
     this.app.post(
       '/api/pets',
       validateResource(createPetSchema),
-      (req, res) => {
+      (req: CreatePetRequest, res: Response) => {
         return this.petController.createPet(req, res);
       },
     );
@@ -42,7 +47,7 @@ export default class PetRoutes {
     this.app.put(
       '/api/pets/:id',
       validateResource(updatePetSchema),
-      (req, res) => {
+      (req: UpdatePetRequest, res: Response) => {
         return this.petController.updatePet(req, res);
       },
     );
@@ -50,7 +55,7 @@ export default class PetRoutes {
     this.app.delete(
       '/api/pets/:id',
       validateResource(deletePetSchema),
-      (req, res) => {
+      (req: DeletePetReqeust, res: Response) => {
         return this.petController.deletePet(req, res);
       },
     );
