@@ -1,7 +1,9 @@
+import 'reflect-metadata';
 import 'express-async-errors';
 import compression from 'compression';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import session from 'express-session';
 import RedisDatabase from './db/redis';
@@ -10,6 +12,8 @@ import errorHandler from './errors/errorHandler';
 import Routes from './routes';
 import testRedis from './test/redis';
 import logger from './utils/logger';
+
+dotenv.config();
 
 class CreateServer {
   private readonly app: Express;
@@ -35,7 +39,7 @@ class CreateServer {
     });
   }
 
-  public init(): Express {
+  public init() {
     // *order is important*
 
     // middleware
@@ -64,7 +68,7 @@ class CreateServer {
             logger.error(`redis session error: ${error}`);
           },
         }),
-        secret: process.env.SESSION_SECRET,
+        secret: process.env.SESSION_SECRET as string,
         resave: false,
         saveUninitialized: false,
         cookie: {

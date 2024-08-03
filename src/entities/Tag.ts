@@ -1,20 +1,16 @@
 /* eslint-disable import/no-cycle */
-import {
-  Collection,
-  Entity,
-  ManyToMany,
-  Property,
-} from '@mikro-orm/postgresql';
+import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
 import { BaseEntity } from './BaseEntity';
 import { Pet } from './Pet';
 
 @Entity()
 export class Tag extends BaseEntity {
-  @Property()
+  @Column()
   name: string;
 
   @ManyToMany(() => Pet, p => p.tags)
-  pets = new Collection<Pet>(this);
+  @JoinTable()
+  pets: Pet[];
 
   constructor(name: string) {
     super();

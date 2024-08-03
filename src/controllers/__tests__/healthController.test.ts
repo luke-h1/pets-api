@@ -12,9 +12,10 @@ const redis = RedisDatabase.getInstance();
 describe('health', () => {
   beforeAll(async () => {
     const orm = await database.getInstance();
-    orm.config.set('dbName', 'express-test-db');
-    orm.config.getLogger().setDebugMode(false);
-    await orm.getSchemaGenerator().clearDatabase();
+    orm.setOptions({
+      applicationName: 'express-test-db',
+      name: 'express-test-db',
+    });
   });
 
   beforeEach(async () => {
@@ -23,7 +24,7 @@ describe('health', () => {
 
   afterAll(async () => {
     const orm = await database.getInstance();
-    await orm.close();
+    await orm.destroy();
   });
 
   test('global error handler returns 404', async () => {
@@ -50,7 +51,7 @@ describe('health', () => {
 
   test('healthcheck responds when db & cache is not connected', async () => {
     const orm = await database.getInstance();
-    await orm.close();
+    await orm.destroy();
 
     redis.on('close', () => {
       return null;

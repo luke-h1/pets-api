@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs';
+import { v4 } from 'uuid';
 import Database from '../db/database';
+import RedisDatabase from '../db/redis';
 import { User, role } from '../entities/User';
 import BadRequestError from '../errors/BadRequestError';
 import { authErrorCodes } from '../errors/auth';
@@ -13,18 +15,24 @@ import logger from '../utils/logger';
 export default class AuthService {
   private readonly db: typeof Database;
 
+  private readonly redis: typeof RedisDatabase;
+
   constructor() {
     this.db = Database;
+    this.redis = RedisDatabase;
   }
 
   async register(user: CreateUserInput['body']) {
     const hashedPassword = await bcrypt.hash(user.password, 10);
 
     const db = await this.db.getInstance();
-    const userRepository = db.em.getRepository(User);
+
+    const userRepository = db.getRepository(User);
 
     const emailExists = await userRepository.findOne({
-      email: user.email,
+      where: {
+        email: user.email,
+      },
     });
 
     if (emailExists) {
@@ -32,24 +40,26 @@ export default class AuthService {
       return authErrorCodes.EmailAlreadyExists;
     }
 
-    const result = db.em.create(User, {
-      ...user,
-      role: role.user,
-      fullName: `${user.firstName} + ${user.lastName}`,
-      password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-    await db.em.flush();
+    const { raw } = await db
+      .createQueryBuilder()
+      .insert()
+      .into(User)
+      .values({
+        ...user,
+        role: role.user,
+        password: hashedPassword,
+      })
+      .returning('*')
+      .execute();
 
-    return result;
+    return raw[0];
   }
 
   async login(user: LoginUserInput['body']) {
     const db = await this.db.getInstance();
-    const userRepository = db.em.getRepository(User);
+    const userRepository = db.getRepository(User);
 
-    const u = await userRepository.findOne({ email: user.email });
+    const u = await userRepository.findOne({ where: { email: user.email } });
 
     if (!u) {
       logger.warn(`${authErrorCodes.UserNotFound} triggered`);
@@ -71,16 +81,39 @@ export default class AuthService {
     return u;
   }
 
-  async resetPassword(user: ResetPasswordInput['body']) {
-    throw new Error('not implemented');
+  async resetPassword(user: ResetPasswordInput['body']): Promise<boolean> {
+    const db = await this.db.getInstance();
+    const userRepository = db.getRepository(User);
+
+    const u = await userRepository.findOne({
+      where: {
+        email: user.email,
+      },
+    });
+
+    if (!u) {
+      return false;
+    }
+
+    const token = v4();
+
+    const PREFIX = 'AUTH_FORGOT_PASSWORD';
+
+    const result = await this.redis.setWithExpr(`${PREFIX}${token}`, u.id, {
+      token: 'EX',
+      time: 1000 * 60 * 60 * 24 * 1, // 1 day to reset pwd
+    });
+    return result;
   }
 
   async deleteAccount(id: string) {
     const db = await this.db.getInstance();
-    const userRepository = db.em.getRepository(User);
+    const userRepository = db.getRepository(User);
 
     const user = await userRepository.findOne({
-      id,
+      where: {
+        id,
+      },
     });
 
     if (!user) {
@@ -93,10 +126,7 @@ export default class AuthService {
     }
 
     try {
-      await Promise.all([
-        await db.em.nativeDelete(User, id),
-        await db.em.flush(),
-      ]);
+      await userRepository.delete(id);
       return true;
     } catch (e) {
       logger.warn(`Issue deleting account with id: ${id}`);

@@ -14,19 +14,17 @@ export default class HealthService {
 
   async health(): Promise<{ db: boolean; cache: boolean }> {
     const orm = await this.db.getInstance();
-    const redis = this.redis.getInstance();
-    const { ok } = await orm.checkConnection();
+    const ok = orm.isInitialized;
     let cacheMsg = '';
 
     try {
-      const cache = await redis.ping();
+      const cache = await this.redis.ping();
       cacheMsg = cache;
     } catch (error) {
       logger.error(`Cache connection error: ${error}`);
     }
 
     const cacheOk = cacheMsg === 'PONG';
-
     logger.info(`DB connection check result -> DB: ${ok}, cache: ${cacheOk}`);
 
     return {

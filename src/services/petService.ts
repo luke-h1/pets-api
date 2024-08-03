@@ -17,24 +17,18 @@ export default class PetService {
 
   async getPets() {
     const orm = await this.db.getInstance();
-
-    const pets = await orm.em.getRepository(Pet).findAll({
-      populate: ['creator', 'tags'],
-    });
+    const pets = await orm.getRepository(Pet).find({});
 
     return pets;
   }
 
   async getPet(id: GetPetInput['params']['id']) {
     const orm = await this.db.getInstance();
-    const pet = await orm.em.getRepository(Pet).findOne(
-      {
+    const pet = await orm.getRepository(Pet).findOne({
+      where: {
         id: id.toString(),
       },
-      {
-        populate: ['creator', 'tags'],
-      },
-    );
+    });
 
     return pet;
   }
@@ -50,10 +44,7 @@ export default class PetService {
 
   async deletePet(id: DeletePetInput['params']['id']) {
     const orm = await this.db.getInstance();
-
-    const result = await orm.em.getRepository(Pet).nativeDelete({
-      id: id.toString(),
-    });
+    const result = await orm.getRepository(Pet).delete(id);
 
     logger.info('delete result', result);
     return null;

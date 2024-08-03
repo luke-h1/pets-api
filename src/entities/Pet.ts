@@ -1,12 +1,6 @@
 /* eslint-disable import/no-cycle */
-import {
-  Collection,
-  Entity,
-  Enum,
-  ManyToMany,
-  ManyToOne,
-  Property,
-} from '@mikro-orm/postgresql';
+import { Entity, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+
 import { BaseEntity } from './BaseEntity';
 import { Tag } from './Tag';
 import { User } from './User';
@@ -19,51 +13,30 @@ const status = {
 
 type PetStatus = (typeof status)[keyof typeof status];
 
-@Entity()
+@Entity({ comment: 'Pets' })
 export class Pet extends BaseEntity {
-  @Property({ type: 'text' })
+  @Column({ type: 'text' })
   name: string;
 
-  @Property({ type: 'text' })
+  @Column({ type: 'text' })
   type: string;
 
-  @Property({ type: 'text' })
+  @Column({ type: 'text' })
   breed: string;
 
-  @Enum(() => status)
+  @Column({ type: 'enum', enum: status, default: status.available })
   status: PetStatus;
 
-  @Property({ type: 'int' })
+  @Column({ type: 'int' })
   birthYear: number;
 
-  @Property({ type: 'text' })
+  @Column({ type: 'text' })
   photoUrl: string;
 
   @ManyToMany(() => Tag)
-  tags = new Collection<Tag>(this);
+  @JoinTable()
+  tags: Tag[];
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, u => u.id)
   creator: User;
-
-  constructor(
-    name: string,
-    type: string,
-    breed: string,
-    // eslint-disable-next-line no-shadow
-    status: PetStatus,
-    birthYear: number,
-    photoUrl: string,
-    creator: User,
-    tags: Collection<Tag>,
-  ) {
-    super();
-    this.name = name;
-    this.type = type;
-    this.breed = breed;
-    this.status = status;
-    this.birthYear = birthYear;
-    this.photoUrl = photoUrl;
-    this.creator = creator;
-    this.tags = tags;
-  }
 }

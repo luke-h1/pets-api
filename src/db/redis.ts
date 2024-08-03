@@ -124,5 +124,11 @@ class RedisDatabase {
       return false;
     }
   }
+
+  public async ping(): Promise<string> {
+    const db = this.getInstance();
+    const result = await db.ping();
+    return result;
+  }
 }
 export default new RedisDatabase();

@@ -1,8 +1,9 @@
-import { MikroORM } from '@mikro-orm/postgresql';
+import { DataSource } from 'typeorm';
 import logger from '../utils/logger';
+import { dataSource } from './app-data-source';
 
 class Database {
-  public instance: MikroORM | null;
+  public instance: DataSource | null;
 
   constructor() {
     this.instance = null;
@@ -10,7 +11,8 @@ class Database {
 
   public async getInstance() {
     if (!this.instance) {
-      this.instance = await MikroORM.init();
+      this.instance = await dataSource.initialize();
+      logger.info('Established DB instance', { tags: 'db' });
     }
 
     return this.instance;
@@ -18,12 +20,8 @@ class Database {
 
   public async runMigrations() {
     const db = await this.getInstance();
-    const migrator = db.getMigrator();
-
-    const pendingMigrations = await migrator.getPendingMigrations();
-    logger.info(`running ${pendingMigrations.length} migration(s)`);
-
-    await migrator.up();
+    const migrations = await db.runMigrations({ transaction: 'all' });
+    logger.info(`ran ${migrations.length} migration(s)`);
   }
 }
 export default new Database();
