@@ -1,12 +1,16 @@
-import { PrimaryKey, Property } from '@mikro-orm/postgresql';
+import {
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 export abstract class BaseEntity {
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id: string;
 
-  @Property()
-  createdAt = new Date();
+  @CreateDateColumn()
+  createdAt: number;
 
-  @Property({ onUpdate: () => new Date() })
-  updatedAt = new Date();
+  @UpdateDateColumn()
+  updatedAt: number;
 }

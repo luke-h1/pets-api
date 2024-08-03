@@ -1,11 +1,11 @@
 import {
-  Cascade,
-  Collection,
+  AfterInsert,
+  AfterLoad,
+  AfterUpdate,
+  Column,
   Entity,
-  Enum,
   OneToMany,
-  Property,
-} from '@mikro-orm/postgresql';
+} from 'typeorm';
 import { BaseEntity } from './BaseEntity';
 
 // eslint-disable-next-line import/no-cycle
@@ -21,41 +21,28 @@ type UserRole = (typeof role)[keyof typeof role];
 
 @Entity()
 export class User extends BaseEntity {
-  @Property({ type: 'text' })
+  @Column({ type: 'text' })
   firstName: string;
 
-  @Property({ type: 'text' })
+  @Column({ type: 'text' })
   lastName: string;
 
-  @Property({ type: 'text', unique: true })
+  @Column({ type: 'text', unique: true })
   email: string;
 
-  @Property({ type: 'text' })
+  @Column({ type: 'text' })
   password: string;
 
-  @Enum(() => role)
-  role: UserRole = role.user;
+  @Column({ type: 'enum', enum: role, default: role.user })
+  role: UserRole;
 
-  @OneToMany(() => Pet, p => p.creator, { cascade: [Cascade.ALL] })
-  pets = new Collection<Pet>(this);
+  @OneToMany(() => Pet, p => p.creator)
+  pets: Pet[];
 
-  @Property({ persist: false })
+  @AfterLoad()
+  @AfterInsert()
+  @AfterUpdate()
   get fullName(): string {
     return `${this.firstName} ${this.lastName}`;
-  }
-
-  constructor(
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string,
-  ) {
-    super();
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.password = password;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
   }
 }

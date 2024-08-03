@@ -1,11 +1,8 @@
-import 'express-async-errors';
-import dotenv from 'dotenv';
 import Database from './db/database';
 import CreateServer from './server';
 import { envSchema } from './util/env';
 import logger from './utils/logger';
 
-dotenv.config();
 class Main {
   private readonly db: typeof Database;
 
@@ -13,7 +10,7 @@ class Main {
     this.db = Database;
   }
 
-  public async validateEnvironmentVariables() {
+  private async validateEnvironmentVariables() {
     const environmentVariables = envSchema.safeParse({
       PORT: process.env.PORT,
       POSTGRES_DB_NAME: process.env.POSTGRES_DB_NAME,
@@ -30,13 +27,15 @@ class Main {
         `${JSON.stringify(environmentVariables.error.issues, null, 2)}`,
       );
       throw new Error('issue reading environment variables');
+    } else {
+      logger.info('parsed env variables succesfully');
     }
   }
 
   public async start() {
     await this.validateEnvironmentVariables();
     await this.db.runMigrations();
-    const app = CreateServer.init();
+    const app = await CreateServer.init();
     const port = process.env.PORT || 8000;
 
     app.listen(port, () => {
