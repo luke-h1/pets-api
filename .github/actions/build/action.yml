@@ -18,9 +18,20 @@ runs:
       run: pnpm lint
       shell: bash
 
+    - name: start test DB
+      run: docker-compose up -d
+      shell: bash
+
+    - name: migrate DB
+      run: pnpm db:generate && pnpm db:up
+      shell: bash
+
     - name: jest
       run: pnpm test:ci
       shell: bash
+
+    - name: stop test DB
+      run: docker-compose down
 
     - name: tsc
       run: pnpm tsc
