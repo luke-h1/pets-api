@@ -19,7 +19,7 @@ runs:
       shell: bash
 
     - name: start test DB
-      run: docker-compose up -d
+      run: docker compose up -d
       shell: bash
 
     - name: migrate DB
@@ -31,7 +31,7 @@ runs:
       shell: bash
 
     - name: stop test DB
-      run: docker-compose down
+      run: docker compose down
       shell: bash
 
     - name: tsc
