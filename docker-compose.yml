@@ -14,20 +14,20 @@ services:
     expose:
       - 5432
 
-  # postgres-test:
-  #   container_name: postgres-test-pets
-  #   image: 'postgres:latest'
-  #   restart: always
-  #   ports:
-  #     - 5555:5432
-  #   environment:
-  #     POSTGRES_USER: pets
-  #     POSTGRES_PASSWORD: pets
-  #     POSTGRES_DB: pets
-  #   volumes:
-  #     - .dbdata:/var/lib/test/postgres
-  #   expose:
-  #     - 5555
+  postgres-test:
+    container_name: postgres-test-pets
+    image: 'postgres:latest'
+    restart: always
+    ports:
+      - 5555:5432
+    environment:
+      POSTGRES_USER: pets
+      POSTGRES_PASSWORD: pets
+      POSTGRES_DB: pets
+    volumes:
+      - .dbdata:/var/lib/test/postgres
+    expose:
+      - 5555
 
   redis:
     image: redis:latest

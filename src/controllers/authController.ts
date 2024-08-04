@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import z from 'zod';
+import omit from 'lodash/omit';
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
 import { authErrorCodes } from '../errors/auth';
@@ -28,44 +28,106 @@ export default class AuthController {
         title: 'Email already exists',
         statusCode: 400,
         message: 'Email already exists',
+        errors: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            received: 'undefined',
+            path: ['body', 'email'],
+            message: 'Email already exists',
+          },
+        ],
       });
     }
 
-    req.session.userId = result.id;
+    req.session.userId = result?.id;
 
-    return res.status(201).json(result);
+    return res.status(201).json(omit(result, 'password'));
   }
 
   async login(req: LoginRequest, res: Response) {
     const result = await this.authService.login(req.body);
 
-    if (result === authErrorCodes.UserNotFound) {
-      throw new NotFoundError({
-        code: authErrorCodes.UserNotFound,
-        title: 'User not found',
-        statusCode: 404,
-        message: 'User not found',
-      });
+    switch (result) {
+      case authErrorCodes.InvalidCredentials: {
+        throw new BadRequestError({
+          message: 'Invalid credentials',
+          statusCode: 401,
+          type: 'Unauthorized',
+          code: authErrorCodes.InvalidCredentials,
+          title: 'Bad credentials supplied',
+          errors: [
+            {
+              code: 'invalid_type',
+              expected: 'string',
+              received: 'undefined',
+              path: ['body', 'email'],
+              message: 'Invalid email or password',
+            },
+          ],
+        });
+      }
+
+      case authErrorCodes.UserNotFound: {
+        throw new NotFoundError({
+          code: authErrorCodes.UserNotFound,
+          title: 'User not found',
+          statusCode: 404,
+          message: 'User not found',
+          errors: [
+            {
+              code: 'invalid_type',
+              expected: 'string',
+              received: 'undefined',
+              path: ['body', 'email'],
+              message: 'User not found',
+            },
+          ],
+        });
+      }
+
+      default:
+        req.session.userId = result.id;
+        return res.status(200).json(omit(result, 'password'));
     }
-
-    req.session.userId = result.id;
-
-    return res.status(200).json(result);
   }
 
   async logout(req: Request, res: Response) {
-    throw new Error('Not implemented');
+    req.session.destroy((e: unknown) => {
+      res.clearCookie('connect.sid');
+      if (e) {
+        return res.status(400).json({
+          msg: 'issue clearing cookie',
+        });
+      }
+      return res.status(200).send();
+    });
   }
 
   async resetPassword(req: ResetPasswordRequest, res: Response) {
-    throw new Error('Not implemented');
+    const result = await this.authService.resetPassword(req.body);
+
+    if (result) {
+      return res.status(200).json({ message: 'Password reset' });
+    }
+
+    return res.status(400).json({ message: 'Password reset failed' });
   }
 
   async deleteAccount(req: Request, res: Response) {
-    throw new Error('Not implemented');
+    const result = await this.authService.deleteAccount(req.body);
+
+    if (result) {
+      return res.status(200).json({ message: 'Account deleted' });
+    }
+
+    return res.status(400).json({ message: 'Account deletion failed' });
   }
 
   async isAuthenticated(req: Request, res: Response) {
-    throw new Error('Not implemented');
+    const isAuth = req.session && req.session.userId;
+    return res.status(200).json({
+      isAuth: !!isAuth,
+    });
   }
 }

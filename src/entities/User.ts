@@ -1,12 +1,11 @@
 import {
-  AfterInsert,
-  AfterLoad,
-  AfterUpdate,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
 
 // eslint-disable-next-line import/no-cycle
 import { Pet } from './Pet';
@@ -20,7 +19,16 @@ export const role = {
 type UserRole = (typeof role)[keyof typeof role];
 
 @Entity()
-export class User extends BaseEntity {
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @CreateDateColumn()
+  createdAt: number;
+
+  @UpdateDateColumn()
+  updatedAt: number;
+
   @Column({ type: 'text' })
   firstName: string;
 
@@ -30,7 +38,7 @@ export class User extends BaseEntity {
   @Column({ type: 'text', unique: true })
   email: string;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'text', select: false })
   password: string;
 
   @Column({ type: 'enum', enum: role, default: role.user })
@@ -38,11 +46,4 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Pet, p => p.creator)
   pets: Pet[];
-
-  @AfterLoad()
-  @AfterInsert()
-  @AfterUpdate()
-  get fullName(): string {
-    return `${this.firstName} ${this.lastName}`;
-  }
 }

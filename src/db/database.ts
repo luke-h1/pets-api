@@ -12,9 +12,8 @@ class Database {
   public async getInstance() {
     if (!this.instance) {
       this.instance = await dataSource.initialize();
-      logger.info('Established DB instance', { tags: 'db' });
+      logger.info(`Connected to db`, { tags: 'db' });
     }
-
     return this.instance;
   }
 

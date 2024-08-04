@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import Database from './db/database';
 import CreateServer from './server';
 import { envSchema } from './util/env';

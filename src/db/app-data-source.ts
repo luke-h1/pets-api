@@ -1,9 +1,10 @@
-import { DataSource } from 'typeorm';
+import 'reflect-metadata';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { Pet } from '../entities/Pet';
 import { Tag } from '../entities/Tag';
 import { User } from '../entities/User';
 
-export const dataSource = new DataSource({
+const options: DataSourceOptions = {
   applicationName: 'pets-api',
   type: 'postgres',
   host: 'localhost',
@@ -13,5 +14,16 @@ export const dataSource = new DataSource({
   password: process.env.POSTGRES_PASSWORD,
   entities: [Pet, Tag, User],
   migrations: [`${__dirname}/migrations/*{.ts,.js}`],
-  logging: process.env.NODE_ENV === 'development',
-});
+};
+
+export const dataSource =
+  process.env.NODE_ENV === 'test'
+    ? new DataSource({
+        ...options,
+        port: 5555,
+        migrationsRun: true,
+        dropSchema: true,
+      })
+    : new DataSource({
+        ...options,
+      });

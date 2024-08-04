@@ -10,6 +10,7 @@ export default class NotFoundError extends ApiError {
       message:
         err?.message ??
         'The requested resource could not be found. Please check your query and try again.',
+      errors: err?.errors ?? [],
     });
   }
 }

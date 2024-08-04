@@ -1,4 +1,5 @@
-import bcrypt from 'bcryptjs';
+import 'reflect-metadata';
+import omit from 'lodash/omit';
 import { v4 } from 'uuid';
 import Database from '../db/database';
 import RedisDatabase from '../db/redis';
@@ -11,74 +12,89 @@ import {
   ResetPasswordInput,
 } from '../schema/auth.schema';
 import logger from '../utils/logger';
+import PasswordService from './passwordService';
 
 export default class AuthService {
   private readonly db: typeof Database;
 
   private readonly redis: typeof RedisDatabase;
 
+  private readonly passwordService: PasswordService;
+
   constructor() {
     this.db = Database;
     this.redis = RedisDatabase;
+    this.passwordService = new PasswordService();
   }
 
   async register(user: CreateUserInput['body']) {
-    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const hashedPassword = await this.passwordService.hashPassword(
+      user.password,
+    );
 
     const db = await this.db.getInstance();
+    let u: User | undefined;
 
-    const userRepository = db.getRepository(User);
+    try {
+      const { raw } = await db
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
+          ...user,
+          role: role.user,
+          password: hashedPassword,
+        })
+        .returning('*')
+        .execute();
 
-    const emailExists = await userRepository.findOne({
-      where: {
-        email: user.email,
-      },
-    });
-
-    if (emailExists) {
-      logger.warn(`${authErrorCodes.EmailAlreadyExists} triggered`);
-      return authErrorCodes.EmailAlreadyExists;
+      // eslint-disable-next-line prefer-destructuring
+      u = raw[0];
+    } catch (error) {
+      if ((error as { code: string }).code === '23505') {
+        logger.warn(`${authErrorCodes.EmailAlreadyExists} triggered`);
+        return authErrorCodes.EmailAlreadyExists;
+      }
     }
-
-    const { raw } = await db
-      .createQueryBuilder()
-      .insert()
-      .into(User)
-      .values({
-        ...user,
-        role: role.user,
-        password: hashedPassword,
-      })
-      .returning('*')
-      .execute();
-
-    return raw[0];
+    return u;
   }
 
   async login(user: LoginUserInput['body']) {
     const db = await this.db.getInstance();
-    const userRepository = db.getRepository(User);
 
-    const u = await userRepository.findOne({ where: { email: user.email } });
+    const repo = db.getRepository(User);
+
+    const u = await repo.findOne({
+      where: {
+        email: user.email,
+      },
+      select: {
+        id: true,
+        password: true,
+        email: true,
+      },
+    });
 
     if (!u) {
-      logger.warn(`${authErrorCodes.UserNotFound} triggered`);
+      logger.warn(
+        `${authErrorCodes.UserNotFound} triggered for user ${user.email}`,
+      );
       return authErrorCodes.UserNotFound;
     }
 
-    const isValidPassword = await bcrypt.compare(user.password, u.password);
+    const isValidPassword = await this.passwordService.isValidPassword({
+      hashedPassword: u.password,
+      plainTextPassword: user.password,
+    });
 
     if (!isValidPassword) {
-      throw new BadRequestError({
-        message: 'Invalid credentials',
-        statusCode: 401,
-        type: 'Unauthorized',
-        code: authErrorCodes.InvalidCredentials,
-        title: 'Bad credentials supplied',
-      });
+      logger.warn(
+        `${authErrorCodes.InvalidCredentials} triggered for user ${user.email}`,
+      );
+      return authErrorCodes.InvalidCredentials;
     }
 
-    return u;
+    return omit(u, 'password');
   }
 
   async resetPassword(user: ResetPasswordInput['body']): Promise<boolean> {
@@ -132,9 +148,5 @@ export default class AuthService {
       logger.warn(`Issue deleting account with id: ${id}`);
       return false;
     }
-  }
-
-  async isAuthenticated() {
-    throw new Error('not implemented');
   }
 }

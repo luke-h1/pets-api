@@ -1,7 +1,15 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  JoinTable,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-import { BaseEntity } from './BaseEntity';
 import { Tag } from './Tag';
 import { User } from './User';
 
@@ -14,7 +22,16 @@ const status = {
 type PetStatus = (typeof status)[keyof typeof status];
 
 @Entity({ comment: 'Pets' })
-export class Pet extends BaseEntity {
+export class Pet {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @CreateDateColumn()
+  createdAt: number;
+
+  @UpdateDateColumn()
+  updatedAt: number;
+
   @Column({ type: 'text' })
   name: string;
 
@@ -33,7 +50,7 @@ export class Pet extends BaseEntity {
   @Column({ type: 'text' })
   photoUrl: string;
 
-  @ManyToMany(() => Tag)
+  @OneToMany(() => Tag, t => t.pets)
   @JoinTable()
   tags: Tag[];
 

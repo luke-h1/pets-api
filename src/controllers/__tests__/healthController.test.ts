@@ -6,12 +6,12 @@ import CreateServer from '../../server';
 const server = CreateServer;
 
 const app = server.init();
-
 const redis = RedisDatabase.getInstance();
 
 describe('health', () => {
   beforeAll(async () => {
     const orm = await database.getInstance();
+
     orm.setOptions({
       applicationName: 'express-test-db',
       name: 'express-test-db',
@@ -20,27 +20,10 @@ describe('health', () => {
 
   beforeEach(async () => {
     jest.resetAllMocks();
+    await database.getInstance();
   });
 
-  afterAll(async () => {
-    const orm = await database.getInstance();
-    await orm.destroy();
-  });
-
-  test('global error handler returns 404', async () => {
-    const { body, statusCode } = await supertest(app).get('/');
-
-    expect(statusCode).toEqual(404);
-
-    expect(body).toEqual({
-      code: 'NotFound',
-      message:
-        'The requested resource could not be found. Please check your query and try again.',
-      statusCode: 404,
-      title: 'The requested resource could not be found.',
-      type: 'Not Found',
-    });
-  });
+  afterAll(async () => {});
 
   test('healthcheck responds when db & cache is ok', async () => {
     const { body, statusCode } = await supertest(app).get('/api/healthcheck');

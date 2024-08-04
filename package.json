@@ -22,6 +22,7 @@
     "db:migration-show": "typeorm migration:show -d src/db/app-data-source"
   },
   "dependencies": {
+    "argon2": "^0.40.3",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "connect-redis": "^6.0.0",

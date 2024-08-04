@@ -1,19 +1,30 @@
 /* eslint-disable import/no-cycle */
-import { Entity, Column, ManyToMany, JoinTable } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import {
+  Entity,
+  Column,
+  JoinTable,
+  ManyToOne,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Pet } from './Pet';
 
 @Entity()
-export class Tag extends BaseEntity {
+export class Tag {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @CreateDateColumn()
+  createdAt: number;
+
+  @UpdateDateColumn()
+  updatedAt: number;
+
   @Column()
   name: string;
 
-  @ManyToMany(() => Pet, p => p.tags)
+  @ManyToOne(() => Pet, p => p.tags)
   @JoinTable()
   pets: Pet[];
-
-  constructor(name: string) {
-    super();
-    this.name = name;
-  }
 }
