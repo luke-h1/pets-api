@@ -19,5 +19,5 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
-      - name: Build frontend
+      - name: Build server
         uses: ./.github/actions/build
