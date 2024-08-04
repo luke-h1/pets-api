@@ -1,16 +1,9 @@
 import 'reflect-metadata';
-import Database from './db/database';
 import CreateServer from './server';
 import { envSchema } from './util/env';
 import logger from './utils/logger';
 
 class Main {
-  private readonly db: typeof Database;
-
-  constructor() {
-    this.db = Database;
-  }
-
   private async validateEnvironmentVariables() {
     const environmentVariables = envSchema.safeParse({
       PORT: process.env.PORT,
@@ -35,8 +28,7 @@ class Main {
 
   public async start() {
     await this.validateEnvironmentVariables();
-    await this.db.runMigrations();
-    const app = CreateServer.init();
+    const app = await CreateServer.init();
     const port = process.env.PORT || 8000;
 
     app.listen(port, () => {

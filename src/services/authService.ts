@@ -1,9 +1,8 @@
 import 'reflect-metadata';
 import omit from 'lodash/omit';
 import { v4 } from 'uuid';
-import Database from '../db/database';
+import { db } from '../db/prisma';
 import RedisDatabase from '../db/redis';
-import { User, role } from '../entities/User';
 import BadRequestError from '../errors/BadRequestError';
 import { authErrorCodes } from '../errors/auth';
 import {
@@ -15,14 +14,11 @@ import logger from '../utils/logger';
 import PasswordService from './passwordService';
 
 export default class AuthService {
-  private readonly db: typeof Database;
-
   private readonly redis: typeof RedisDatabase;
 
   private readonly passwordService: PasswordService;
 
   constructor() {
-    this.db = Database;
     this.redis = RedisDatabase;
     this.passwordService = new PasswordService();
   }
@@ -32,39 +28,32 @@ export default class AuthService {
       user.password,
     );
 
-    const db = await this.db.getInstance();
-    let u: User | undefined;
-
-    try {
-      const { raw } = await db
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values({
-          ...user,
-          role: role.user,
-          password: hashedPassword,
-        })
-        .returning('*')
-        .execute();
-
-      // eslint-disable-next-line prefer-destructuring
-      u = raw[0];
-    } catch (error) {
-      if ((error as { code: string }).code === '23505') {
-        logger.warn(`${authErrorCodes.EmailAlreadyExists} triggered`);
-        return authErrorCodes.EmailAlreadyExists;
-      }
+    const emailExists = await db.user.findFirst({
+      where: {
+        email: user.email,
+      },
+    });
+    if (emailExists) {
+      logger.warn(`${authErrorCodes.EmailAlreadyExists} triggered`);
+      return authErrorCodes.EmailAlreadyExists;
     }
+
+    const u = await db.user.create({
+      data: {
+        ...user,
+        role: 'USER',
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        password: false,
+      },
+    });
     return u;
   }
 
   async login(user: LoginUserInput['body']) {
-    const db = await this.db.getInstance();
-
-    const repo = db.getRepository(User);
-
-    const u = await repo.findOne({
+    const u = await db.user.findFirst({
       where: {
         email: user.email,
       },
@@ -98,10 +87,7 @@ export default class AuthService {
   }
 
   async resetPassword(user: ResetPasswordInput['body']): Promise<boolean> {
-    const db = await this.db.getInstance();
-    const userRepository = db.getRepository(User);
-
-    const u = await userRepository.findOne({
+    const u = await db.user.findFirst({
       where: {
         email: user.email,
       },
@@ -123,10 +109,7 @@ export default class AuthService {
   }
 
   async deleteAccount(id: string) {
-    const db = await this.db.getInstance();
-    const userRepository = db.getRepository(User);
-
-    const user = await userRepository.findOne({
+    const user = await db.user.findFirst({
       where: {
         id,
       },
@@ -142,7 +125,9 @@ export default class AuthService {
     }
 
     try {
-      await userRepository.delete(id);
+      await db.user.delete({
+        where: { id },
+      });
       return true;
     } catch (e) {
       logger.warn(`Issue deleting account with id: ${id}`);

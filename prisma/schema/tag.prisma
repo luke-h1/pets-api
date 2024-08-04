@@ -1,0 +1,9 @@
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  pets      Pet[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tags")
+}

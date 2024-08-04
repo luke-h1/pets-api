@@ -1,31 +1,10 @@
 import supertest from 'supertest';
 import { v4 } from 'uuid';
-import database from '../../db/database';
 import { LoginRequest, RegisterRequest } from '../../requests/auth';
-import CreateServer from '../../server';
-
-const server = CreateServer;
-
-const app = server.init();
+import server from '../../server';
 
 describe('auth', () => {
-  beforeAll(async () => {
-    const orm = await database.getInstance();
-
-    orm.setOptions({
-      applicationName: 'express-test-db',
-      name: 'express-test-db',
-    });
-  });
-
-  beforeEach(async () => {
-    jest.resetAllMocks();
-    await database.getInstance();
-  });
-
-  afterAll(async () => {
-    await database.instance?.destroy();
-  });
+  const app = server.init();
 
   describe('register', () => {
     test('registers user', async () => {
@@ -42,15 +21,7 @@ describe('auth', () => {
 
       expect(statusCode).toBe(201);
 
-      expect(body).toEqual({
-        id: expect.any(String),
-        createdAt: expect.any(String),
-        email: 'bob@email.com',
-        firstName: 'test',
-        lastName: 'test',
-        role: 'user',
-        updatedAt: expect.any(String),
-      });
+      expect(body).toEqual({ id: expect.any(String) });
     });
 
     test('returns bad request when user exists', async () => {

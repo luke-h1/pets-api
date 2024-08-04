@@ -1,0 +1,20 @@
+enum Role {
+  ADMIN
+  USER
+  MODERATOR
+}
+
+model User {
+  id        String @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String @unique
+  password  String
+  pets      Pet[]
+
+  role      Role    @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}

@@ -1,5 +1,4 @@
-import Database from '../db/database';
-import { Pet } from '../entities/Pet';
+import { db } from '../db/prisma';
 import {
   CreatePetInput,
   DeletePetInput,
@@ -9,22 +8,13 @@ import {
 import logger from '../utils/logger';
 
 export default class PetService {
-  private readonly db: typeof Database;
-
-  constructor() {
-    this.db = Database;
-  }
-
   async getPets() {
-    const orm = await this.db.getInstance();
-    const pets = await orm.getRepository(Pet).find({});
-
+    const pets = await db.pet.findMany();
     return pets;
   }
 
   async getPet(id: GetPetInput['params']['id']) {
-    const orm = await this.db.getInstance();
-    const pet = await orm.getRepository(Pet).findOne({
+    const pet = await db.pet.findFirst({
       where: {
         id: id.toString(),
       },
@@ -43,8 +33,7 @@ export default class PetService {
   }
 
   async deletePet(id: DeletePetInput['params']['id']) {
-    const orm = await this.db.getInstance();
-    const result = await orm.getRepository(Pet).delete(id);
+    const result = await db.pet.delete({ where: { id: id.toString() } });
 
     logger.info('delete result', result);
     return null;

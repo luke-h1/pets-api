@@ -3,9 +3,9 @@ import { z } from 'zod';
 export const envSchema = z.object({
   PORT: z.string().default('8000'),
   // postgres
-  POSTGRES_DB_NAME: z.string().default('pets'),
-  POSTGRES_USER: z.string().default('pets'),
-  POSTGRES_PASSWORD: z.string().default('pets'),
+  DATABASE_URL: z
+    .string()
+    .default('postgresql://pets:pets@localhost:5432/pets?schema=public'),
 
   // redis
   REDIS_HOTNAME: z.string().default('localhost'),

@@ -13,6 +13,7 @@ describe('errorHandler', () => {
 
     expect(body).toEqual({
       code: 'NotFound',
+      errors: [],
       message:
         'The requested resource could not be found. Please check your query and try again.',
       statusCode: 404,

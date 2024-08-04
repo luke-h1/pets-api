@@ -1,13 +1,16 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const config = {
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/default-esm', // or other ESM presets
   testEnvironment: 'node',
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
   verbose: true,
   setupFiles: ['dotenv/config'],
-  setupFilesAfterEnv: ['<rootDir>/test/setupTests.js'],
   resetMocks: true,
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  transform: {
+    '^.+\\.(ts|js)$': 'ts-jest',
+  },
+  setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.js'],
   coverageThreshold: {
     global: {
       statements: 93.8,

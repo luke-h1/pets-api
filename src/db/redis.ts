@@ -2,6 +2,7 @@
 
 import { Redis } from 'ioredis';
 import isNumber from 'lodash/isNumber';
+import testRedis from '../test/redis';
 import logger from '../utils/logger';
 
 type RedisExpireOptions = {
@@ -18,12 +19,15 @@ class RedisDatabase {
 
   public getInstance() {
     if (!this.instance) {
-      this.instance = new Redis({
-        host: process.env.REDIS_HOTNAME,
-        port: process.env.REDIS_PORT,
-        password: process.env.REDIS_PASSWORD,
-        keyPrefix: 'pets',
-      });
+      this.instance =
+        process.env.NODE_ENV === 'test'
+          ? testRedis
+          : new Redis({
+              host: process.env.REDIS_HOTNAME,
+              port: process.env.REDIS_PORT,
+              password: process.env.REDIS_PASSWORD,
+              keyPrefix: 'pets',
+            });
     }
     return this.instance;
   }

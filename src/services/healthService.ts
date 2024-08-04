@@ -1,20 +1,17 @@
-import Database from '../db/database';
+import { db } from '../db/prisma';
 import RedisDatabase from '../db/redis';
 import logger from '../utils/logger';
 
 export default class HealthService {
-  private readonly db: typeof Database;
-
   private readonly redis: typeof RedisDatabase;
 
   constructor() {
-    this.db = Database;
     this.redis = RedisDatabase;
   }
 
   async health(): Promise<{ db: boolean; cache: boolean }> {
-    const orm = await this.db.getInstance();
-    const ok = orm.isInitialized;
+    const dbMsg = await db.$queryRaw`SELECT 1`;
+
     let cacheMsg = '';
 
     try {
@@ -25,10 +22,12 @@ export default class HealthService {
     }
 
     const cacheOk = cacheMsg === 'PONG';
-    logger.info(`DB connection check result -> DB: ${ok}, cache: ${cacheOk}`);
+    logger.info(
+      `DB connection check result -> DB: ${!!dbMsg}, cache: ${cacheOk}`,
+    );
 
     return {
-      db: ok,
+      db: !!dbMsg,
       cache: cacheOk,
     };
   }
