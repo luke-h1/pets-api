@@ -5,14 +5,15 @@ enum PetStatus {
 }
 
 model Pet {
-  id        String    @id @default(uuid())
-  name      String
-  type      String
-  breed     String
-  status    PetStatus @default(AVAILABLE)
-  birthDate DateTime
-  photoUrl  String
-  tags      Tag[]
+  id          String    @id @default(uuid())
+  name        String
+  description String
+  age         String
+  breed       String
+  status      PetStatus @default(AVAILABLE)
+  birthDate   String
+  photoUrl    String
+  tags        String[]
 
   creatorId String
   creator   User     @relation(fields: [creatorId], references: [id])

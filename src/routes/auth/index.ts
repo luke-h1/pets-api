@@ -1,11 +1,7 @@
 import { Express } from 'express';
 import AuthController from '../../controllers/authController';
 import validateResource from '../../middleware/validateResource';
-import {
-  createUserSchema,
-  loginUserSchema,
-  resetPasswordSchmea,
-} from '../../schema/auth.schema';
+import { createUserSchema, loginUserSchema } from '../../schema/auth.schema';
 
 export default class AuthRoutes {
   private readonly app: Express;
@@ -38,13 +34,13 @@ export default class AuthRoutes {
       return this.authController.logout(req, res);
     });
 
-    this.app.post(
-      '/api/auth/reset-password',
-      validateResource(resetPasswordSchmea),
-      (req, res) => {
-        return this.authController.resetPassword(req, res);
-      },
-    );
+    // this.app.post(
+    //   '/api/auth/reset-password',
+    //   validateResource(resetPasswordSchmea),
+    //   (req, res) => {
+    //     return this.authController.resetPassword(req, res);
+    //   },
+    // );
 
     this.app.delete('/api/auth/delete-account', (req, res) => {
       return this.authController.deleteAccount(req, res);

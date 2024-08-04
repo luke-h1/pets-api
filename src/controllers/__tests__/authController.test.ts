@@ -21,7 +21,10 @@ describe('auth', () => {
 
       expect(statusCode).toBe(201);
 
-      expect(body).toEqual({ id: expect.any(String) });
+      expect(body).toEqual({
+        id: expect.any(String),
+        email: expect.any(String),
+      });
     });
 
     test('returns bad request when user exists', async () => {

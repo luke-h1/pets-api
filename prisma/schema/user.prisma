@@ -12,7 +12,7 @@ model User {
   password  String
   pets      Pet[]
 
-  role      Role    @default(USER)
+  role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

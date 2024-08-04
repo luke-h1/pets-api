@@ -1,15 +1,10 @@
 import 'reflect-metadata';
 import omit from 'lodash/omit';
-import { v4 } from 'uuid';
 import { db } from '../db/prisma';
 import RedisDatabase from '../db/redis';
 import BadRequestError from '../errors/BadRequestError';
 import { authErrorCodes } from '../errors/auth';
-import {
-  CreateUserInput,
-  LoginUserInput,
-  ResetPasswordInput,
-} from '../schema/auth.schema';
+import { CreateUserInput, LoginUserInput } from '../schema/auth.schema';
 import logger from '../utils/logger';
 import PasswordService from './passwordService';
 
@@ -28,16 +23,20 @@ export default class AuthService {
       user.password,
     );
 
-    const emailExists = await db.user.findFirst({
+    const existingUser = await db.user.findFirst({
       where: {
         email: user.email,
       },
+      select: {
+        id: true,
+        email: true,
+      },
     });
-    if (emailExists) {
+
+    if (existingUser?.email === user.email) {
       logger.warn(`${authErrorCodes.EmailAlreadyExists} triggered`);
       return authErrorCodes.EmailAlreadyExists;
     }
-
     const u = await db.user.create({
       data: {
         ...user,
@@ -46,6 +45,7 @@ export default class AuthService {
       },
       select: {
         id: true,
+        email: true,
         password: false,
       },
     });
@@ -86,27 +86,27 @@ export default class AuthService {
     return omit(u, 'password');
   }
 
-  async resetPassword(user: ResetPasswordInput['body']): Promise<boolean> {
-    const u = await db.user.findFirst({
-      where: {
-        email: user.email,
-      },
-    });
+  // async resetPassword(user: ResetPasswordInput['body']): Promise<boolean> {
+  //   const u = await db.user.findFirst({
+  //     where: {
+  //       email: user.email,
+  //     },
+  //   });
 
-    if (!u) {
-      return false;
-    }
+  //   if (!u) {
+  //     return false;
+  //   }
 
-    const token = v4();
+  //   const token = v4();
 
-    const PREFIX = 'AUTH_FORGOT_PASSWORD';
+  //   const PREFIX = 'AUTH_FORGOT_PASSWORD';
 
-    const result = await this.redis.setWithExpr(`${PREFIX}${token}`, u.id, {
-      token: 'EX',
-      time: 1000 * 60 * 60 * 24 * 1, // 1 day to reset pwd
-    });
-    return result;
-  }
+  //   const result = await this.redis.setWithExpr(`${PREFIX}${token}`, u.id, {
+  //     token: 'EX',
+  //     time: 1000 * 60 * 60 * 24 * 1, // 1 day to reset pwd
+  //   });
+  //   return result;
+  // }
 
   async deleteAccount(id: string) {
     const user = await db.user.findFirst({

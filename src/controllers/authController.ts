@@ -3,11 +3,7 @@ import omit from 'lodash/omit';
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
 import { authErrorCodes } from '../errors/auth';
-import {
-  LoginRequest,
-  RegisterRequest,
-  ResetPasswordRequest,
-} from '../requests/auth';
+import { LoginRequest, RegisterRequest } from '../requests/auth';
 import AuthService from '../services/authService';
 import logger from '../utils/logger';
 
@@ -40,7 +36,7 @@ export default class AuthController {
       });
     }
 
-    req.session.userId = result?.id;
+    // req.session.userId = result?.id;
 
     return res.status(201).json(omit(result, 'password'));
   }
@@ -48,48 +44,46 @@ export default class AuthController {
   async login(req: LoginRequest, res: Response) {
     const result = await this.authService.login(req.body);
 
-    switch (result) {
-      case authErrorCodes.InvalidCredentials: {
-        throw new BadRequestError({
-          message: 'Invalid credentials',
-          statusCode: 401,
-          type: 'Unauthorized',
-          code: authErrorCodes.InvalidCredentials,
-          title: 'Bad credentials supplied',
-          errors: [
-            {
-              code: 'invalid_type',
-              expected: 'string',
-              received: 'undefined',
-              path: ['body', 'email'],
-              message: 'Invalid email or password',
-            },
-          ],
-        });
-      }
-
-      case authErrorCodes.UserNotFound: {
-        throw new NotFoundError({
-          code: authErrorCodes.UserNotFound,
-          title: 'User not found',
-          statusCode: 404,
-          message: 'User not found',
-          errors: [
-            {
-              code: 'invalid_type',
-              expected: 'string',
-              received: 'undefined',
-              path: ['body', 'email'],
-              message: 'User not found',
-            },
-          ],
-        });
-      }
-
-      default:
-        req.session.userId = result.id;
-        return res.status(200).json(omit(result, 'password'));
+    if (result === authErrorCodes.InvalidCredentials) {
+      throw new BadRequestError({
+        message: 'Invalid credentials',
+        statusCode: 401,
+        type: 'Unauthorized',
+        code: authErrorCodes.InvalidCredentials,
+        title: 'Bad credentials supplied',
+        errors: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            received: 'undefined',
+            path: ['body', 'email'],
+            message: 'Invalid email or password',
+          },
+        ],
+      });
     }
+
+    if (result === authErrorCodes.UserNotFound) {
+      throw new NotFoundError({
+        code: authErrorCodes.UserNotFound,
+        title: 'User not found',
+        statusCode: 404,
+        message: 'User not found',
+        errors: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            received: 'undefined',
+            path: ['body', 'email'],
+            message: 'User not found',
+          },
+        ],
+      });
+    }
+    req.session.userId = result.id;
+    // auth user with express-session
+
+    return res.status(200).json(omit(result, 'password'));
   }
 
   async logout(req: Request, res: Response) {
@@ -104,15 +98,15 @@ export default class AuthController {
     });
   }
 
-  async resetPassword(req: ResetPasswordRequest, res: Response) {
-    const result = await this.authService.resetPassword(req.body);
+  // async resetPassword(req: ResetPasswordRequest, res: Response) {
+  //   const result = await this.authService.resetPassword(req.body);
 
-    if (result) {
-      return res.status(200).json({ message: 'Password reset' });
-    }
+  //   if (result) {
+  //     return res.status(200).json({ message: 'Password reset' });
+  //   }
 
-    return res.status(400).json({ message: 'Password reset failed' });
-  }
+  //   return res.status(400).json({ message: 'Password reset failed' });
+  // }
 
   async deleteAccount(req: Request, res: Response) {
     const result = await this.authService.deleteAccount(req.body);

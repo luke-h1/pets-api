@@ -7,19 +7,13 @@ const payload = {
         required_error: 'Name is required',
         description: 'Name of the pet',
       }),
-      type: z.string({
-        required_error: 'type is required',
-        description: 'type of the pet',
-      }),
       breed: z.string(),
       status: z.enum(['AVAILABLE', 'PENDING', 'ADOPTED']),
-      birthDate: z.date(),
+      birthDate: z.string(),
       photoUrl: z.string(),
-      tags: z.array(
-        z.object({
-          name: z.string(),
-        }),
-      ),
+      age: z.string(),
+      description: z.string(),
+      tags: z.array(z.string()),
     })
     .strict(),
 };

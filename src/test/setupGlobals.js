@@ -11,9 +11,8 @@ beforeEach(async () => {
 
   const deletePet = db.pet.deleteMany();
   const deleteUser = db.user.deleteMany();
-  const deleteTag = db.tag.deleteMany();
 
-  await db.$transaction([deletePet, deleteUser, deleteTag]);
+  await db.$transaction([deletePet, deleteUser]);
 });
 
 afterAll(async () => {

@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import 'express-async-errors';
+import bodyParser from 'body-parser';
 import compression from 'compression';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
@@ -48,6 +49,7 @@ class CreateServer {
     this.app.set('json spaces', 2);
     this.app.use(cors());
     this.app.use(express.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(compression());
 
     const RedisStore = connectRedis(session);
@@ -63,7 +65,6 @@ class CreateServer {
               : this.redisDb.getInstance(),
           disableTouch: true,
           prefix: 'sess:',
-          db: 1,
           logErrors(error) {
             logger.error(`redis session error: ${error}`);
           },
@@ -79,6 +80,7 @@ class CreateServer {
           path: '/',
           signed: this.isProduction(),
           sameSite: 'lax',
+          priority: 'high',
         },
       }),
     );

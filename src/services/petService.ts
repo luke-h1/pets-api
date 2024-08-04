@@ -28,9 +28,6 @@ export default class PetService {
       data: {
         ...pet,
         creatorId: userId,
-        tags: {
-          create: pet.tags,
-        },
       },
     });
 
@@ -47,9 +44,6 @@ export default class PetService {
       },
       data: {
         ...pet,
-        tags: {
-          create: pet.tags,
-        },
       },
     });
 
