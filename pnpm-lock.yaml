@@ -102,6 +102,9 @@ importers:
       '@types/node':
         specifier: ^20.8.6
         version: 20.14.13
+      '@types/superagent':
+        specifier: ^8.1.8
+        version: 8.1.8
       '@types/supertest':
         specifier: ^6.0.2
         version: 6.0.2
@@ -120,6 +123,9 @@ importers:
       concurrently:
         specifier: ^8.2.1
         version: 8.2.2
+      cookiejar:
+        specifier: ^2.1.4
+        version: 2.1.4
       eslint:
         specifier: ^8.52.0
         version: 8.57.0
@@ -147,9 +153,15 @@ importers:
       prisma:
         specifier: ^5.17.0
         version: 5.17.0
+      superagent:
+        specifier: ^9.0.2
+        version: 9.0.2
       supertest:
         specifier: ^7.0.0
         version: 7.0.0
+      supertest-session:
+        specifier: ^5.0.1
+        version: 5.0.1(supertest@7.0.0)
       testcontainers:
         specifier: ^10.11.0
         version: 10.11.0
@@ -3132,6 +3144,11 @@ packages:
   superagent@9.0.2:
     resolution: {integrity: sha512-xuW7dzkUpcJq7QnhOsnNUgtYp3xRwpt2F7abdRYIpCsAt0hhUqia0EdxyXZQQpNmGtsCzYHryaKSV3q3GJnq7w==}
     engines: {node: '>=14.18.0'}
+
+  supertest-session@5.0.1:
+    resolution: {integrity: sha512-RpR8tGQZGreQsOCiW3YMSPKMwPlAB8lA0Jyat+8VUSJaYvLHTMqhMW6gooJ2htzjr3w/kgqJTQDnmuFenzA9JA==}
+    peerDependencies:
+      supertest: '>= 3.1.0'
 
   supertest@7.0.0:
     resolution: {integrity: sha512-qlsr7fIC0lSddmA3tzojvzubYxvlGtzumcdHgPwbFWMISQwL22MhM2Y3LNt+6w9Yyx7559VW5ab70dgphm8qQA==}
@@ -7174,6 +7191,13 @@ snapshots:
       qs: 6.12.3
     transitivePeerDependencies:
       - supports-color
+
+  supertest-session@5.0.1(supertest@7.0.0):
+    dependencies:
+      cookiejar: 2.1.4
+      methods: 1.1.2
+      object-assign: 4.1.1
+      supertest: 7.0.0
 
   supertest@7.0.0:
     dependencies:

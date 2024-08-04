@@ -23,13 +23,37 @@ export default class PetService {
     return pet;
   }
 
-  async createPet(pet: CreatePetInput['body']) {}
+  async createPet(pet: CreatePetInput['body'], userId: string) {
+    const newPet = await db.pet.create({
+      data: {
+        ...pet,
+        creatorId: userId,
+        tags: {
+          create: pet.tags,
+        },
+      },
+    });
+
+    return newPet;
+  }
 
   async updatePet(
     id: UpdatePetInput['params']['id'],
     pet: UpdatePetInput['body'],
   ) {
-    return null;
+    const updatedPet = await db.pet.update({
+      where: {
+        id: id.toString(),
+      },
+      data: {
+        ...pet,
+        tags: {
+          create: pet.tags,
+        },
+      },
+    });
+
+    return updatedPet;
   }
 
   async deletePet(id: DeletePetInput['params']['id']) {

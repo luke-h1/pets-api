@@ -17,16 +17,6 @@ export default class PetController {
 
   async getPets(_req: Request, res: Response) {
     const pets = await this.petService.getPets();
-
-    if (!pets.length) {
-      throw new NotFoundError({
-        title: 'Pets not found',
-        code: 'NoPetsFound',
-        message: 'No pets found',
-        statusCode: 404,
-      });
-    }
-
     return res.status(200).json(pets);
   }
 
@@ -47,7 +37,7 @@ export default class PetController {
 
   async createPet(req: CreatePetRequest, res: Response) {
     const pet = req.body;
-    const newPet = await this.petService.createPet(pet);
+    const newPet = await this.petService.createPet(pet, req.session.userId);
 
     return res.status(201).json(newPet);
   }

@@ -9,11 +9,11 @@ beforeAll(async () => {
 beforeEach(async () => {
   jest.resetAllMocks();
 
+  const deletePet = db.pet.deleteMany();
   const deleteUser = db.user.deleteMany();
-  const deleteRole = db.pet.deleteMany();
   const deleteTag = db.tag.deleteMany();
 
-  await db.$transaction([deleteUser, deleteRole, deleteTag]);
+  await db.$transaction([deletePet, deleteUser, deleteTag]);
 });
 
 afterAll(async () => {

@@ -1,5 +1,7 @@
 import { Express, Response } from 'express';
 import PetController from '../../controllers/petController';
+import isAuth from '../../middleware/isAuth';
+import isPetOwner from '../../middleware/isPetOwner';
 import validateResource from '../../middleware/validateResource';
 import {
   CreatePetRequest,
@@ -38,6 +40,7 @@ export default class PetRoutes {
 
     this.app.post(
       '/api/pets',
+      isAuth(),
       validateResource(createPetSchema),
       (req: CreatePetRequest, res: Response) => {
         return this.petController.createPet(req, res);
@@ -46,8 +49,10 @@ export default class PetRoutes {
 
     this.app.put(
       '/api/pets/:id',
+      isAuth(),
       validateResource(updatePetSchema),
       (req: UpdatePetRequest, res: Response) => {
+        isPetOwner(req.body, req.session.user.id);
         return this.petController.updatePet(req, res);
       },
     );
@@ -56,6 +61,7 @@ export default class PetRoutes {
       '/api/pets/:id',
       validateResource(deletePetSchema),
       (req: DeletePetReqeust, res: Response) => {
+        isPetOwner(req.body, req.session.user.id);
         return this.petController.deletePet(req, res);
       },
     );

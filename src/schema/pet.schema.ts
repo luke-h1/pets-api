@@ -12,12 +12,12 @@ const payload = {
         description: 'type of the pet',
       }),
       breed: z.string(),
-      status: z.enum(['available', 'pending', 'adopted']),
-      birthYear: z.number(),
+      status: z.enum(['AVAILABLE', 'PENDING', 'ADOPTED']),
+      birthDate: z.date(),
       photoUrl: z.string(),
       tags: z.array(
-        z.string({
-          description: 'Tags of the pet',
+        z.object({
+          name: z.string(),
         }),
       ),
     })
