@@ -8,7 +8,7 @@
   },
   "scripts": {
     "alphabetize": "node scripts/alphabetize.js",
-    "build": "npm run clean && tsc && cp -r src/data dist/data",
+    "build": "npm run clean && tsc",
     "clean": "rm -rf dist",
     "commit": "npx cz",
     "db:down": "pnpm prisma migrate reset",
