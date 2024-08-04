@@ -2,11 +2,15 @@
   "name": "pets-api",
   "version": "1.0.0",
   "main": "index.js",
+  "packageManager": "pnpm@9.0.6",
+  "engines": {
+    "pnpm": "9.0.6"
+  },
   "scripts": {
     "alphabetize": "node scripts/alphabetize.js",
     "build": "npm run clean && tsc && cp -r src/data dist/data",
     "clean": "rm -rf dist",
-    "commit": "git-cz",
+    "commit": "npx cz",
     "db:down": "pnpm prisma migrate reset",
     "db:drop": "pnpm prisma db push --force-reset",
     "db:format": "pnpm prisma format",
@@ -65,6 +69,7 @@
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
     "babel-jest": "^29.7.0",
+    "commitizen": "4.3.0",
     "concurrently": "^8.2.1",
     "cookiejar": "^2.1.4",
     "cz-conventional-changelog": "^3.3.0",

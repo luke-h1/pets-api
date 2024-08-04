@@ -1,0 +1,36 @@
+name: 'Build server'
+description: 'Build server'
+runs:
+  using: 'composite'
+  steps:
+    - name: install
+      uses: ./.github/actions/install
+
+    - name: Check commit message
+      run: pnpm commitlint --from=HEAD^1
+      shell: bash
+
+    - name: format:check
+      run: pnpm format:check
+      shell: bash
+
+    - name: lint
+      run: pnpm lint
+      shell: bash
+
+    - name: jest
+      run: pnpm test:ci
+      shell: bash
+
+    - name: tsc
+      run: pnpm tsc
+      shell: bash
+
+    - name: build
+      run: pnpm build
+      shell: bash
+
+    # - name: local UI tests
+    #   uses: ./.github/actions/ui-test
+    #   with:
+    #     target: e2e-local-ci
