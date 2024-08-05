@@ -196,4 +196,35 @@ describe('auth', () => {
       });
     });
   });
+
+  describe('isAuth', () => {
+    test('returns true if user is authenticated', async () => {
+      const user: RegisterRequest['body'] = {
+        email: 'bob@email.com',
+        firstName: 'test',
+        lastName: 'test',
+        password: 'password',
+      };
+      await supertest(app).post('/api/auth/register').send(user);
+      const { headers } = await supertest(app).post('/api/auth/login').send({
+        email: user.email,
+        password: user.password,
+      });
+
+      const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
+      const cookieName = 'connect.sid';
+
+      const { body } = await supertest(app)
+        .get('/api/auth')
+        .set('Cookie', `${cookieName}=${cookieValue}`);
+
+      expect(body).toEqual({ isAuth: true });
+    });
+
+    test('returns false if user is unauthenticated', async () => {
+      const { body } = await supertest(app).get('/api/auth');
+
+      expect(body).toEqual({ isAuth: false });
+    });
+  });
 });
