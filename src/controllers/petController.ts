@@ -15,7 +15,7 @@ export default class PetController {
     this.petService = new PetService();
   }
 
-  async getPets(_req: Request, res: Response) {
+  async getPets(req: Request, res: Response) {
     const pets = await this.petService.getPets();
     return res.status(200).json(pets);
   }

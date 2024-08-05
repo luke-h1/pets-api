@@ -1,4 +1,10 @@
+import './setEnvVars';
+import { config } from 'dotenv';
 import { db } from '../db/prisma';
+
+config({
+  path: '.env.test',
+});
 
 jest.setTimeout(30000);
 
