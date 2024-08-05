@@ -6,7 +6,7 @@ const config = {
   verbose: true,
   setupFiles: ['dotenv/config'],
   resetMocks: true,
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', 'e2e'],
   transform: {
     '^.+\\.(ts|js)$': 'ts-jest',
   },

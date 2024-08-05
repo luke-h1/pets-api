@@ -41,8 +41,3 @@ runs:
     - name: build
       run: pnpm build
       shell: bash
-
-    # - name: local UI tests
-    #   uses: ./.github/actions/ui-test
-    #   with:
-    #     target: e2e-local-ci

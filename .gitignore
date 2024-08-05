@@ -37,3 +37,7 @@ newrelic_agent.log
 
 # open-next
 .open-next
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
