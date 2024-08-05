@@ -1,9 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
+import ForbiddenError from '../errors/ForbiddenError';
 
 const isAuth = () => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.session.userId) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      throw new ForbiddenError({
+        message: 'You are not authorized to perform this action',
+        code: 'Forbidden',
+        statusCode: 401,
+        title: 'Forbidden',
+        errors: [],
+      });
     }
     next();
     // eslint-disable-next-line consistent-return, no-useless-return

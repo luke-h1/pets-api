@@ -15,5 +15,9 @@ export default class HealthRoutes {
     this.app.get('/api/healthcheck', (req, res) => {
       return this.healthController.health(req, res);
     });
+
+    this.app.head('/', (req, res) => {
+      return res.status(200).send();
+    });
   }
 }

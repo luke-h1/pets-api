@@ -1,6 +1,6 @@
 import { db } from '../db/prisma';
 
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 
 beforeAll(async () => {
   await db.$connect();

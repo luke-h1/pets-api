@@ -31,21 +31,20 @@ export default class PetController {
         statusCode: 404,
       });
     }
-
     return res.status(200).json(pet);
   }
 
   async createPet(req: CreatePetRequest, res: Response) {
-    const pet = req.body;
-    const newPet = await this.petService.createPet(pet, req.session.userId);
-
+    const newPet = await this.petService.createPet(
+      req.body,
+      req.session.userId,
+    );
     return res.status(201).json(newPet);
   }
 
   async updatePet(req: UpdatePetRequest, res: Response) {
     const pet = req.body;
     const updatedPet = await this.petService.updatePet(req.params.id, pet);
-
     return res.status(200).json(updatedPet);
   }
 

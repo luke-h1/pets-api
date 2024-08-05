@@ -2,6 +2,7 @@ import { ErrorRequestHandler } from 'express';
 import logger from '../utils/logger';
 import ApiError from './ApiError';
 import BadRequestError from './BadRequestError';
+import ForbiddenError from './ForbiddenError';
 import InternalServerError from './InternalServerError';
 import NotFoundError from './NotFoundError';
 
@@ -36,6 +37,16 @@ const errorHandler: ErrorRequestHandler<{}, ApiError | string> = (
           'The request is invalid. Please check the request and try again.',
         type: 'Bad Request',
         code: 'BadRequest',
+      });
+    }
+
+    if (err instanceof ForbiddenError) {
+      return new ApiError({
+        title: 'You are not authorized to perform this action',
+        statusCode: 401,
+        message: 'You are not authorized to perform this action',
+        type: 'Forbidden',
+        code: 'Forbidden',
       });
     }
 

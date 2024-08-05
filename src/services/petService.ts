@@ -30,7 +30,6 @@ export default class PetService {
         creatorId: userId,
       },
     });
-
     return newPet;
   }
 

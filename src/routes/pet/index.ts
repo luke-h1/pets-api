@@ -51,17 +51,18 @@ export default class PetRoutes {
       '/api/pets/:id',
       isAuth(),
       validateResource(updatePetSchema),
-      (req: UpdatePetRequest, res: Response) => {
-        isPetOwner(req.body, req.session.user.id);
+      isPetOwner<UpdatePetRequest>(),
+      async (req: UpdatePetRequest, res: Response) => {
         return this.petController.updatePet(req, res);
       },
     );
 
     this.app.delete(
       '/api/pets/:id',
+      isAuth(),
       validateResource(deletePetSchema),
-      (req: DeletePetReqeust, res: Response) => {
-        isPetOwner(req.body, req.session.user.id);
+      isPetOwner<DeletePetReqeust>(),
+      async (req: DeletePetReqeust, res: Response) => {
         return this.petController.deletePet(req, res);
       },
     );
