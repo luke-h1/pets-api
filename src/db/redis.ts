@@ -36,7 +36,7 @@ class RedisDatabase {
     const db = this.getInstance();
     try {
       const result = await db.get(key);
-      logger.info(`got ${key} item successfully`, { tag: 'redis' });
+      logger.info(`[REDIS]: got key: ${key} successfully`, { tag: 'redis' });
       return result as TData;
     } catch (e) {
       logger.error(`Error getting key ${key}, error -> ${e}`, {

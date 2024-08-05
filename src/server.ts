@@ -14,7 +14,9 @@ import Routes from './routes';
 import testRedis from './test/redis';
 import logger from './utils/logger';
 
-dotenv.config();
+dotenv.config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+});
 
 class CreateServer {
   private readonly app: Express;

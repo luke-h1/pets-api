@@ -4,7 +4,7 @@ const config = {
   testEnvironment: 'node',
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
   verbose: true,
-  setupFiles: ['dotenv/config'],
+  setupFiles: ['dotenv/config', './src/test/setEnvVars.js'],
   resetMocks: true,
   testPathIgnorePatterns: ['/node_modules/', '/dist/', 'e2e'],
   transform: {
