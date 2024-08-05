@@ -7,9 +7,9 @@ class Main {
   private async validateEnvironmentVariables() {
     const environmentVariables = envSchema.safeParse({
       PORT: process.env.PORT,
-      POSTGRES_DB_NAME: process.env.POSTGRES_DB_NAME,
-      POSTGRES_USER: process.env.POSTGRES_USER,
-      POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+
+      // postgres
+      DATABASE_URL: process.env.DATABASE_URL,
 
       // redis
       REDIS_HOTNAME: process.env.REDIS_HOTNAME,
