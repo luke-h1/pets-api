@@ -40,12 +40,6 @@ class CreateServer {
     });
   }
 
-  private handleHead() {
-    this.app.head('/', (req, res) => {
-      return res.status(200).send();
-    });
-  }
-
   public init() {
     // *order is important*
 
@@ -86,7 +80,6 @@ class CreateServer {
           path: '/',
           signed: this.isProduction(),
           sameSite: 'lax',
-          priority: 'high',
         },
       }),
     );
@@ -96,9 +89,6 @@ class CreateServer {
 
     // global 404
     this.handleNotFound();
-
-    // head
-    this.handleHead();
 
     // global error handler
     this.app.use(errorHandler);

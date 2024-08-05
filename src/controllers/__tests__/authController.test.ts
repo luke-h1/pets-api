@@ -1,5 +1,6 @@
 import supertest from 'supertest';
 import { v4 } from 'uuid';
+import { db } from '../../db/prisma';
 import { LoginRequest, RegisterRequest } from '../../requests/auth';
 import server from '../../server';
 
@@ -34,7 +35,10 @@ describe('auth', () => {
         lastName: 'test',
         password: 'password',
       };
-      await supertest(app).post('/api/auth/register').send(user);
+
+      await db.user.create({
+        data: user,
+      });
 
       const { body, statusCode } = await supertest(app)
         .post('/api/auth/register')
@@ -171,7 +175,6 @@ describe('auth', () => {
         password: 'password',
       };
       await supertest(app).post('/api/auth/register').send(user);
-
       await supertest(app).post('/api/auth/login').send({
         email: user.email,
         password: user.password,

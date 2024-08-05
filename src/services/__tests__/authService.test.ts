@@ -35,6 +35,7 @@ describe('AuthService', () => {
           ...user,
         },
       });
+      await authService.register(user);
       const result = await authService.register(user);
       expect(result).toEqual(authErrorCodes.EmailAlreadyExists);
     });
