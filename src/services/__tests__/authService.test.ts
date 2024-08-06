@@ -88,4 +88,25 @@ describe('AuthService', () => {
       expect(result).toEqual(authErrorCodes.UserNotFound);
     });
   });
+
+  describe('deleteAccount', () => {
+    test('deletes account', async () => {
+      const user: CreateUserInput['body'] = {
+        email: 'bob@bob.com',
+        firstName: 'bob',
+        lastName: 'bob',
+        password: 'password12345',
+      };
+      await authService.register(user);
+
+      const u = await authService.login({
+        email: user.email,
+        password: user.password,
+      });
+
+      const result = await authService.deleteAccount((u as { id: string }).id);
+
+      expect(result).toEqual(true);
+    });
+  });
 });

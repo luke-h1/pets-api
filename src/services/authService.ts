@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import omit from 'lodash/omit';
 import { db } from '../db/prisma';
 import RedisDatabase from '../db/redis';
-import BadRequestError from '../errors/BadRequestError';
+import NotFoundError from '../errors/NotFoundError';
 import { authErrorCodes } from '../errors/auth';
 import { CreateUserInput, LoginUserInput } from '../schema/auth.schema';
 import logger from '../utils/logger';
@@ -116,7 +116,7 @@ export default class AuthService {
     });
 
     if (!user) {
-      throw new BadRequestError({
+      throw new NotFoundError({
         code: authErrorCodes.UserNotFound,
         title: 'User not found',
         message: 'User not found',
