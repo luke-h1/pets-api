@@ -15,7 +15,7 @@ import testRedis from './test/redis';
 import logger from './utils/logger';
 
 dotenv.config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env.development',
 });
 
 class CreateServer {
@@ -71,7 +71,7 @@ class CreateServer {
             logger.error(`redis session error: ${error}`);
           },
         }),
-        secret: process.env.SESSION_SECRET as string,
+        secret: process.env.SESSION_SECRET ?? 'pets',
         resave: false,
         saveUninitialized: false,
         cookie: {

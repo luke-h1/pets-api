@@ -15,14 +15,17 @@ export default class PetService {
     this.redis = RedisDatabase;
   }
 
-  async getPets() {
+  async getPets(page?: number, pageSize?: number) {
     // const cachedPets = await this.redis.getAll<Pet[]>('pets');
 
     // if (cachedPets && cachedPets.length) {
     //   return JSON.parse(cachedPets as unknown as string);
     // }
 
-    const pets = await db.pet.findMany();
+    const pets = await db.pet.findMany({
+      take: pageSize,
+      skip: page && pageSize ? (page - 1) * pageSize : 0,
+    });
 
     // save to cache
     // console.log('pets', JSON.stringify(pets, null, 2));

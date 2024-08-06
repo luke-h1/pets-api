@@ -37,16 +37,33 @@ async function main() {
       password: 'password123',
       role: Role.USER,
       pets: {
-        create: {
-          name: 'Mittens',
-          age: '4',
-          birthDate: '2019-02-20',
-          breed: 'Tabby',
-          description:
-            'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
-          photoUrl:
-            'https://images.pexels.com/photos/10891037/pexels-photo-10891037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          tags: ['cute', 'fluffy'],
+        createMany: {
+          data: [
+            {
+              name: 'Mittens',
+              age: '4',
+              birthDate: '2019-02-20',
+              breed: 'Tabby',
+              status: PetStatus.PENDING,
+              description:
+                'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
+              photoUrl:
+                'https://images.pexels.com/photos/10891037/pexels-photo-10891037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              tags: ['cute', 'fluffy'],
+            },
+            {
+              name: 'Mittens',
+              age: '4',
+              birthDate: '2019-02-20',
+              breed: 'Tabby',
+              status: PetStatus.ADOPTED,
+              description:
+                'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
+              photoUrl:
+                'https://images.pexels.com/photos/10891037/pexels-photo-10891037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              tags: ['cute', 'fluffy'],
+            },
+          ],
         },
       },
     },
@@ -61,17 +78,45 @@ async function main() {
       password: 'password123',
       role: Role.USER,
       pets: {
-        create: {
-          name: 'Whiskers',
-          age: '2',
-          birthDate: '2021-08-10',
-          breed: 'Siamese',
-          description:
-            'Whiskers is a curious and playful Siamese cat who loves to explore and climb.',
-          photoUrl:
-            'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-          status: PetStatus.AVAILABLE,
-          tags: ['curious', 'playful'],
+        createMany: {
+          data: [
+            {
+              name: 'Chloe',
+              age: '2',
+              birthDate: '2021-06-18',
+              breed: 'Sphynx',
+              status: PetStatus.AVAILABLE,
+              description:
+                'Chloe is a unique Sphynx cat who loves to stay warm.',
+              photoUrl:
+                'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              tags: ['unique', 'warm'],
+            },
+            {
+              name: 'Leo',
+              age: '3',
+              birthDate: '2020-09-22',
+              breed: 'British Shorthair',
+              status: PetStatus.AVAILABLE,
+              description:
+                'Leo is a friendly British Shorthair cat who loves to play.',
+              photoUrl:
+                'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              tags: ['friendly', 'playful'],
+            },
+            {
+              name: 'Nala',
+              age: '5',
+              birthDate: '2018-04-14',
+              breed: 'Russian Blue',
+              status: PetStatus.AVAILABLE,
+              description:
+                'Nala is a graceful Russian Blue cat with a calm demeanor.',
+              photoUrl:
+                'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              tags: ['graceful', 'calm'],
+            },
+          ],
         },
       },
     },

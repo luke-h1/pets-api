@@ -7,6 +7,7 @@ import {
   UpdatePetRequest,
 } from '../requests/pet';
 import PetService from '../services/petService';
+import parsePaginationParams from '../utils/parsePaginationParams';
 
 export default class PetController {
   private readonly petService: PetService;
@@ -16,7 +17,8 @@ export default class PetController {
   }
 
   async getPets(req: Request, res: Response) {
-    const pets = await this.petService.getPets();
+    const { page, pageSize } = parsePaginationParams(req.query);
+    const pets = await this.petService.getPets(page, pageSize);
     return res.status(200).json(pets);
   }
 
