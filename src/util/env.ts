@@ -15,6 +15,8 @@ export const envSchema = z.object({
     .transform(v => parseInt(v, 10)),
   REDIS_PASSWORD: z.string().default('pets'),
   SESSION_SECRET: z.string().default('pets'),
+  DEPLOYED_AT: z.string().default(new Date().getTime().toString()),
+  DEPLOYED_BY: z.string().default('luke-h1'),
 });
 
 export type Env = z.infer<typeof envSchema>;

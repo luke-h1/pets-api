@@ -15,6 +15,10 @@ class Main {
       REDIS_HOTNAME: process.env.REDIS_HOTNAME,
       REDIS_PORT: process.env.REDIS_PORT,
       REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+
+      // version
+      DEPLOYED_AT: process.env.DEPLOYED_AT,
+      DEPLOYED_BY: process.env.DEPLOYED_BY,
     });
     if (!environmentVariables.success) {
       logger.error(
