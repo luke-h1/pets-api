@@ -47,6 +47,7 @@ export default class PetController {
   async updatePet(req: UpdatePetRequest, res: Response) {
     const pet = req.body;
     const updatedPet = await this.petService.updatePet(req.params.id, pet);
+
     return res.status(200).json(updatedPet);
   }
 

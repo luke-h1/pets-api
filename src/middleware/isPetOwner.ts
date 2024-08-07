@@ -19,7 +19,12 @@ const isPetOwner = <TRequest extends Request>() => {
       });
 
       if (!pet) {
-        return false;
+        return res.status(404).json({
+          code: 'PetNotFound',
+          message: 'Pet not found. Please check your query and try again',
+          statusCode: 404,
+          title: 'pet not found',
+        });
       }
 
       if (pet.creatorId !== req.session.userId) {

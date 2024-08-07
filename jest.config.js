@@ -3,6 +3,10 @@ const config = {
   preset: 'ts-jest/presets/default-esm', // or other ESM presets
   testEnvironment: 'node',
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
+  testMatch: [
+    '<rootDir>/src/**/*.(test).{js,jsx,ts,tsx}',
+    '<rootDir>/test/**/*.(test).{js,jsx,ts,tsx}',
+  ],
   verbose: true,
   setupFiles: ['dotenv/config', './src/test/setEnvVars.js'],
   resetMocks: true,

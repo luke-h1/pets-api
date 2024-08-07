@@ -85,9 +85,7 @@ export default class PetService {
 
   async deletePet(id: DeletePetInput['params']['id']) {
     const result = await db.pet.delete({ where: { id: id.toString() } });
-
     // await this.redis.deleteItem(`pet:${id}`);
-
     logger.info('delete result', result);
     return null;
   }
