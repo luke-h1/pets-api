@@ -11,6 +11,7 @@
     "build": "npm run clean && tsc",
     "clean": "rm -rf dist",
     "commit": "npx cz",
+    "e2e:local": "make e2e-local",
     "db:seed": "ts-node prisma/seed.ts",
     "db:down": "pnpm prisma migrate reset",
     "db:drop": "pnpm prisma db push --force-reset",
