@@ -1,17 +1,9 @@
-## add e2e tests with playwright ✅
+# TODO
 
-## add e2e support in CI ✅
-
-## add swagger docs ✅
-
-## add semantic-release
-
-## semver bump on main
-
-# deploy api to fly.io (for now) (potential for aws down the line)
-
-# use supabase for postgres and https://github.com/terraform-aws-modules/terraform-aws-elasticache for cache
-
-## add caching
-
-## add xml support for /health
+- e2e tests with playwright + ci ✅
+- swagger docs ✅
+- csv upload support for pets endpoint (upload csv, parse and save to db)
+- xml support for /health
+- xml support for /version
+- caching
+- deploy - supabase for postgres, aws elasticache for cache and fly.io for hosting
