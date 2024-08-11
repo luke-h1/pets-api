@@ -1,8 +1,8 @@
 ## add e2e tests with playwright ✅
 
-## add e2e support in CI
+## add e2e support in CI ✅
 
-## add swagger docs
+## add swagger docs ✅
 
 ## add semantic-release
 

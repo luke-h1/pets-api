@@ -1,6 +1,6 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 const config = {
-  preset: 'ts-jest/presets/default-esm', // or other ESM presets
+  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   collectCoverageFrom: ['src/**/*.{js,jsx,ts,tsx}', '!src/**/*.d.ts'],
   testMatch: [
