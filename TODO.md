@@ -1,4 +1,4 @@
-## add e2e tests with playwright
+## add e2e tests with playwright ✅
 
 ## add e2e support in CI
 
@@ -8,7 +8,9 @@
 
 ## semver bump on main
 
-## deploy to fly.io - setup db and cache elsewhere (vercel for pg and upstash for redis)
+# deploy api to fly.io (for now) (potential for aws down the line)
+
+# use supabase for postgres and https://github.com/terraform-aws-modules/terraform-aws-elasticache for cache
 
 ## add caching
 

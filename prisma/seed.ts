@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { PetStatus, Role } from '@prisma/client';
 import { db } from '../src/db/prisma';
 
@@ -122,7 +123,6 @@ async function main() {
     },
   });
 }
-// eslint-disable-next-line no-console
 console.info('Seeding database...');
 console.info('-------------------');
 console.info('seeded DB...');

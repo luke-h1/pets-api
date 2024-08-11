@@ -27,10 +27,34 @@ export default class PetRoutes {
   }
 
   public initRoutes(): void {
+    /**
+     * @swagger
+     * /api/pets:
+     *   get:
+     *     summary: Get all pets
+     *     responses:
+     *       200:
+     *         description: A list of pets
+     */
     this.app.get('/api/pets', (req, res) => {
       return this.petController.getPets(req, res);
     });
 
+    /**
+     * @swagger
+     * /api/pets/{id}:
+     *   get:
+     *     summary: Get a pet by ID
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: string
+     *     responses:
+     *       200:
+     *         description: A pet object
+     */
     this.app.get(
       '/api/pets/:id',
       validateResource(getPetSchema),
@@ -38,6 +62,21 @@ export default class PetRoutes {
         this.petController.getPet(req, res),
     );
 
+    /**
+     * @swagger
+     * /api/pets:
+     *   post:
+     *     summary: Create a new pet
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/CreatePetRequest'
+     *     responses:
+     *       201:
+     *         description: The created pet
+     */
     this.app.post(
       '/api/pets',
       isAuth(),
@@ -57,6 +96,21 @@ export default class PetRoutes {
       },
     );
 
+    /**
+     * @swagger
+     * /api/pets/{id}:
+     *   delete:
+     *     summary: Delete a pet by ID
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: string
+     *     responses:
+     *       204:
+     *         description: No content
+     */
     this.app.delete(
       '/api/pets/:id',
       isAuth(),
