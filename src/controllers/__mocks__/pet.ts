@@ -1,4 +1,4 @@
-import { CreatePetInput } from 'src/schema/pet.schema';
+import { CreatePetInput } from '../../schema/pet.schema';
 
 export const pets: CreatePetInput['body'][] = [
   {

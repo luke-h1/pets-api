@@ -1,6 +1,6 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { petSchema, createPetSchema } from 'src/schema/pet.schema';
 import { z } from 'zod';
+import { petSchema, createPetSchema } from '../../schema/pet.schema';
 import { responseSchema } from '../../schema/response.schema';
 
 const registerPetPaths = (registry: OpenAPIRegistry) => {

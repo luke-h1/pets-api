@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
-import { CreatePetInput } from 'src/schema/pet.schema';
+import { CreatePetInput } from '../../schema/pet.schema';
 import { createUser, loginUser, getCookieFromHeaders } from '../util/user';
 
 test.describe('deletePet', () => {
