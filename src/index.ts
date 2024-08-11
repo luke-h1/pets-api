@@ -19,6 +19,10 @@ class Main {
       // version
       DEPLOYED_AT: process.env.DEPLOYED_AT,
       DEPLOYED_BY: process.env.DEPLOYED_BY,
+
+      // general
+      ENVIRONMENT: process.env.ENVIRONMENT,
+      API_BASE_URL: process.env.API_BASE_URL,
     });
     if (!environmentVariables.success) {
       logger.error(

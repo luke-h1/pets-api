@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import z from '../util/validation';
 
 type ErrorCode = 'InternalServerError' | 'NotFound' | 'BadRequest' | string;
 

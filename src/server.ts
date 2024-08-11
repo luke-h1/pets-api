@@ -7,7 +7,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import session from 'express-session';
+import swaggerUi from 'swagger-ui-express';
 import RedisDatabase from './db/redis';
+import openApiSpec from './docs/swagger';
 import NotFoundError from './errors/NotFoundError';
 import errorHandler from './errors/errorHandler';
 import Routes from './routes';
@@ -88,6 +90,14 @@ class CreateServer {
 
     // routing
     this.routes.setupRoutes();
+
+    this.app.use(
+      '/docs',
+      swaggerUi.serve,
+      swaggerUi.setup(openApiSpec(process.env.API_BASE_URL), {
+        customSiteTitle: 'Pet API docs | Swagger UI',
+      }),
+    );
 
     // global 404
     this.handleNotFound();
