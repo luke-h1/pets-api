@@ -26,10 +26,6 @@ runs:
       run: pnpm test:ci
       shell: bash
 
-    - name: stop test DB
-      run: docker compose down
-      shell: bash
-
     - name: tsc
       run: pnpm tsc
       shell: bash
@@ -37,3 +33,8 @@ runs:
     - name: build
       run: pnpm build
       shell: bash
+
+    - name: e2e local
+      uses: ./.github/actions/e2e
+      with:
+        target: e2e-local
