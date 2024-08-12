@@ -36,6 +36,8 @@ EXPOSE 8000
 
 RUN chown -R node /app
 
+RUN pnpm db:generate
+
 USER node 
 
 CMD ["pnpm", "run", "start:prod"]
