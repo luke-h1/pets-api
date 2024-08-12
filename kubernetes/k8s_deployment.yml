@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pets-api
+  template:
+    metadata:
+      labels:
+        app: pets-api
+    spec:
+      containers:
+        - name: pets-api
+          image: '753493924839.dkr.ecr.eu-west-2.amazonaws.com/pets-api:latest'
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
