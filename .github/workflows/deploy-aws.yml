@@ -180,16 +180,3 @@ jobs:
         id: apply
         run: terraform apply ./app.out
         working-directory: ${{ env.TERRAFORM_ROOT }}
-
-      - name: Install kubectl
-        uses: azure/setup-kubectl@v2.0
-        with:
-          version: 'v1.24.0'
-
-      - name: update kube config
-        run: aws eks update-kubeconfig --name pets-api-staging-eks-cluster --region eu-west-2
-
-      - name: deploy to EKS
-        run: |
-          kubectl apply -f kubernetes/k8s_deployment.yml
-          kubectl apply -f kubernetes/k8s_services.yml
