@@ -24,7 +24,7 @@ authPaths(registry);
 
 const generator = new OpenApiGeneratorV3(registry.definitions);
 
-const openApiSpec = (url: string) =>
+const openApiSpec = () =>
   generator.generateDocument({
     openapi: '3.0.0',
     info: {
@@ -32,10 +32,6 @@ const openApiSpec = (url: string) =>
       version: pkg.version,
       description: 'Restful API for pet adoptions',
     },
-    servers: [
-      {
-        url,
-      },
-    ],
+    servers: [],
   });
 export default openApiSpec;
