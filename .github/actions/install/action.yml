@@ -40,7 +40,3 @@ runs:
     - name: Install dependencies
       run: pnpm i
       shell: bash
-
-    - uses: actions/labeler@v4
-      with:
-        sync-labels: true

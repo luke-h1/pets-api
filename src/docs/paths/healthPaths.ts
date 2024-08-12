@@ -4,7 +4,7 @@ import { healthSchema } from '../../schema/health.schema';
 const healthPaths = (registry: OpenAPIRegistry) => {
   registry.registerPath({
     method: 'get',
-    path: '/api/health',
+    path: '/api/healthcheck',
     description: 'Get status of DB, cache and API',
     responses: {
       200: {
