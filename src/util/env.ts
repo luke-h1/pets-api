@@ -9,12 +9,7 @@ export const envSchema = z.object({
     .default('postgresql://pets:pets@localhost:5432/pets?schema=public'),
 
   // redis
-  REDIS_HOTNAME: z.string().default('localhost'),
-  REDIS_PORT: z
-    .string()
-    .default('6379')
-    .transform(v => parseInt(v, 10)),
-  REDIS_PASSWORD: z.string().default('pets'),
+  REDIS_URL: z.string().default('redis://localhost:6379'),
   SESSION_SECRET: z.string().default('pets'),
   DEPLOYED_AT: z.string().default(new Date().getTime().toString()),
   DEPLOYED_BY: z.string().default('luke-h1'),

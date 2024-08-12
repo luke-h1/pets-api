@@ -22,10 +22,7 @@ class RedisDatabase {
       this.instance =
         process.env.NODE_ENV === 'test'
           ? testRedis
-          : new Redis({
-              host: process.env.REDIS_HOTNAME,
-              port: process.env.REDIS_PORT,
-              password: process.env.REDIS_PASSWORD,
+          : new Redis(process.env.REDIS_URL, {
               keyPrefix: 'pets',
             });
     }
