@@ -9,11 +9,7 @@ export default class VersionController {
   }
 
   async getVersion(req: Request, res: Response) {
-    const version = this.versionService.getVersion(req);
-
-    if (req.accepts('xml')) {
-      return res.status(200).send(version);
-    }
+    const version = this.versionService.getVersion();
     return res.status(200).json(version);
   }
 }
