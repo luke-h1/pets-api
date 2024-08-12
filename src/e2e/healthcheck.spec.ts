@@ -2,7 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test.describe('healthcheck', () => {
   test('should return ok when db & cache is up', async ({ request }) => {
-    const result = await request.get('/api/healthcheck');
+    const result = await request.get('/api/healthcheck', {
+      headers: {
+        accept: 'application/json',
+      },
+    });
     expect(result.status()).toBe(200);
 
     const response = await result.json();
@@ -11,5 +15,19 @@ test.describe('healthcheck', () => {
       db: true,
       status: 'OK',
     });
+  });
+
+  test('should return xml response when requested', async ({ request }) => {
+    // set the accept header to application/xml
+    const result = await request.get('/api/healthcheck', {
+      headers: {
+        accept: 'application/xml',
+      },
+    });
+    expect(result.status()).toBe(200);
+    const response = await result.text();
+    expect(response).toEqual(
+      '<health><db>true</db><cache>true</cache><status>OK</status></health>',
+    );
   });
 });

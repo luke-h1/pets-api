@@ -4,7 +4,7 @@ import { envSchema } from './util/env';
 import logger from './utils/logger';
 
 class Main {
-  private async validateEnvironmentVariables() {
+  private validateEnvironmentVariables() {
     const environmentVariables = envSchema.safeParse({
       PORT: process.env.PORT,
 
@@ -35,7 +35,7 @@ class Main {
   }
 
   public async start() {
-    await this.validateEnvironmentVariables();
+    this.validateEnvironmentVariables();
     const app = CreateServer.init();
     const port = process.env.PORT || 8000;
 

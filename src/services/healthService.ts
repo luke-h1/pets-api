@@ -11,7 +11,6 @@ export default class HealthService {
 
   async health(): Promise<{ db: boolean; cache: boolean }> {
     const dbMsg = await db.$queryRaw`SELECT 1`;
-
     let cacheMsg = '';
 
     try {
@@ -20,8 +19,8 @@ export default class HealthService {
     } catch (error) {
       logger.error(`Cache connection error: ${error}`);
     }
-
     const cacheOk = cacheMsg === 'PONG';
+
     logger.info(
       `DB connection check result -> DB: ${!!dbMsg}, cache: ${cacheOk}`,
     );
