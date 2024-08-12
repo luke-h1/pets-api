@@ -14,7 +14,7 @@
 - Version endpoint
 - Swagger documentation
 - XML support for health and version endpoints
-- Containerized with Docker and kubernetes
+- Containerized with Docker
 
 ## tech stack
 
