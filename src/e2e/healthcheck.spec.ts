@@ -25,9 +25,11 @@ test.describe('healthcheck', () => {
       },
     });
     expect(result.status()).toBe(200);
-    const response = await result.text();
-    expect(response).toEqual(
-      '<health><db>true</db><cache>true</cache><status>OK</status></health>',
-    );
+    const response = await result.json();
+    expect(response).toEqual({
+      db: true,
+      cache: true,
+      status: 'OK',
+    });
   });
 });
