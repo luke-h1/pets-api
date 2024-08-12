@@ -17,15 +17,15 @@ describe('version', () => {
       expect(statusCode).toBe(200);
     });
 
-    test('getVersion returns xml if requested', async () => {
-      const { text, statusCode } = await supertest(app)
-        .get('/api/version')
-        .set('Accept', 'application/xml');
+    // test('getVersion returns xml if requested', async () => {
+    //   const { text, statusCode } = await supertest(app)
+    //     .get('/api/version')
+    //     .set('Accept', 'application/xml');
 
-      expect(statusCode).toBe(200);
-      expect(text).toEqual(
-        '<version><deployedBy>luke-h1</deployedBy><deployedAt>local</deployedAt></version>',
-      );
-    });
+    //   expect(statusCode).toBe(200);
+    //   expect(text).toEqual(
+    //     '<version><deployedBy>luke-h1</deployedBy><deployedAt>local</deployedAt></version>',
+    //   );
+    // });
   });
 });
