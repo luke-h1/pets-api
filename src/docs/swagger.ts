@@ -26,16 +26,21 @@ const generator = new OpenApiGeneratorV3(registry.definitions);
 
 const openApiSpec = () =>
   generator.generateDocument({
-    openapi: '3.0.0',
+    openapi: '3.1.0',
     info: {
       title: 'Pets adoption API',
       version: pkg.version,
       description: 'Restful API for pet adoptions',
     },
-    // servers: [
-    //   {
-    //     url,
-    //   },
-    // ],
+    servers: [
+      {
+        description: 'Local server',
+        url: 'http://localhost:8000',
+      },
+      {
+        description: 'dev server',
+        url: 'https://pets-staging.lhowsam.com',
+      },
+    ],
   });
 export default openApiSpec;
