@@ -154,7 +154,7 @@ resource "aws_ecs_service" "app_ecs" {
   task_definition                    = aws_ecs_task_definition.app_task.arn
   launch_type                        = "FARGATE"
   desired_count                      = var.task_count
-  deployment_maximum_percent         = 100
+  deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50 # Using 50% ensures the service is available but makes rolling updates much faster
 
   # Cause the deployment to fail and rollback if the service is unable to stabilize
