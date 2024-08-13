@@ -162,10 +162,6 @@ resource "aws_ecs_service" "app_ecs" {
     enable   = true
     rollback = true
   }
-  capacity_provider_strategy {
-    capacity_provider = "FARGATE_SPOT"
-    weight            = 1
-  }
   force_new_deployment = true
 
   load_balancer {
