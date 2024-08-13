@@ -1,9 +1,9 @@
 name: Deploy to staging
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
 env:
   TERRAFORM_ROOT: terraform
   DOCKER_ENV: production
@@ -82,9 +82,27 @@ jobs:
         run: terraform apply -auto-approve ./app.out
         working-directory: ${{ env.TERRAFORM_ROOT }}
 
+  build:
+    name: Build server
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: provision-ecr
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: install
+        uses: ./.github/actions/install
+
+      - name: build
+        uses: ./.github/actions/build
+
   build-and-push-docker:
     name: Build and push Docker image
-    needs: provision-ecr
+    needs: [provision-ecr, build]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -211,3 +229,8 @@ jobs:
         id: apply
         run: terraform apply ./app.out
         working-directory: ${{ env.TERRAFORM_ROOT }}
+
+      - name: e2e-staging
+        uses: ./.github/actions/e2e
+        with:
+          target: e2e-staging
