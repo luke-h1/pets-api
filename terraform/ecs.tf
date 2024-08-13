@@ -154,7 +154,7 @@ resource "aws_ecs_service" "app_ecs" {
   task_definition                    = aws_ecs_task_definition.app_task.arn
   launch_type                        = "FARGATE"
   desired_count                      = var.task_count
-  deployment_maximum_percent         = 200
+  deployment_maximum_percent         = 100
   deployment_minimum_healthy_percent = 50 # Using 50% ensures the service is available but makes rolling updates much faster
 
   # Cause the deployment to fail and rollback if the service is unable to stabilize
@@ -162,6 +162,11 @@ resource "aws_ecs_service" "app_ecs" {
     enable   = true
     rollback = true
   }
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 1
+  }
+  force_new_deployment = true
 
   load_balancer {
     target_group_arn = aws_lb_target_group.app_target_group.arn
