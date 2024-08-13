@@ -1,5 +1,4 @@
 # create an entry in route53 for the load balancer and the given domain
-
 resource "aws_acm_certificate" "cert" {
   private_key       = var.private_key
   certificate_body  = var.certificate_body
