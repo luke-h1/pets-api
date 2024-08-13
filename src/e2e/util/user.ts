@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { User } from '@prisma/client';
 import { LoginRequest, RegisterRequest } from '../../requests/auth';
+import { Dictionary } from '../../types/util';
 
 export const createUser = async (
   request: APIRequestContext,
@@ -45,25 +46,7 @@ export const loginUser = async (
   return result;
 };
 
-interface Headers {
-  date: string;
-  'content-type': string;
-  'transfer-encoding': string;
-  connection: string;
-  'set-cookie': string;
-  'access-control-allow-origin': string;
-  etag: string;
-  vary: string;
-  'cf-cache-status': string | undefined;
-  'report-to': string | undefined;
-  nel: string;
-  server: string;
-  'cf-ray'?: string;
-  'content-encoding': string;
-  'alt-svc'?: string;
-}
-
-export const getCookieFromHeaders = async (headers: Headers) => {
+export const getCookieFromHeaders = async (headers: Dictionary<string>) => {
   // due to the presence of other set-cookie headers from cf, aws ALB, etc
   // we need different logic for local vs deployed
   if (process.env.API_BASE_URL !== 'http://localhost:8000') {
@@ -74,8 +57,8 @@ export const getCookieFromHeaders = async (headers: Headers) => {
 
     const cookieValue = cookie?.split(';')[0].split('=')[1];
 
-    return cookieValue;
+    return cookieValue as string;
   }
 
-  return headers['set-cookie'][0].split(';')[0].split('=')[1];
+  return headers['set-cookie'][0].split(';')[0].split('=')[1] as string;
 };
