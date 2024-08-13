@@ -174,6 +174,9 @@ resource "aws_ecs_service" "app_ecs" {
     assign_public_ip = true
     security_groups  = ["${aws_security_group.application_service_security_group.id}"]
   }
+  triggers = {
+    redeployment = timestamp()
+  }
 }
 
 resource "aws_ecs_cluster" "app_cluster" {

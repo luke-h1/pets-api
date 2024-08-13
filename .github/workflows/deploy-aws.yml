@@ -24,6 +24,7 @@ jobs:
   provision-ecr:
     name: Provision ECR repository if needed
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
@@ -84,6 +85,7 @@ jobs:
     name: Build and push Docker image
     needs: provision-ecr
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -151,6 +153,7 @@ jobs:
     name: Migrate database
     needs: [build-and-push-docker]
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -168,6 +171,7 @@ jobs:
     name: Deploy infrastructure
     needs: [build-and-push-docker, migrate-db]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Install moreutils
         run: sudo apt install moreutils
