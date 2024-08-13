@@ -80,7 +80,7 @@ class CreateServer {
           secure: this.isProduction(),
           httpOnly: true, // prevent client side js from reading the cookie
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-          domain: this.isProduction() ? 'deployed_domain' : undefined,
+          domain: this.isProduction() ? process.env.API_BASE_URL : undefined,
           path: '/',
           signed: this.isProduction(),
           sameSite: 'lax',
