@@ -19,5 +19,10 @@ export default class HealthRoutes {
     this.app.head('/', (req, res) => {
       return res.status(200).send();
     });
+    this.app.get('/', (req, res) => {
+      return res.status(200).json({
+        message: 'Welcome to the API',
+      });
+    });
   }
 }

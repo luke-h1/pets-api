@@ -7,7 +7,7 @@ const app = server.init();
 
 describe('errorHandler', () => {
   test('global error handler returns 404', async () => {
-    const { body, statusCode } = await supertest(app).get('/');
+    const { body, statusCode } = await supertest(app).get('/not/found');
 
     expect(statusCode).toEqual(404);
 
