@@ -48,7 +48,7 @@ class CreateServer {
     // *order is important*
 
     // middleware
-    this.app.set('trust-proxy', 1);
+    this.app.enable('trust proxy');
     this.app.disable('x-powered-by');
     this.app.set('json spaces', 2);
     this.app.use(cors());

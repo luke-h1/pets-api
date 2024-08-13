@@ -16,3 +16,7 @@ e2e-install-browsers:
 .PHONY: e2e-local
 e2e-local:
 	./node_modules/.bin/playwright test --config=playwright-base.config.ts ${tests}
+
+.PHONY: e2e-staging
+e2e-staging:
+	./node_modules/.bin/playwright test --config=playwright-stg.config.ts ${tests}

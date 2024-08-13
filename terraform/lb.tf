@@ -25,6 +25,7 @@ resource "aws_alb" "app_load_balancer" {
   tags = merge(var.tags, {
     "Name" = "${var.project_name}-${var.env}-lb"
   })
+  preserve_host_header = true
 }
 
 resource "aws_security_group" "app_load_balancer_security_group" {
@@ -73,6 +74,12 @@ resource "aws_lb_target_group" "app_target_group" {
     interval          = 60
     timeout           = 30
     healthy_threshold = 3
+  }
+  stickiness {
+    cookie_name     = "lb"
+    cookie_duration = 3600
+    enabled         = true
+    type            = "lb_cookie"
   }
 }
 

@@ -36,7 +36,7 @@ export default class AuthController {
       });
     }
 
-    // req.session.userId = result?.id;
+    req.session.userId = result?.id;
 
     return res.status(201).json(omit(result, 'password'));
   }
@@ -80,8 +80,8 @@ export default class AuthController {
         ],
       });
     }
-    req.session.userId = result.id;
     // auth user with express-session
+    req.session.userId = result.id;
 
     return res.status(200).json(omit(result, 'password'));
   }

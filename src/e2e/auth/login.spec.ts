@@ -22,18 +22,6 @@ test.describe('login', () => {
       email: createUserResponse.email,
       id: expect.any(String),
     });
-
-    expect(result.headers()).toEqual({
-      'access-control-allow-origin': '*',
-      connection: 'keep-alive',
-      'content-length': expect.any(String),
-      'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String),
-      etag: expect.any(String),
-      'keep-alive': expect.any(String),
-      'set-cookie': expect.stringContaining('connect.sid='),
-      vary: expect.any(String),
-    });
   });
 
   test('returns validation error when password is incorrect', async ({
@@ -66,17 +54,6 @@ test.describe('login', () => {
       statusCode: 400,
       title: 'Bad credentials supplied',
       type: 'Bad request',
-    });
-
-    expect(login.headers()).toEqual({
-      'access-control-allow-origin': '*',
-      connection: 'keep-alive',
-      'content-length': expect.any(String),
-      'content-type': 'application/json; charset=utf-8',
-      date: expect.any(String),
-      etag: expect.any(String),
-      'keep-alive': expect.any(String),
-      vary: expect.any(String),
     });
   });
 

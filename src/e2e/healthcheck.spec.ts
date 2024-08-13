@@ -25,6 +25,7 @@ test.describe('healthcheck', () => {
       },
     });
     expect(result.status()).toBe(200);
+
     const response = await result.json();
     expect(response).toEqual({
       db: true,
