@@ -94,7 +94,7 @@ class CreateServer {
     this.app.use(
       '/docs',
       swaggerUi.serve,
-      swaggerUi.setup(openApiSpec, {
+      swaggerUi.setup(openApiSpec(process.env.API_BASE_URL), {
         customSiteTitle: 'Pet API docs | Swagger UI',
       }),
     );
