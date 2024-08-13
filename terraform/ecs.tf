@@ -162,7 +162,6 @@ resource "aws_ecs_service" "app_ecs" {
     enable   = true
     rollback = true
   }
-  force_new_deployment = true
 
   load_balancer {
     target_group_arn = aws_lb_target_group.app_target_group.arn
@@ -174,9 +173,6 @@ resource "aws_ecs_service" "app_ecs" {
     subnets          = ["${aws_default_subnet.application_subnet_a.id}", "${aws_default_subnet.application_subnet_b.id}", "${aws_default_subnet.application_subnet_c.id}"]
     assign_public_ip = true
     security_groups  = ["${aws_security_group.application_service_security_group.id}"]
-  }
-  triggers = {
-    redeployment = timestamp()
   }
 }
 
