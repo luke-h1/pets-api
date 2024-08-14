@@ -2,9 +2,9 @@
   "name": "pets-api",
   "version": "1.0.0",
   "main": "index.js",
-  "packageManager": "pnpm@9.0.6",
+  "packageManager": "pnpm@9.7.0",
   "engines": {
-    "pnpm": "9.0.6"
+    "pnpm": "9.7.0"
   },
   "scripts": {
     "alphabetize": "node scripts/alphabetize.js",
