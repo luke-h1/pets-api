@@ -1,4 +1,7 @@
-import { OpenApiGeneratorV3, OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
+import {
+  OpenApiGeneratorV3,
+  OpenAPIRegistry,
+} from '@asteasolutions/zod-to-openapi';
 import pkg from '../../package.json';
 import authPaths from './paths/authPaths';
 import healthPaths from './paths/healthPaths';
