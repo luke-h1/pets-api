@@ -1,7 +1,4 @@
-import {
-  OpenAPIRegistry,
-  OpenApiGeneratorV3,
-} from '@asteasolutions/zod-to-openapi';
+import { OpenApiGeneratorV3, OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import pkg from '../../package.json';
 import authPaths from './paths/authPaths';
 import healthPaths from './paths/healthPaths';
@@ -34,12 +31,12 @@ const openApiSpec = () =>
     },
     servers: [
       {
-        description: 'Local server',
+        description: 'local',
         url: 'http://localhost:8000',
       },
       {
-        description: 'dev server',
-        url: 'https://pets-staging.lhowsam.com',
+        description: 'live',
+        url: 'https://pets.lhowsam.com',
       },
     ],
   });
