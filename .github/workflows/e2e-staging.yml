@@ -22,6 +22,10 @@ jobs:
       - name: Install
         uses: ./.github/actions/install
 
+      - name: pnpm db:generate
+        run: pnpm db:generate
+        shell: bash
+
       - name: e2e staging
         uses: ./.github/actions/e2e
         with:
