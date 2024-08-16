@@ -26,6 +26,6 @@ jobs:
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
-          flyctl deploy --config fly.toml --env DEPLOYED_AT=$(date +%s) DEPLOYED_BY=${{ github.actor }} --push
+          flyctl deploy --config fly.toml --push
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
