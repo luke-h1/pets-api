@@ -1,14 +1,15 @@
-name: Build
+name: e2e staging
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 */6 * * *'
 jobs:
-  build:
+  e2e-staging:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
-    name: Build
+
+    name: e2e-staging
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
