@@ -24,3 +24,8 @@ jobs:
 
       - name: Build server
         uses: ./.github/actions/build
+
+      - name: e2e staging
+        uses: ./.github/actions/e2e
+        with:
+          target: e2e-staging
