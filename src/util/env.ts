@@ -1,7 +1,7 @@
 import z from './validation';
 
 export const envSchema = z.object({
-  API_BASE_URL: z.string().default('http://localhost'),
+  API_BASE_URL: z.string().default('http://localhost:8000'),
   PORT: z.string().default('8000'),
   // postgres
   DATABASE_URL: z

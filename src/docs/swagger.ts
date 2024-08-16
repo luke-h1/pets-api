@@ -32,15 +32,5 @@ const openApiSpec = () =>
       version: pkg.version,
       description: 'Restful API for pet adoptions',
     },
-    servers: [
-      {
-        description: 'local',
-        url: 'http://localhost:8000',
-      },
-      {
-        description: 'live',
-        url: 'https://pets-api.lhowsam.com',
-      },
-    ],
   });
 export default openApiSpec;

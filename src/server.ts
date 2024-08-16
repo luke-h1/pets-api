@@ -95,7 +95,7 @@ class CreateServer {
       '/docs',
       swaggerUi.serve,
       swaggerUi.setup(openApiSpec(), {
-        swaggerUrl: '/docs',
+        swaggerUrl: process.env.API_BASE_URL,
       }),
     );
 
