@@ -39,7 +39,7 @@ const openApiSpec = () =>
       },
       {
         description: 'live',
-        url: 'https://pets.lhowsam.com',
+        url: 'https://pets-api.lhowsam.com',
       },
     ],
   });

@@ -38,3 +38,7 @@ runs:
       uses: ./.github/actions/e2e
       with:
         target: e2e-local
+
+    - name: docker compose down
+      run: docker compose down
+      shell: bash
