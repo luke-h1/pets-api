@@ -3,7 +3,7 @@ import { pets as mockPets } from '../../controllers/__mocks__/pet';
 import { user } from '../../controllers/__mocks__/user';
 import { db } from '../../db/prisma';
 import { CreatePetInput } from '../../schema/pet.schema';
-import PetService from '../petService';
+import PetService from '../pet.service';
 
 describe('petService', () => {
   let petService: PetService;
@@ -75,8 +75,9 @@ describe('petService', () => {
         age: '2',
         birthDate: '2022-02-02',
         breed: 'cat :)',
-        photoUrl:
-          'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        images: [
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        ],
         status: PetStatus.AVAILABLE,
         tags: ['cute', 'indoor'],
       };
@@ -94,7 +95,7 @@ describe('petService', () => {
   });
 
   describe('updatePet', () => {
-    test('can update a pet', async () => {
+    test('update a pet', async () => {
       const u = await db.user.create({
         data: user,
       });
@@ -105,8 +106,9 @@ describe('petService', () => {
         age: '2',
         birthDate: '2022-02-02',
         breed: 'cat :)',
-        photoUrl:
-          'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        images: [
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        ],
         status: PetStatus.AVAILABLE,
         tags: ['cute', 'indoor'],
       };
@@ -130,7 +132,7 @@ describe('petService', () => {
   });
 
   describe('deletePet', () => {
-    test('can delete pet', async () => {
+    test('delete pet', async () => {
       const u = await db.user.create({
         data: user,
       });
@@ -141,8 +143,9 @@ describe('petService', () => {
         age: '2',
         birthDate: '2022-02-02',
         breed: 'cat :)',
-        photoUrl:
-          'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        images: [
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        ],
         status: PetStatus.AVAILABLE,
         tags: ['cute', 'indoor'],
       };

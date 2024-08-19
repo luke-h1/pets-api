@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import HealthController from '../../controllers/healthController';
+import HealthController from '../controllers/health.controller';
 
 export default class HealthRoutes {
   private readonly app: Express;

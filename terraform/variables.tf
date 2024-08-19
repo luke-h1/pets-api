@@ -114,3 +114,9 @@ variable "database_url" {
   type        = string
   description = "The URL of the postgres database"
 }
+
+variable "session_domain" {
+  type        = string
+  description = "The domain to use for the session cookie. This should not start with https://"
+  default     = "pets-api.lhowsam.com"
+}

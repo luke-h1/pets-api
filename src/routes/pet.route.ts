@@ -1,20 +1,21 @@
 import { Express, Response } from 'express';
-import PetController from '../../controllers/petController';
-import isAuth from '../../middleware/isAuth';
-import isPetOwner from '../../middleware/isPetOwner';
-import validateResource from '../../middleware/validateResource';
+import PetController from '../controllers/pet.controller';
+import isAuth from '../middleware/isAuth';
+import isPetOwner from '../middleware/isPetOwner';
+import validateResource from '../middleware/validateResource';
+
 import {
   CreatePetRequest,
   DeletePetReqeust,
   GetPetRequest,
   UpdatePetRequest,
-} from '../../requests/pet';
+} from '../requests/pet.requests';
 import {
   createPetSchema,
   deletePetSchema,
   getPetSchema,
   updatePetSchema,
-} from '../../schema/pet.schema';
+} from '../schema/pet.schema';
 
 export default class PetRoutes {
   private readonly app: Express;

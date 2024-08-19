@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import 'express-async-errors';
 import bodyParser from 'body-parser';
 import compression from 'compression';
@@ -16,9 +15,12 @@ import Routes from './routes';
 import testRedis from './test/redis';
 import logger from './utils/logger';
 
+const dotenvFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({
-  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env.development',
+  path: dotenvFile,
 });
+
+logger.info(`loaded ${dotenvFile}`);
 
 class CreateServer {
   private readonly app: Express;
@@ -48,12 +50,16 @@ class CreateServer {
     // *order is important*
 
     // middleware
+    this.app.use(bodyParser.urlencoded({ extended: true, limit: '25mb' }));
+    this.app.use(
+      express.json({
+        limit: '25mb',
+      }),
+    );
     this.app.enable('trust proxy');
     this.app.disable('x-powered-by');
     this.app.set('json spaces', 2);
     this.app.use(cors());
-    this.app.use(express.json());
-    this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.use(compression());
 
     const RedisStore = connectRedis(session);
