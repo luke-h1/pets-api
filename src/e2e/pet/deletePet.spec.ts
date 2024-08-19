@@ -23,7 +23,10 @@ test.describe('deletePet', () => {
       breed: faker.animal.cat(),
       birthDate: '2024-08-02',
       description: faker.animal.cat(),
-      photoUrl: faker.internet.url(),
+      images: [
+        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+      ],
       status: PetStatus.AVAILABLE,
       tags: ['pet', 'cat', 'tag'],
     };

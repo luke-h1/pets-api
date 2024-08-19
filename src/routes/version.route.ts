@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import VersionController from '../../controllers/versionController';
+import VersionController from '../controllers/version.controller';
 
 export default class VersionRoutes {
   private readonly app: Express;

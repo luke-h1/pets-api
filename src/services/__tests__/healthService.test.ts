@@ -1,4 +1,4 @@
-import HealthService from '../healthService';
+import HealthService from '../health.service';
 
 describe('healthService', () => {
   const healthService = new HealthService();

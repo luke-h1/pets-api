@@ -5,8 +5,8 @@ import {
   DeletePetReqeust,
   GetPetRequest,
   UpdatePetRequest,
-} from '../requests/pet';
-import PetService from '../services/petService';
+} from '../requests/pet.requests';
+import PetService from '../services/pet.service';
 import parsePaginationParams from '../utils/parsePaginationParams';
 
 export default class PetController {

@@ -1,5 +1,3 @@
-// import Redis from 'ioredis';
-
 import { Redis } from 'ioredis';
 import isNumber from 'lodash/isNumber';
 import testRedis from '../test/redis';

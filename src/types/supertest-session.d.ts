@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 declare module 'supertest-session' {
   // index.d.ts
-  import { CookieAccessInfo } from 'cookiejar';
   import { Server } from 'http';
   import { Server as SecureServer } from 'https';
   import { SuperAgentTest } from 'supertest';

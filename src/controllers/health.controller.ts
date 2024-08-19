@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import HealthService from '../services/healthService';
+import HealthService from '../services/health.service';
 
 export default class HealthController {
   private readonly healthService: HealthService;

@@ -40,4 +40,6 @@ RUN pnpm db:generate
 
 USER node 
 
+ENV TZ=Europe/London
+
 CMD ["pnpm", "run", "start:prod"]

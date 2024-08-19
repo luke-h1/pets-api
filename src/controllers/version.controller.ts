@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import VersionService from '../services/versionService';
+import VersionService from '../services/version.service';
 
 export default class VersionController {
   private readonly versionService: VersionService;

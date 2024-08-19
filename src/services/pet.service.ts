@@ -28,7 +28,6 @@ export default class PetService {
     });
 
     // save to cache
-    // console.log('pets', JSON.stringify(pets, null, 2));
     // await this.redis.set('pets', JSON.stringify(pets));
 
     return pets;
@@ -48,8 +47,6 @@ export default class PetService {
 
     // await this.redis.set(`pet:${id}`, JSON.stringify(pet));
 
-    // console.log('key is', `pet:${id}`);
-
     return pet;
   }
 
@@ -60,8 +57,6 @@ export default class PetService {
         creatorId: userId,
       },
     });
-
-    // await this.redis.set(`pet:${newPet.id}`, JSON.stringify(newPet));
 
     return newPet;
   }

@@ -21,9 +21,6 @@ const validateResource = (schema: AnyZodObject) => {
       logger.warn('validation exception caught', JSON.stringify(e));
 
       if (e instanceof z.ZodError) {
-        // throw new BadRequestError({
-
-        // })
         return res.status(400).json({
           status: 'error',
           message: 'Validation failed',

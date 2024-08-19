@@ -10,6 +10,9 @@ jest.setTimeout(30000);
 
 beforeAll(async () => {
   await db.$connect();
+  const deletePet = db.pet.deleteMany();
+  const deleteUser = db.user.deleteMany();
+  await db.$transaction([deletePet, deleteUser]);
 });
 
 beforeEach(async () => {
@@ -17,7 +20,6 @@ beforeEach(async () => {
 
   const deletePet = db.pet.deleteMany();
   const deleteUser = db.user.deleteMany();
-
   await db.$transaction([deletePet, deleteUser]);
 });
 

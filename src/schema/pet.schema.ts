@@ -1,5 +1,9 @@
 import z from '../util/validation';
 
+const ALLOWED_IMAGE_DOMAINS = [
+  'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com',
+];
+
 export const petSchema = z
   .object({
     id: z.string(),
@@ -10,10 +14,14 @@ export const petSchema = z
       required_error: 'Name is required',
       description: 'Name of the pet',
     }),
+    images: z.array(
+      z.string().refine(s => {
+        return ALLOWED_IMAGE_DOMAINS.every(domain => s.startsWith(domain));
+      }),
+    ),
     breed: z.string(),
     status: z.enum(['AVAILABLE', 'PENDING', 'ADOPTED']),
     birthDate: z.string(),
-    photoUrl: z.string(),
     age: z.string(),
     description: z.string(),
     tags: z.array(z.string()),

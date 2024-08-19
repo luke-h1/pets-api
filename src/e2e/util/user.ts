@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { User } from '@prisma/client';
-import { LoginRequest, RegisterRequest } from '../../requests/auth';
+import { LoginRequest, RegisterRequest } from '../../requests/auth.requests';
 import { Dictionary } from '../../types/util';
 
 export const createUser = async (
@@ -49,6 +49,7 @@ export const loginUser = async (
 export const getCookieFromHeaders = async (headers: Dictionary<string>) => {
   // due to the presence of other set-cookie headers from cf, aws ALB, etc
   // we need different logic for local vs deployed
+
   if (process.env.API_BASE_URL !== 'http://localhost:8000') {
     const setCookieHeader = headers['set-cookie'];
     const cookie = setCookieHeader

@@ -13,9 +13,10 @@ help:
 e2e-install-browsers:
 	pnpm exec playwright install --with-deps chromium
 
+
 .PHONY: e2e-local
 e2e-local:
-	./node_modules/.bin/playwright test --config=playwright-base.config.ts ${tests}
+	API_BASE_URL=http://localhost:8000 ./node_modules/.bin/playwright test --config=playwright-base.config.ts ${tests}
 
 .PHONY: e2e-staging
 e2e-staging:

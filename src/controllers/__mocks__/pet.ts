@@ -1,5 +1,10 @@
 import { CreatePetInput } from '../../schema/pet.schema';
 
+export const testImages: CreatePetInput['body']['images'] = [
+  'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+  'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+];
+
 export const pets: CreatePetInput['body'][] = [
   {
     name: 'Buddy',
@@ -9,7 +14,7 @@ export const pets: CreatePetInput['body'][] = [
     birthDate: '2022',
     description: 'dog',
     tags: ['dog'],
-    photoUrl: 'https://images.unsplash.com/photo-1560807707-8cc777a4d2f9',
+    images: testImages,
   },
   {
     name: 'Mittens',
@@ -19,7 +24,7 @@ export const pets: CreatePetInput['body'][] = [
     birthDate: '2022',
     description: 'dog',
     tags: ['dog'],
-    photoUrl: 'https://images.unsplash.com/photo-1592194996308-7d9c3f8d4a2b',
+    images: testImages,
   },
   {
     name: 'Charlie',
@@ -29,7 +34,7 @@ export const pets: CreatePetInput['body'][] = [
     birthDate: '2022',
     description: 'dog',
     tags: ['dog'],
-    photoUrl: 'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8',
+    images: testImages,
   },
   {
     name: 'Whiskers',
@@ -39,7 +44,7 @@ export const pets: CreatePetInput['body'][] = [
     birthDate: '2022',
     description: 'dog',
     tags: ['dog'],
-    photoUrl: 'https://images.unsplash.com/photo-1560807707-8cc777a4d2f9',
+    images: testImages,
   },
   {
     name: 'Max',
@@ -49,7 +54,7 @@ export const pets: CreatePetInput['body'][] = [
     birthDate: '2022',
     description: 'dog',
     tags: ['dog'],
-    photoUrl: 'https://images.unsplash.com/photo-1558788353-f76d92427f16',
+    images: testImages,
   },
   {
     name: 'Luna',
@@ -59,6 +64,6 @@ export const pets: CreatePetInput['body'][] = [
     birthDate: '2022',
     description: 'dog',
     tags: ['dog'],
-    photoUrl: 'https://images.unsplash.com/photo-1592194996308-7d9c3f8d4a2b',
+    images: testImages,
   },
 ];

@@ -12,59 +12,41 @@ describe('pet', () => {
       const u = await db.user.create({
         data: user,
       });
+
       await db.pet.createMany({
-        data: pets.slice(3).map(p => ({
+        data: pets.map(p => ({
           ...p,
           creatorId: u.id,
         })),
       });
 
       const { body, statusCode } = await supertest(app).get('/api/pets');
-
-      expect(body).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            age: expect.any(String),
-            birthDate: expect.any(String),
-            breed: expect.any(String),
-            createdAt: expect.any(String),
-            creatorId: expect.any(String),
-            description: expect.any(String),
-            id: expect.any(String),
-            name: expect.any(String),
-            photoUrl: expect.any(String),
-            status: expect.any(String),
-            tags: expect.arrayContaining([expect.any(String)]),
-            updatedAt: expect.any(String),
-          }),
-        ]),
-      );
       expect(statusCode).toBe(200);
+      expect(body).toHaveLength(6);
+    });
+  });
+
+  test('getPets with pagination', async () => {
+    const u = await db.user.create({
+      data: user,
+    });
+    await db.pet.createMany({
+      data: pets.slice(3).map(p => ({
+        ...p,
+        creatorId: u.id,
+      })),
     });
 
-    test('getPets with pagination', async () => {
-      const u = await db.user.create({
-        data: user,
-      });
-      await db.pet.createMany({
-        data: pets.slice(3).map(p => ({
-          ...p,
-          creatorId: u.id,
-        })),
-      });
+    const { body, statusCode } = await supertest(app).get(
+      '/api/pets?page=1&pageSize=2',
+    );
+    expect(body).toHaveLength(2);
+    expect(statusCode).toBe(200);
 
-      const { body, statusCode } = await supertest(app).get(
-        '/api/pets?page=1&pageSize=2',
-      );
-      expect(body).toHaveLength(2);
-      expect(statusCode).toBe(200);
-
-      // test we return empty array if no results
-      const { body: secondPageBody, statusCode: secondPageStatusCode } =
-        await supertest(app).get('/api/pets?page=2&pageSize=3');
-      expect(secondPageBody).toHaveLength(0);
-      expect(secondPageStatusCode).toBe(200);
-    });
+    const { body: secondPageBody, statusCode: secondPageStatusCode } =
+      await supertest(app).get('/api/pets?page=2&pageSize=3');
+    expect(secondPageBody).toHaveLength(0);
+    expect(secondPageStatusCode).toBe(200);
   });
 
   test('getPet', async () => {

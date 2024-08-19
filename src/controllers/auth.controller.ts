@@ -3,8 +3,8 @@ import omit from 'lodash/omit';
 import BadRequestError from '../errors/BadRequestError';
 import NotFoundError from '../errors/NotFoundError';
 import { authErrorCodes } from '../errors/auth';
-import { LoginRequest, RegisterRequest } from '../requests/auth';
-import AuthService from '../services/authService';
+import { LoginRequest, RegisterRequest } from '../requests/auth.requests';
+import AuthService from '../services/auth.service';
 import logger from '../utils/logger';
 
 export default class AuthController {

@@ -1,7 +1,7 @@
 import { db } from '../../db/prisma';
 import { authErrorCodes } from '../../errors/auth';
 import { CreateUserInput } from '../../schema/auth.schema';
-import AuthService from '../authService';
+import AuthService from '../auth.service';
 
 describe('AuthService', () => {
   const authService = new AuthService();
