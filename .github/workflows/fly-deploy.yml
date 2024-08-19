@@ -7,6 +7,11 @@ on:
     branches:
       - main
 env:
+  DATABASE_URL: postgres://pets:pets@localhost:5432/pets
+  S3_ASSETS_BUCKET: pets-api-staging-assets
+  S3_ASSETS_REGION: eu-west-2
+  S3_ASSETS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  S3_ASSETS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   REDIS_URL: redis://localhost:6379
   API_BASE_URL: http://localhost:8000
 jobs:
