@@ -13,7 +13,7 @@ describe('petService', () => {
   });
 
   describe('getPets', () => {
-    test('returns pets from the database', async () => {
+    test('returns pets', async () => {
       const u = await db.user.create({
         data: user,
       });
@@ -30,15 +30,15 @@ describe('petService', () => {
           ...pet,
           creatorId: u.id,
           id: expect.any(String),
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
+          createdAt: expect.any(String),
+          updatedAt: expect.any(String),
         })),
       ]);
     });
   });
 
   describe('getPet', () => {
-    test('returns a pet from the database', async () => {
+    test('returns a pet by id', async () => {
       const u = await db.user.create({
         data: user,
       });

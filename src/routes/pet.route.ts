@@ -27,7 +27,7 @@ export default class PetRoutes {
     this.petController = new PetController();
   }
 
-  public initRoutes(): void {
+  public setupRoutes(): void {
     this.app.get('/api/pets', (req, res) => {
       return this.petController.getPets(req, res);
     });

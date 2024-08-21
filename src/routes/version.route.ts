@@ -11,7 +11,7 @@ export default class VersionRoutes {
     this.versionController = new VersionController();
   }
 
-  public initRoutes(): void {
+  public setupRoutes(): void {
     this.app.get('/api/version', (req, res) => {
       return this.versionController.getVersion(req, res);
     });

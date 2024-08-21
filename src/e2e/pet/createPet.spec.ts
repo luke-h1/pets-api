@@ -50,6 +50,18 @@ test.describe('createPet', () => {
       id: expect.any(String),
       updatedAt: expect.any(String),
     });
+
+    // assert cache was updated
+    const existingPet = await request.get(`/api/pets/${response.id}`);
+    expect(existingPet.status()).toEqual(200);
+    const existingPetResponse = await existingPet.json();
+    expect(existingPetResponse).toEqual(response);
+
+    // assert /api/pets cache tree was updated
+    const allPets = await request.get('/api/pets');
+    expect(allPets.status()).toEqual(200);
+    const allPetsResponse = await allPets.json();
+    expect(allPetsResponse).toContainEqual(response);
   });
 
   test('returns validation error if not authenticated', async ({ request }) => {

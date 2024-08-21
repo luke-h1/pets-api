@@ -1,4 +1,5 @@
 import { Express } from 'express';
+import AdminRoutes from './admin.route';
 import AuthRoutes from './auth.route';
 import HealthRoutes from './health.route';
 import ImageRoutes from './image.route';
@@ -18,6 +19,8 @@ export default class Routes {
 
   private readonly imageRoutes: ImageRoutes;
 
+  private readonly adminRoutes: AdminRoutes;
+
   constructor(app: Express) {
     this.app = app;
     this.healthRoutes = new HealthRoutes(app);
@@ -25,13 +28,15 @@ export default class Routes {
     this.authRoutes = new AuthRoutes(app);
     this.versionRoutes = new VersionRoutes(app);
     this.imageRoutes = new ImageRoutes(app);
+    this.adminRoutes = new AdminRoutes(app);
   }
 
   public setupRoutes(): void {
-    this.healthRoutes.initRoutes();
-    this.versionRoutes.initRoutes();
-    this.petRoutes.initRoutes();
-    this.authRoutes.initRoutes();
-    this.imageRoutes.initRoutes();
+    this.healthRoutes.setupRoutes();
+    this.versionRoutes.setupRoutes();
+    this.petRoutes.setupRoutes();
+    this.authRoutes.setupRoutes();
+    this.imageRoutes.setupRoutes();
+    this.adminRoutes.setupRoutes();
   }
 }

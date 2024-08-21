@@ -20,8 +20,9 @@ async function main() {
           breed: 'Golden Retriever',
           description:
             'Buddy is a friendly and energetic Golden Retriever who loves to play fetch.',
-          photoUrl:
-            'https://images.dog.ceo/breeds/segugio-italian/n02090722_001.jpg',
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
           status: PetStatus.AVAILABLE,
           tags: ['friendly', 'energetic'],
         },
@@ -48,8 +49,9 @@ async function main() {
               status: PetStatus.PENDING,
               description:
                 'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
-              photoUrl:
-                'https://images.pexels.com/photos/10891037/pexels-photo-10891037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              images: [
+                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+              ],
               tags: ['cute', 'fluffy'],
             },
             {
@@ -60,8 +62,9 @@ async function main() {
               status: PetStatus.ADOPTED,
               description:
                 'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
-              photoUrl:
-                'https://images.pexels.com/photos/10891037/pexels-photo-10891037.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              images: [
+                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+              ],
               tags: ['cute', 'fluffy'],
             },
           ],
@@ -89,8 +92,9 @@ async function main() {
               status: PetStatus.AVAILABLE,
               description:
                 'Chloe is a unique Sphynx cat who loves to stay warm.',
-              photoUrl:
-                'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              images: [
+                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+              ],
               tags: ['unique', 'warm'],
             },
             {
@@ -101,8 +105,9 @@ async function main() {
               status: PetStatus.AVAILABLE,
               description:
                 'Leo is a friendly British Shorthair cat who loves to play.',
-              photoUrl:
-                'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              images: [
+                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+              ],
               tags: ['friendly', 'playful'],
             },
             {
@@ -113,8 +118,9 @@ async function main() {
               status: PetStatus.AVAILABLE,
               description:
                 'Nala is a graceful Russian Blue cat with a calm demeanor.',
-              photoUrl:
-                'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+              images: [
+                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+              ],
               tags: ['graceful', 'calm'],
             },
           ],

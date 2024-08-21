@@ -14,6 +14,7 @@ import errorHandler from './errors/errorHandler';
 import Routes from './routes';
 import testRedis from './test/redis';
 import logger from './utils/logger';
+// import { parseQueryString } from './utils/queryStringParsers';
 
 const dotenvFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({
@@ -29,10 +30,13 @@ class CreateServer {
 
   private readonly redisDb: typeof RedisDatabase;
 
+  private readonly maxBodySize: string;
+
   constructor() {
     this.app = express();
     this.routes = new Routes(this.app);
     this.redisDb = RedisDatabase;
+    this.maxBodySize = '25mb';
   }
 
   private isProduction() {
@@ -50,13 +54,17 @@ class CreateServer {
     // *order is important*
 
     // middleware
-    this.app.use(bodyParser.urlencoded({ extended: true, limit: '25mb' }));
+    // this.app.set('query parser', parseQueryString);
+    // logging
+    this.app.enable('trust proxy');
     this.app.use(
       express.json({
-        limit: '25mb',
+        limit: this.maxBodySize,
       }),
     );
-    this.app.enable('trust proxy');
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(bodyParser.text());
+
     this.app.disable('x-powered-by');
     this.app.set('json spaces', 2);
     this.app.use(cors());
@@ -86,16 +94,13 @@ class CreateServer {
           secure: this.isProduction(),
           httpOnly: true, // prevent client side js from reading the cookie
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-          domain: this.isProduction() ? 'pets-api-live.fly.dev' : undefined,
+          domain: this.isProduction() ? process.env.SESSION_DOMAIN : undefined,
           path: '/',
           signed: this.isProduction(),
           sameSite: 'lax',
         },
       }),
     );
-
-    // routing
-    this.routes.setupRoutes();
 
     this.app.use(
       '/docs',
@@ -104,6 +109,9 @@ class CreateServer {
         swaggerUrl: process.env.API_BASE_URL,
       }),
     );
+
+    // routing
+    this.routes.setupRoutes();
 
     // global 404
     this.handleNotFound();

@@ -3,6 +3,7 @@ import {
   OpenAPIRegistry,
 } from '@asteasolutions/zod-to-openapi';
 import pkg from '../../package.json';
+import adminPaths from './paths/adminPaths';
 import authPaths from './paths/authPaths';
 import healthPaths from './paths/healthPaths';
 import imagePaths from './paths/imagePaths';
@@ -19,6 +20,9 @@ authPaths(registry);
 
 // images
 imagePaths(registry);
+
+// admin
+adminPaths(registry);
 
 // version
 versionPaths(registry);

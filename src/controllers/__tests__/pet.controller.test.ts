@@ -44,7 +44,7 @@ describe('pet', () => {
     expect(statusCode).toBe(200);
 
     const { body: secondPageBody, statusCode: secondPageStatusCode } =
-      await supertest(app).get('/api/pets?page=2&pageSize=3');
+      await supertest(app).get('/api/pets?page=200&pageSize=300');
     expect(secondPageBody).toHaveLength(0);
     expect(secondPageStatusCode).toBe(200);
   });

@@ -26,7 +26,7 @@ export default class ImageRoutes {
     this.imageController = new ImageController();
   }
 
-  public initRoutes(): void {
+  public setupRoutes(): void {
     this.app.post(
       '/api/images',
       isAuth(),

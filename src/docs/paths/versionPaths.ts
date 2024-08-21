@@ -7,6 +7,7 @@ const versionPaths = (registry: OpenAPIRegistry) => {
     path: '/api/version',
     description:
       'Get current version of API as well as who deployed this version',
+    summary: 'Get version of currently deployed API',
     responses: {
       200: {
         description: 'version of api and user who deployed it',

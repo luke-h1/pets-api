@@ -11,7 +11,7 @@ export default class HealthRoutes {
     this.healthController = new HealthController();
   }
 
-  public initRoutes(): void {
+  public setupRoutes(): void {
     this.app.get('/api/healthcheck', (req, res) => {
       return this.healthController.health(req, res);
     });
