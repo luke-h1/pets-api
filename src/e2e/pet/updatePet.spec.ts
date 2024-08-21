@@ -62,6 +62,18 @@ test.describe('updatePet', () => {
       updatedAt: expect.any(String),
       creatorId: body.creatorId,
     });
+
+    // assert cache was updated
+    const existingPet = await request.get(`/api/pets/${body.id}`);
+    expect(existingPet.status()).toEqual(200);
+    const existingPetResponse = await existingPet.json();
+    expect(existingPetResponse).toEqual(updatedBody);
+
+    // assert /pets endpoint cache tree was updated
+    const allPets = await request.get('/api/pets');
+    expect(allPets.status()).toEqual(200);
+    const allPetsResponse = await allPets.json();
+    expect(allPetsResponse).toContainEqual(updatedBody);
   });
 
   test('returns 404 when pet doesnt exist', async ({ request }) => {

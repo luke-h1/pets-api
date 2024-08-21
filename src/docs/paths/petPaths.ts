@@ -8,6 +8,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
     method: 'get',
     path: '/api/pets',
     description: 'Get all pets',
+    summary: 'Fetches all pets',
     request: {
       query: z.object({
         page: z.number().optional(),
@@ -39,6 +40,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
     method: 'get',
     path: '/api/pets/{id}',
     description: 'Get pet by id',
+    summary: 'Fetches a pet by id',
     request: {
       params: z.object({
         id: z.string(),
@@ -69,6 +71,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
     method: 'post',
     path: '/api/pets',
     description: 'Create a pet',
+    summary: 'Create a pet',
     request: {
       body: {
         content: {
@@ -106,6 +109,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
     method: 'put',
     path: '/api/pets/{id}',
     description: 'Update a pet',
+    summary: 'Update a pet',
     request: {
       params: z.object({ id: z.string() }),
       cookies: z.object({
@@ -145,6 +149,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
     method: 'delete',
     path: '/api/pets/{id}',
     description: 'delete a pet',
+    summary: 'Delete a pet',
     request: {
       params: z.object({ id: z.string() }),
       cookies: z.object({

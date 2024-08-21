@@ -8,6 +8,7 @@ const authPaths = (registry: OpenAPIRegistry) => {
     path: '/api/auth',
     description:
       'Returns a boolean indicating if the current user is authenticated',
+    summary: 'Check if user is authenticated',
     responses: {
       200: {
         description: 'isAuth',
@@ -27,6 +28,7 @@ const authPaths = (registry: OpenAPIRegistry) => {
     method: 'post',
     path: '/api/auth/register',
     description: 'Register user',
+    summary: 'Register a user',
     responses: {
       201: {
         description: 'User created',
@@ -55,6 +57,7 @@ const authPaths = (registry: OpenAPIRegistry) => {
     method: 'post',
     path: '/api/auth/login',
     description: 'Logs in user',
+    summary: 'Login user',
     responses: {
       200: {
         description: 'auth succesfull',
@@ -82,6 +85,7 @@ const authPaths = (registry: OpenAPIRegistry) => {
   registry.registerPath({
     method: 'post',
     path: '/api/auth/logout',
+    summary: 'Logout user',
     description: 'Logs out user and clears cookies from store',
     responses: {
       200: {
@@ -100,6 +104,7 @@ const authPaths = (registry: OpenAPIRegistry) => {
     method: 'delete',
     path: '/api/auth/delete-account',
     description: 'Deletes account',
+    summary: 'Delete your account',
     responses: {
       200: {
         description: 'Deleted account',

@@ -1,5 +1,5 @@
 import { db } from '../db/prisma';
-import RedisDatabase from '../db/redis';
+import PetCacheRepository from '../repository/petCacheRepository';
 import {
   CreatePetInput,
   DeletePetInput,
@@ -9,35 +9,50 @@ import {
 import logger from '../utils/logger';
 
 export default class PetService {
-  private readonly redis: typeof RedisDatabase;
+  private readonly petCacheRepository: PetCacheRepository;
 
   constructor() {
-    this.redis = RedisDatabase;
+    this.petCacheRepository = new PetCacheRepository();
   }
 
   async getPets(page?: number, pageSize?: number) {
-    // const cachedPets = await this.redis.getAll<Pet[]>('pets');
+    if (page) {
+      const cachedPets = await this.petCacheRepository.getPaginatedPets(
+        page,
+        pageSize,
+      );
 
-    // if (cachedPets && cachedPets.length) {
-    //   return JSON.parse(cachedPets as unknown as string);
-    // }
+      if (!cachedPets) {
+        const pets = await db.pet.findMany();
+        await this.petCacheRepository.setPets(pets);
+        const updatedCache = await this.petCacheRepository.getPaginatedPets(
+          page,
+          pageSize,
+        );
 
-    const pets = await db.pet.findMany({
-      take: pageSize,
-      skip: page && pageSize ? (page - 1) * pageSize : 0,
-    });
+        return updatedCache;
+      }
 
-    // save to cache
-    // await this.redis.set('pets', JSON.stringify(pets));
+      return cachedPets;
+    }
+
+    const pets = await this.petCacheRepository.getPets();
+
+    if (!pets) {
+      const dbPets = await db.pet.findMany({});
+      await this.petCacheRepository.setPets(dbPets);
+      return this.petCacheRepository.getPets();
+    }
 
     return pets;
   }
 
   async getPet(id: GetPetInput['params']['id']) {
-    // const cachedPet = await this.redis.get<Pet>(`pet:${id}`);
-    // if (cachedPet) {
-    //   return JSON.parse(cachedPet as unknown as string);
-    // }
+    const cachedPet = await this.petCacheRepository.getPet(id);
+
+    if (cachedPet) {
+      return cachedPet;
+    }
 
     const pet = await db.pet.findFirst({
       where: {
@@ -45,7 +60,11 @@ export default class PetService {
       },
     });
 
-    // await this.redis.set(`pet:${id}`, JSON.stringify(pet));
+    if (!pet) {
+      return null;
+    }
+
+    await this.petCacheRepository.setPet(pet);
 
     return pet;
   }
@@ -58,6 +77,8 @@ export default class PetService {
       },
     });
 
+    await this.petCacheRepository.setPet(newPet);
+    await this.petCacheRepository.deletePets();
     return newPet;
   }
 
@@ -74,14 +95,24 @@ export default class PetService {
       },
     });
 
-    // await this.redis.set(`pet:${id}`, JSON.stringify(updatedPet));
+    await this.petCacheRepository.setPet(updatedPet);
+    await this.petCacheRepository.deletePets();
     return updatedPet;
   }
 
   async deletePet(id: DeletePetInput['params']['id']) {
-    const result = await db.pet.delete({ where: { id: id.toString() } });
-    // await this.redis.deleteItem(`pet:${id}`);
-    logger.info('delete result', result);
-    return null;
+    try {
+      await Promise.allSettled([
+        db.pet.delete({ where: { id: id.toString() } }),
+        this.petCacheRepository.deletePet(id),
+        this.petCacheRepository.deletePets(),
+      ]);
+      return null;
+    } catch (error) {
+      logger.error(`Failed to delete pet: ${error}`, {
+        tag: 'pet',
+      });
+      throw error;
+    }
   }
 }

@@ -20,9 +20,7 @@ class RedisDatabase {
       this.instance =
         process.env.NODE_ENV === 'test'
           ? testRedis
-          : new Redis(process.env.REDIS_URL, {
-              keyPrefix: 'pets',
-            });
+          : new Redis(process.env.REDIS_URL);
     }
     return this.instance;
   }
@@ -41,32 +39,16 @@ class RedisDatabase {
     }
   }
 
-  public async getAll<TData>(namespace: string): Promise<TData[]> {
-    try {
-      const keys = await this.getKeys(namespace);
+  public async getAll(namespace: string): Promise<string> {
+    const db = this.getInstance();
+    const results = await db.get(namespace);
 
-      if (Array.isArray(keys)) {
-        const prefix = 'pets';
-
-        if (Array.isArray(keys)) {
-          const results = await Promise.all(
-            keys.map(async key => {
-              return this.get(key.replace(`${prefix}:`, ''));
-            }),
-          );
-          return results as TData[];
-        }
-      }
-    } catch (e) {
-      logger.error(
-        `Error getting all keys for namespace ${namespace}, error -> ${e}`,
-        {
-          tag: 'redis',
-        },
-      );
-      return [];
+    if (!results) {
+      logger.info(`[REDIS]: getAll - no keys found in cache`, { tag: 'redis' });
+      return '[]';
     }
-    return [];
+    logger.info(`[REDIS]: keys found in cache`, { tag: 'redis' });
+    return results;
   }
 
   public async set(key: string, data: string): Promise<boolean> {

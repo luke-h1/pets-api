@@ -16,7 +16,7 @@
     "db:seed": "ts-node prisma/seed.ts",
     "db:down": "pnpm prisma migrate reset",
     "start:prod": "NODE_ENV=production node dist/src/index.js",
-    "db:drop": "pnpm prisma db push --force-reset",
+    "db:drop": "pnpm prisma db push --force-reset && DATABASE_URL='postgresql://pets:pets@localhost:5555/pets?schema=public' ts-node scripts/drop.ts",
     "db:format": "pnpm prisma format",
     "db:generate": "pnpm prisma generate",
     "db:migrate-new": "pnpm prisma migrate dev --name <NAME>",

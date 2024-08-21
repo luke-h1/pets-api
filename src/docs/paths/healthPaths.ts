@@ -6,6 +6,7 @@ const healthPaths = (registry: OpenAPIRegistry) => {
     method: 'get',
     path: '/api/healthcheck',
     description: 'Get status of DB, cache and API',
+    summary: 'Health check of DB, cache and API',
     responses: {
       200: {
         description: 'DB, API and cache are OK',

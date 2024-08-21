@@ -62,5 +62,11 @@ test.describe('deletePet', () => {
       title: 'Pet not found',
       type: 'Not Found',
     });
+
+    // assert /api/pets cache tree was updated
+    const allPets = await request.get('/api/pets');
+    expect(allPets.status()).toEqual(200);
+    const allPetsResponse = await allPets.json();
+    expect(allPetsResponse).not.toContainEqual(body);
   });
 });

@@ -13,7 +13,7 @@ export default class AuthRoutes {
     this.authController = new AuthController();
   }
 
-  public initRoutes(): void {
+  public setupRoutes(): void {
     this.app.post(
       '/api/auth/register',
       validateResource(createUserSchema),

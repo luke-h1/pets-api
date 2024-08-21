@@ -6,6 +6,7 @@ const imagePaths = (registry: OpenAPIRegistry) => {
     method: 'post',
     path: '/api/image',
     description: 'Upload images',
+    summary: 'Upload images to S3 for use in pet profiles',
     requestBody: {
       content: {
         'multipart/form-data': {
