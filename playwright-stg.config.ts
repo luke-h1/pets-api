@@ -4,7 +4,7 @@ import baseConfig from './playwright-base.config';
 const stagingConfig: PlaywrightTestConfig = {
   ...baseConfig,
   use: {
-    baseURL: 'pets-staging.lhowsam.com',
+    baseURL: 'https://pets-staging.lhowsam.com',
   },
 };
 
