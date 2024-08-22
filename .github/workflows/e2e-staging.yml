@@ -1,4 +1,4 @@
-name: Build
+name: e2e-staging
 on:
   workflow_dispatch:
   schedule:
@@ -13,11 +13,11 @@ env:
   S3_ASSETS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  build:
+  e2e-staging:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
-    name: Build
+    name: e2e-staging
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
