@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
 import { CreatePetInput } from '../../schema/pet.schema';
 import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
+import { sleep } from '../util/sleep';
 
 test.describe('createPet', () => {
   test('creates pet when user is authenticated', async ({ request }) => {
@@ -51,6 +52,7 @@ test.describe('createPet', () => {
       updatedAt: expect.any(String),
     });
 
+    await sleep(5000);
     // assert cache was updated
     const existingPet = await request.get(`/api/pets/${response.id}`);
     expect(existingPet.status()).toEqual(200);
