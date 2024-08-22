@@ -1,5 +1,6 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
+import { responseSchema } from '../../schema/response.schema';
 
 const adminPaths = (registry: OpenAPIRegistry) => {
   registry.registerPath({
@@ -25,6 +26,14 @@ const adminPaths = (registry: OpenAPIRegistry) => {
             schema: z.object({
               result: z.literal('ERROR'),
             }),
+          },
+        },
+      },
+      401: {
+        description: 'Unauthorized',
+        content: {
+          'application/json': {
+            schema: responseSchema,
           },
         },
       },
