@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         uses: ./.github/actions/install
 
+      - name: generate prisma client
+        run: pnpm db:generate
+
       - name: e2e staging
         uses: ./.github/actions/e2e
         with:
