@@ -6,6 +6,7 @@ const stagingConfig: PlaywrightTestConfig = {
   use: {
     baseURL: 'https://pets-staging.lhowsam.com',
   },
+  retries: process.env.CI ? 2 : 0,
 };
 
 export default stagingConfig;
