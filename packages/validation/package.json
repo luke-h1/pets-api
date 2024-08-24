@@ -1,0 +1,19 @@
+{
+  "name": "@pets/validation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsup src/index.ts",
+    "tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^7.1.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.6",
+    "lodash": "^4.17.21",
+    "tsup": "^8.2.4",
+    "typescript": "^5.2.2"
+  }
+}

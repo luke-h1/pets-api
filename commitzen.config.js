@@ -1,6 +1,5 @@
 module.exports = {
   types: [
-    { value: 'tooling', name: 'tooling: Add or update tooling' },
     { value: 'feat', name: 'feat:\tAdding a new feature' },
     { value: 'fix', name: 'fix:\tFixing a bug' },
     {
@@ -8,34 +7,28 @@ module.exports = {
       name: 'style: Add or update styles',
     },
     {
-      value: 'tests',
-      name: 'test: Add or update tests',
-    },
-    {
       value: 'refactor',
-      name: 'refactor: Code change that neither fixes a bug nor adds a feature',
+      name: 'refactor:\tCode change that neither fixes a bug nor adds a feature',
     },
     {
       value: 'perf',
-      name: 'Code change that improves performance',
+      name: '\tCode change that improves performance',
     },
     {
       value: 'test',
-      name: 'test: Adding tests cases / adds missing tests',
+      name: 'test:\tAdding tests cases / adds missing tests',
     },
     {
       value: 'chore',
-      name: 'chore: Changes to the build process or auxiliary tools and libraries such as documentation generation',
+      name: 'chore:\tChanges to the build process or auxiliary tools\n\t\tand libraries such as documentation generation',
     },
     { value: 'revert', name: 'revert:\tRevert to a commit' },
   ],
   scopes: [
-    { name: 'backend' },
+    { name: 'frontend' },
     { name: 'infrastructure' },
     { name: 'documentation' },
     { name: 'ci' },
-    { name: 'tests' },
-    { name: 'tooling' },
   ],
   allowCustomScopes: true,
   allowBreakingChanges: ['feat', 'fix', 'perf', 'refactor'],

@@ -14,9 +14,6 @@ describe('image', () => {
       });
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
       const cookieName = 'connect.sid';
-      // form data
-      const formData = new FormData();
-      formData.append('images', '../__mocks__/cat.png');
       const { statusCode } = await supertest(app)
         .post('/api/images')
         .set('Cookie', `${cookieName}=${cookieValue}`)

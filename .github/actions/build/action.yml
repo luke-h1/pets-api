@@ -19,6 +19,7 @@ runs:
       shell: bash
 
     - name: start test DB
+      working-directory: apps/api
       run: docker compose up -d
       shell: bash
 
@@ -40,5 +41,6 @@ runs:
         target: e2e-local
 
     - name: docker compose down
+      working-directory: apps/api
       run: docker compose down
       shell: bash
