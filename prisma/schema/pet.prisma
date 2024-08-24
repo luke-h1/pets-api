@@ -22,11 +22,5 @@ model Pet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // TODO:
-  // sex
-  // microchipped
-  // price - or free
-  // add listing table with views, location, creator
-
   @@map("pets")
 }
