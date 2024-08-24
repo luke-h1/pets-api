@@ -49,6 +49,165 @@ describe('pet', () => {
     expect(secondPageStatusCode).toBe(200);
   });
 
+  test('sortOrder asc', async () => {
+    const u = await db.user.create({
+      data: user,
+    });
+    await db.pet.createMany({
+      data: [
+        {
+          name: 'bob',
+          age: '12',
+          birthDate: '2022',
+          breed: 'cat',
+          description: 'cat',
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          status: 'PENDING',
+          createdAt: new Date('2022-01-01'),
+          creatorId: u.id,
+        },
+        {
+          name: 'Tiffany',
+          age: '15',
+          birthDate: '2022',
+          breed: 'dog',
+          description: 'dog',
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          status: 'ADOPTED',
+          createdAt: new Date('2024-01-01'),
+          creatorId: u.id,
+        },
+      ],
+    });
+
+    const { body, statusCode } = await supertest(app).get(
+      '/api/pets?page=1&pageSize=2&order=asc',
+    );
+
+    expect(statusCode).toBe(200);
+    expect(body).toEqual([
+      {
+        age: '12',
+        birthDate: '2022',
+        breed: 'cat',
+        createdAt: expect.any(String),
+        creatorId: u.id,
+        description: 'cat',
+        id: expect.any(String),
+        images: [
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        ],
+        name: 'bob',
+        status: 'PENDING',
+        tags: [],
+        updatedAt: expect.any(String),
+      },
+      {
+        age: '15',
+        birthDate: '2022',
+        breed: 'dog',
+        createdAt: expect.any(String),
+        creatorId: u.id,
+        description: 'dog',
+        id: expect.any(String),
+        images: [
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        ],
+        name: 'Tiffany',
+        status: 'ADOPTED',
+        tags: [],
+        updatedAt: expect.any(String),
+      },
+    ]);
+  });
+  test('sortOrder desc', async () => {
+    const u = await db.user.create({
+      data: user,
+    });
+    await db.pet.createMany({
+      data: [
+        {
+          name: 'bob',
+          age: '12',
+          birthDate: '2022',
+          breed: 'cat',
+          description: 'cat',
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          status: 'PENDING',
+          createdAt: new Date('2022-01-01'),
+          creatorId: u.id,
+        },
+        {
+          name: 'Tiffany',
+          age: '15',
+          birthDate: '2022',
+          breed: 'dog',
+          description: 'dog',
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          status: 'ADOPTED',
+          createdAt: new Date('2024-01-01'),
+          creatorId: u.id,
+        },
+      ],
+    });
+
+    const { body, statusCode } = await supertest(app).get(
+      '/api/pets?page=1&pageSize=2&order=desc',
+    );
+
+    expect(statusCode).toBe(200);
+    expect(body).toEqual([
+      {
+        age: '15',
+        birthDate: '2022',
+        breed: 'dog',
+        createdAt: expect.any(String),
+        creatorId: u.id,
+        description: 'dog',
+        id: expect.any(String),
+        images: [
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        ],
+        name: 'Tiffany',
+        status: 'ADOPTED',
+        tags: [],
+        updatedAt: expect.any(String),
+      },
+      {
+        age: '12',
+        birthDate: '2022',
+        breed: 'cat',
+        createdAt: expect.any(String),
+        creatorId: u.id,
+        description: 'cat',
+        id: expect.any(String),
+        images: [
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        ],
+        name: 'bob',
+        status: 'PENDING',
+        tags: [],
+        updatedAt: expect.any(String),
+      },
+    ]);
+  });
+
   test('getPet', async () => {
     const u = await db.user.create({
       data: {

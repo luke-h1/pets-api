@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "packageManager": "pnpm@9.7.0",
-  "package-manager-strict": "0",
   "engines": {
     "pnpm": "9.7.0"
   },
