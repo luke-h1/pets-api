@@ -1,10 +1,6 @@
 import type { ParsedQs } from 'qs';
 
-interface PetParams {
-  adopted?: boolean;
-}
-
-interface PaginationParams extends PetParams {
+interface PaginationParams {
   page?: number;
   pageSize?: number;
 }

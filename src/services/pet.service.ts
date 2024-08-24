@@ -15,11 +15,12 @@ export default class PetService {
     this.petCacheRepository = new PetCacheRepository();
   }
 
-  async getPets(page?: number, pageSize?: number) {
+  async getPets(page?: number, pageSize?: number, sortOrder?: 'asc' | 'desc') {
     if (page) {
       const cachedPets = await this.petCacheRepository.getPaginatedPets(
         page,
         pageSize,
+        sortOrder,
       );
 
       if (!cachedPets) {
@@ -28,6 +29,7 @@ export default class PetService {
         const updatedCache = await this.petCacheRepository.getPaginatedPets(
           page,
           pageSize,
+          sortOrder,
         );
 
         return updatedCache;
@@ -36,7 +38,7 @@ export default class PetService {
       return cachedPets;
     }
 
-    const pets = await this.petCacheRepository.getPets();
+    const pets = await this.petCacheRepository.getPets(sortOrder);
 
     if (!pets) {
       const dbPets = await db.pet.findMany({});

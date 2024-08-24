@@ -9,7 +9,7 @@ export default class PetCacheRepository {
     this.redis = RedisDatabase;
   }
 
-  async getPets(): Promise<Pet[] | null> {
+  async getPets(sortOrder?: 'asc' | 'desc'): Promise<Pet[] | null> {
     const db = this.redis.getInstance();
 
     const cachedPets = await db.get('pets');
@@ -22,7 +22,18 @@ export default class PetCacheRepository {
       tag: 'redis',
     });
 
-    return this.cacheToJSON(cachedPets);
+    const parsedPets = this.cacheToJSON(cachedPets);
+
+    if (sortOrder === 'asc') {
+      parsedPets.sort((a: Pet, b: Pet) => {
+        return a.createdAt < b.createdAt ? -1 : 1;
+      });
+    } else if (sortOrder === 'desc') {
+      parsedPets.sort((a: Pet, b: Pet) => {
+        return a.createdAt > b.createdAt ? -1 : 1;
+      });
+    }
+    return parsedPets;
   }
 
   async setPet(pet: Pet): Promise<void> {
@@ -54,6 +65,7 @@ export default class PetCacheRepository {
   async getPaginatedPets(
     page: number,
     pageSize?: number,
+    sortOrder?: 'asc' | 'desc',
   ): Promise<Pet[] | null> {
     const db = this.redis.getInstance();
     let ps: number;
@@ -75,6 +87,16 @@ export default class PetCacheRepository {
     }
 
     const parsedPets = this.cacheToJSON(cachedPets);
+
+    if (sortOrder === 'asc') {
+      parsedPets.sort((a: Pet, b: Pet) => {
+        return a.createdAt < b.createdAt ? -1 : 1;
+      });
+    } else if (sortOrder === 'desc') {
+      parsedPets.sort((a: Pet, b: Pet) => {
+        return a.createdAt > b.createdAt ? -1 : 1;
+      });
+    }
 
     return parsedPets.slice(start, end);
   }

@@ -8,6 +8,7 @@ import {
 } from '../requests/pet.requests';
 import PetService from '../services/pet.service';
 import parsePaginationParams from '../utils/parsePaginationParams';
+import parseSortParams from '../utils/parseSortParams';
 
 export default class PetController {
   private readonly petService: PetService;
@@ -18,7 +19,8 @@ export default class PetController {
 
   async getPets(req: Request, res: Response) {
     const { page, pageSize } = parsePaginationParams(req.query);
-    const pets = await this.petService.getPets(page, pageSize);
+    const { sortOrder } = parseSortParams(req.query);
+    const pets = await this.petService.getPets(page, pageSize, sortOrder);
     return res.status(200).json(pets);
   }
 
