@@ -20,6 +20,15 @@ users:
 
 - Export openAPI spec to typescript
 
+- messages table:
+
+  - senderId
+  - receiverId
+  - petId
+  - message
+
+* add ability for users to send messages to each other. Will do this via pub sub and store messages in db. see https://dev.to/franciscomendes10866/using-redis-pub-sub-with-node-js-13k3 for example
+
 future:
 split into monorepo:
 
