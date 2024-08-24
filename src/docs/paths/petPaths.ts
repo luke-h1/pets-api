@@ -13,6 +13,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
       query: z.object({
         page: z.number().optional(),
         pageSize: z.number().optional(),
+        order: z.enum(['asc', 'desc']).optional(),
       }),
     },
     responses: {
