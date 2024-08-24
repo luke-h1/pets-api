@@ -1,8 +1,19 @@
+import xml from 'xml';
+
 export default class VersionService {
-  getVersion() {
+  getVersion(isXml: string | false) {
+    if (isXml === 'text/xml') {
+      return xml({
+        version: [
+          { deployedBy: process.env.DEPLOYED_BY ?? 'luke-h1' },
+          { deployedAt: process.env.DEPLOYED_AT ?? 'local' },
+        ],
+      });
+    }
+
     return {
-      deployedBy: process.env.DEPLOYED_BY,
-      deployedAt: process.env.DEPLOYED_AT,
+      deployedBy: process.env.DEPLOYED_BY ?? 'luke-h1',
+      deployedAt: process.env.DEPLOYED_AT ?? 'local',
     };
   }
 }
