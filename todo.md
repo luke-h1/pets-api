@@ -1,15 +1,24 @@
 TODO:
 
+pets table:
+
+- sex
+- microchipped
+- vaccinated
+- price - default = 0 meaning free
+
 pets:
-sex
-microchipped
-price - or free
 
-add csv upload update endpoint for pets use parseCsv for this
+- add csv upload update endpoint for pets use parseCsv for this
+- search endpoint for pets by name
 
-search endpoint for pets by name
+users:
 
-Export openAPI spec to typescript
+- add GET /users endpoint
+- add GET /users/:id endpoint
+- add UPDATE /users/:id endpoint
+
+- Export openAPI spec to typescript
 
 future:
 split into monorepo:
