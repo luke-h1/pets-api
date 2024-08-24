@@ -1,5 +1,5 @@
 import CreateServer from './server';
-import { envSchema } from './util/env';
+import { envSchema } from './utils/env';
 import logger from './utils/logger';
 
 class Main {

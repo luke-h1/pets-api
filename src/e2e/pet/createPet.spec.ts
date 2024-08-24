@@ -2,8 +2,8 @@ import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
 import { CreatePetInput } from '../../schema/pet.schema';
-import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
 import { sleep } from '../util/sleep';
+import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
 
 test.describe('createPet', () => {
   test('creates pet when user is authenticated', async ({ request }) => {

@@ -1,5 +1,5 @@
 import omit from 'lodash/omit';
-import z from '../util/validation';
+import z from '../utils/validation';
 
 const loginPayload = {
   email: z.string().email(),
