@@ -12,7 +12,7 @@
     "clean": "rm -rf dist",
     "commit": "npx cz",
     "db:down": "pnpm prisma migrate reset",
-    "db:drop": "pnpm prisma db push --force-reset && DATABASE_URL='postgresql://pets:pets@localhost:5555/pets?schema=public' ts-node scripts/drop.ts",
+    "db:drop": "DATABASE_URL='postgresql://pets:pets@localhost:5555/pets?schema=public' ts-node scripts/drop.ts && DATABASE_URL='postgresql://pets:pets@localhost:5555/pets?schema=public' pnpm prisma db push --force-reset",
     "db:format": "pnpm prisma format",
     "db:generate": "pnpm prisma generate",
     "db:migrate-dev": "pnpm prisma migrate dev",

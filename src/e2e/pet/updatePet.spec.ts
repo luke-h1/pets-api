@@ -1,7 +1,8 @@
+import { sleep } from '@api/e2e/util/sleep';
 import { CreatePetInput } from '@api/schema/pet.schema';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
-import { PetStatus } from '@prisma/client';
+import { Pet, PetStatus } from '@prisma/client';
 import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
 
 test.describe('updatePet', () => {
@@ -69,11 +70,17 @@ test.describe('updatePet', () => {
     const existingPetResponse = await existingPet.json();
     expect(existingPetResponse).toEqual(updatedBody);
 
+    await sleep(2000);
     // assert /pets endpoint cache tree was updated
     const allPets = await request.get('/api/pets');
     expect(allPets.status()).toEqual(200);
     const allPetsResponse = await allPets.json();
-    expect(allPetsResponse.pets).toContainEqual(updatedBody);
+
+    const updatedPet = allPetsResponse.pets.find(
+      (pet: Pet) => pet.id === body.id,
+    );
+
+    expect(updatedPet).toEqual(updatedBody);
   });
 
   test('returns 404 when pet doesnt exist', async ({ request }) => {

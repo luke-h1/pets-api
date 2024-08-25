@@ -20,11 +20,9 @@ export default class PetController {
   }
 
   async getPets(req: Request, res: Response) {
-    const { page = 1, pageSize = 10 } = parsePaginationParams(req.query);
+    const { page, pageSize } = parsePaginationParams(req.query);
     const { sortOrder } = parseSortParams(req.query);
     const pets = await this.petService.getPets(page, pageSize, sortOrder);
-
-    const totalPages = pageSize > 0 ? Math.ceil(pets!.length / pageSize) : 0;
 
     return res.status(200).json({
       pets,
@@ -36,8 +34,9 @@ export default class PetController {
       }),
       paging: {
         query: req.query,
-        page,
-        totalPages,
+        page: page ?? undefined,
+        totalPages:
+          pageSize && pageSize > 0 ? Math.ceil(pets!.length / pageSize) : 0,
         totalResults: pets!.length,
       },
     });

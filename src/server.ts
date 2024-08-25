@@ -93,10 +93,7 @@ class CreateServer {
           secure: this.isProduction(),
           httpOnly: true, // prevent client side js from reading the cookie
           maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-          domain:
-            this.isProduction() && process.env.COMMIT_SHA !== 'undefined'
-              ? 'pets-staging.lhowsam.com'
-              : undefined,
+          domain: undefined,
           path: '/',
           signed: this.isProduction(),
           sameSite: 'lax',
