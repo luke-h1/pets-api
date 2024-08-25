@@ -1,8 +1,8 @@
+import PetController from '@api/controllers/pet.controller';
+import isAuth from '@api/middleware/isAuth';
+import isPetOwner from '@api/middleware/isPetOwner';
+import validateResource from '@api/middleware/validateResource';
 import { Express, Response } from 'express';
-import PetController from '../controllers/pet.controller';
-import isAuth from '../middleware/isAuth';
-import isPetOwner from '../middleware/isPetOwner';
-import validateResource from '../middleware/validateResource';
 
 import {
   CreatePetRequest,

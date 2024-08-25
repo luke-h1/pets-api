@@ -14,6 +14,9 @@ const config = {
   transform: {
     '^.+\\.(ts|js)$': 'ts-jest',
   },
+  moduleNameMapper: {
+    '^@api/(.*)$': '<rootDir>/src/$1',
+  },
   setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.js'],
   coverageThreshold: {
     global: {

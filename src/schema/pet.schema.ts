@@ -1,4 +1,4 @@
-import z from '../utils/validation';
+import z from '@api/utils/validation';
 
 const ALLOWED_IMAGE_DOMAINS = [
   'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com',

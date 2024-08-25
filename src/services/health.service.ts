@@ -1,6 +1,6 @@
-import { db } from '../db/prisma';
-import RedisDatabase from '../db/redis';
-import logger from '../utils/logger';
+import { db } from '@api/db/prisma';
+import RedisDatabase from '@api/db/redis';
+import logger from '@api/utils/logger';
 
 export default class HealthService {
   private readonly redis: typeof RedisDatabase;

@@ -1,5 +1,5 @@
-import RedisDatabase from '../db/redis';
-import logger from '../utils/logger';
+import RedisDatabase from '@api/db/redis';
+import logger from '@api/utils/logger';
 
 export default class AdminService {
   private readonly redis: typeof RedisDatabase;

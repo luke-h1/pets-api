@@ -1,5 +1,5 @@
+import logger from '@api/utils/logger';
 import { ErrorRequestHandler } from 'express';
-import logger from '../utils/logger';
 import ApiError from './ApiError';
 import BadRequestError from './BadRequestError';
 import ForbiddenError from './ForbiddenError';

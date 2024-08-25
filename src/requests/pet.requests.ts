@@ -1,10 +1,10 @@
-import { Request } from 'express';
 import {
   CreatePetInput,
   DeletePetInput,
   GetPetInput,
   UpdatePetInput,
-} from '../schema/pet.schema';
+} from '@api/schema/pet.schema';
+import { Request } from 'express';
 
 export type GetPetRequest = Request<GetPetInput['params']>;
 

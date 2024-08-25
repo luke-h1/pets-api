@@ -1,4 +1,4 @@
-import z from '../utils/validation';
+import z from '@api/utils/validation';
 
 export const responseSchema = z.object({
   title: z.string(),

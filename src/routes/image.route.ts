@@ -1,9 +1,9 @@
+import ImageController from '@api/controllers/image.controller';
+import isAuth from '@api/middleware/isAuth';
+import { s3Client } from '@api/utils/upload';
 import { Express } from 'express';
 import multer from 'multer';
 import multers3 from 'multer-s3';
-import ImageController from '../controllers/image.controller';
-import isAuth from '../middleware/isAuth';
-import { s3Client } from '../utils/upload';
 
 const upload = multer({
   storage: multers3({

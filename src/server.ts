@@ -1,4 +1,11 @@
 import 'express-async-errors';
+import RedisDatabase from '@api/db/redis';
+import openApiSpec from '@api/docs/swagger';
+import NotFoundError from '@api/errors/NotFoundError';
+import errorHandler from '@api/errors/errorHandler';
+import Routes from '@api/routes';
+import testRedis from '@api/test/redis';
+import logger from '@api/utils/logger';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import connectRedis from 'connect-redis';
@@ -7,14 +14,6 @@ import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
-import RedisDatabase from './db/redis';
-import openApiSpec from './docs/swagger';
-import NotFoundError from './errors/NotFoundError';
-import errorHandler from './errors/errorHandler';
-import Routes from './routes';
-import testRedis from './test/redis';
-import logger from './utils/logger';
-// import { parseQueryString } from './utils/queryStringParsers';
 
 const dotenvFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({

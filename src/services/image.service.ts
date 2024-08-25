@@ -1,5 +1,5 @@
+import logger from '@api/utils/logger';
 import { Request } from 'express';
-import logger from '../utils/logger';
 
 export default class ImageService {
   async createImages(req: Request) {

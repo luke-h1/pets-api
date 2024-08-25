@@ -1,8 +1,8 @@
+import { pets as mockPets } from '@api/controllers/__mocks__/pet';
+import { user } from '@api/controllers/__mocks__/user';
+import { db } from '@api/db/prisma';
+import { CreatePetInput } from '@api/schema/pet.schema';
 import { PetStatus } from '@prisma/client';
-import { pets as mockPets } from '../../controllers/__mocks__/pet';
-import { user } from '../../controllers/__mocks__/user';
-import { db } from '../../db/prisma';
-import { CreatePetInput } from '../../schema/pet.schema';
 import PetService from '../pet.service';
 
 describe('petService', () => {

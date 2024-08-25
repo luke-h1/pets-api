@@ -1,7 +1,7 @@
+import { db } from '@api/db/prisma';
+import { petErrorCodes } from '@api/errors/pet';
+import logger from '@api/utils/logger';
 import { NextFunction, Request, Response } from 'express';
-import { db } from '../db/prisma';
-import { petErrorCodes } from '../errors/pet';
-import logger from '../utils/logger';
 
 /**
  * Middleware to validate if the user is the owner of the pet

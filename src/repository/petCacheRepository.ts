@@ -1,6 +1,6 @@
+import RedisDatabase from '@api/db/redis';
+import logger from '@api/utils/logger';
 import { Pet } from '@prisma/client';
-import RedisDatabase from '../db/redis';
-import logger from '../utils/logger';
 
 export default class PetCacheRepository {
   private readonly redis: typeof RedisDatabase;
