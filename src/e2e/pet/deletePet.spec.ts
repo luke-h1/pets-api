@@ -1,7 +1,7 @@
+import { CreatePetInput } from '@api/schema/pet.schema';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
-import { CreatePetInput } from '../../schema/pet.schema';
 import { createUser, loginUser, getCookieFromHeaders } from '../util/user';
 
 test.describe('deletePet', () => {
@@ -67,6 +67,6 @@ test.describe('deletePet', () => {
     const allPets = await request.get('/api/pets');
     expect(allPets.status()).toEqual(200);
     const allPetsResponse = await allPets.json();
-    expect(allPetsResponse).not.toContainEqual(body);
+    expect(allPetsResponse.pets).not.toContainEqual(body);
   });
 });

@@ -1,13 +1,13 @@
+import { db } from '@api/db/prisma';
+import server from '@api/server';
 import supertest from 'supertest';
-import { db } from '../../db/prisma';
-import server from '../../server';
 import { user } from '../__mocks__/user';
 
 describe('admin', () => {
   const app = server.init();
 
   describe('flushRedis', () => {
-    test('throws unauthorized exception if user is un-autheticated', async () => {
+    test('throws unauthorized exception if user is un-authenticated', async () => {
       const { body, statusCode } =
         await supertest(app).post('/api/admin/flush');
 

@@ -6,5 +6,5 @@ export const responseSchema = z.object({
   statusCode: z.number(),
   code: z.string(),
   message: z.string(),
-  erros: z.array(z.object({})).optional(),
+  errors: z.array(z.object({})).optional(),
 });

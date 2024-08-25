@@ -1,5 +1,5 @@
+import AdminService from '@api/services/admin.service';
 import { Request, Response } from 'express';
-import AdminService from '../services/admin.service';
 
 export default class AdminController {
   private readonly adminService: AdminService;
@@ -8,7 +8,7 @@ export default class AdminController {
     this.adminService = new AdminService();
   }
 
-  async flushRedis(req: Request, res: Response) {
+  async flushRedis(_req: Request, res: Response) {
     const result = await this.adminService.flush();
 
     if (result === 'ERROR') {

@@ -27,7 +27,12 @@ runs:
 
     - name: ${{ inputs.environment }} UI tests
       if: inputs.target == 'e2e-local'
-      run: ./scripts/setup-e2edb.sh && pnpx start-server-and-test dev 8000 e2e:local
+      run: pnpm build
+      shell: bash
+
+    - name: ${{ inputs.environment }} UI tests
+      if: inputs.target == 'e2e-local'
+      run: ./scripts/setup-e2edb.sh && pnpx start-server-and-test start 8000 e2e:local
       shell: bash
 
     - name: ${{ inputs.environment }} UI tests

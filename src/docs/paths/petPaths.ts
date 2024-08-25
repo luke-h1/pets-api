@@ -1,7 +1,8 @@
+import { linksSchema, paginatedLinksSchema } from '@api/schema/links.schema';
+import { petSchema, createPetSchema } from '@api/schema/pet.schema';
+import { responseSchema } from '@api/schema/response.schema';
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
-import { petSchema, createPetSchema } from '../../schema/pet.schema';
-import { responseSchema } from '../../schema/response.schema';
 
 const registerPetPaths = (registry: OpenAPIRegistry) => {
   registry.registerPath({
@@ -21,7 +22,11 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
         description: 'List of pets',
         content: {
           'application/json': {
-            schema: petSchema.array(),
+            schema: z.object({
+              pets: petSchema.array(),
+              _links: linksSchema,
+              paging: paginatedLinksSchema,
+            }),
           },
         },
       },

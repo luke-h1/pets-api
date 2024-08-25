@@ -1,6 +1,6 @@
+import { responseSchema } from '@api/schema/response.schema';
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import { z } from 'zod';
-import { responseSchema } from '../../schema/response.schema';
 
 const authPaths = (registry: OpenAPIRegistry) => {
   registry.registerPath({

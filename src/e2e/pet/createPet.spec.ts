@@ -1,7 +1,7 @@
+import { CreatePetInput } from '@api/schema/pet.schema';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
-import { CreatePetInput } from '../../schema/pet.schema';
 import { sleep } from '../util/sleep';
 import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
 
@@ -62,8 +62,22 @@ test.describe('createPet', () => {
     // assert /api/pets cache tree was updated
     const allPets = await request.get('/api/pets');
     expect(allPets.status()).toEqual(200);
+
     const allPetsResponse = await allPets.json();
-    expect(allPetsResponse).toContainEqual(response);
+
+    // eslint-disable-next-line no-underscore-dangle
+    expect(allPetsResponse._links).toEqual({
+      self: { href: `${process.env.API_BASE_URL}/api/pets` },
+    });
+
+    expect(allPetsResponse.paging).toEqual({
+      page: expect.any(Number),
+      query: {},
+      totalPages: expect.any(Number),
+      totalResults: expect.any(Number),
+    });
+
+    expect(allPetsResponse.pets).toContainEqual(response);
   });
 
   test('returns validation error if not authenticated', async ({ request }) => {

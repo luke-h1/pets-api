@@ -16,8 +16,8 @@ e2e-install-browsers:
 
 .PHONY: e2e-local
 e2e-local:
-	API_BASE_URL=http://localhost:8000 ./node_modules/.bin/playwright test --config=playwright-base.config.ts ${tests}
+	API_BASE_URL=http://localhost:8000 ./node_modules/.bin/playwright test ${tests} --config=playwright-base.config.ts
 
 .PHONY: e2e-staging
 e2e-staging:
-	./node_modules/.bin/playwright test --config=playwright-stg.config.ts ${tests}
+	API_BASE_URL=https://pets-staging.lhowsam.com ./node_modules/.bin/playwright test --config=playwright-stg.config.ts ${tests}
