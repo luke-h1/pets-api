@@ -1,5 +1,5 @@
+import CreateServer from '@api/server';
 import supertest from 'supertest';
-import CreateServer from '../../server';
 
 const server = CreateServer;
 

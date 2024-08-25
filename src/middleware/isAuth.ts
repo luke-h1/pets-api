@@ -1,5 +1,5 @@
+import ForbiddenError from '@api/errors/ForbiddenError';
 import { NextFunction, Request, Response } from 'express';
-import ForbiddenError from '../errors/ForbiddenError';
 
 const isAuth = () => {
   return (req: Request, res: Response, next: NextFunction) => {

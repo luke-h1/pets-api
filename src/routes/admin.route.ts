@@ -1,7 +1,7 @@
+import AdminController from '@api/controllers/admin.controller';
+import isRole from '@api/middleware/isRole';
 import { Role } from '@prisma/client';
 import { Express } from 'express';
-import AdminController from '../controllers/admin.controller';
-import isRole from '../middleware/isRole';
 
 export default class AdminRoutes {
   private readonly app: Express;

@@ -22,7 +22,10 @@
     "baseUrl": ".",
     "isolatedModules": true,
     "noEmit": false,
-    "noImplicitReturns": true
+    "noImplicitReturns": true,
+    "paths": {
+      "@api/*": ["./src/*"]
+    }
   },
   "include": ["src", "test", "src/types/env.d.ts"],
   "exclude": ["node_modules"]

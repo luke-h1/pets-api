@@ -1,7 +1,7 @@
+import AuthController from '@api/controllers/auth.controller';
+import validateResource from '@api/middleware/validateResource';
+import { createUserSchema, loginUserSchema } from '@api/schema/auth.schema';
 import { Express } from 'express';
-import AuthController from '../controllers/auth.controller';
-import validateResource from '../middleware/validateResource';
-import { createUserSchema, loginUserSchema } from '../schema/auth.schema';
 
 export default class AuthRoutes {
   private readonly app: Express;

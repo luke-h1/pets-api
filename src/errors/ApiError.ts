@@ -1,4 +1,4 @@
-import z from '../utils/validation';
+import z from '@api/utils/validation';
 
 type ErrorCode = 'InternalServerError' | 'NotFound' | 'BadRequest' | string;
 

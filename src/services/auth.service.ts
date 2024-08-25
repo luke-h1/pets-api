@@ -1,10 +1,10 @@
+import { db } from '@api/db/prisma';
+import RedisDatabase from '@api/db/redis';
+import NotFoundError from '@api/errors/NotFoundError';
+import { authErrorCodes } from '@api/errors/auth';
+import { CreateUserInput, LoginUserInput } from '@api/schema/auth.schema';
+import logger from '@api/utils/logger';
 import omit from 'lodash/omit';
-import { db } from '../db/prisma';
-import RedisDatabase from '../db/redis';
-import NotFoundError from '../errors/NotFoundError';
-import { authErrorCodes } from '../errors/auth';
-import { CreateUserInput, LoginUserInput } from '../schema/auth.schema';
-import logger from '../utils/logger';
 import PasswordService from './password.service';
 
 export default class AuthService {

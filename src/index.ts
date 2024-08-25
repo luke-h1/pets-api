@@ -1,6 +1,6 @@
+import { envSchema } from '@api/utils/env';
+import logger from '@api/utils/logger';
 import CreateServer from './server';
-import { envSchema } from './utils/env';
-import logger from './utils/logger';
 
 class Main {
   private validateEnvironmentVariables() {

@@ -1,6 +1,6 @@
+import logger from '@api/utils/logger';
 import { NextFunction, Request, Response } from 'express';
 import { AnyZodObject, z } from 'zod';
-import logger from '../utils/logger';
 
 /**
  * Middleware to validate a request body, query, and params against a {@param schema} Zod schema

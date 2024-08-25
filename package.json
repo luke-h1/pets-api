@@ -26,8 +26,7 @@
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx,css,scss,html}\"",
     "kill:port": "npx kill-port 8000",
     "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx .",
-    "start": "NODE_ENV=production node dist/index.js",
-    "start:prod": "NODE_ENV=production node dist/src/index.js",
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/src/index.js",
     "test": "./scripts/setup-testdb.sh && jest --runInBand",
     "test:ci": "./scripts/setup-testdb.sh && jest --ci --reporters=default --reporters=jest-junit --runInBand",
     "tsc": "tsc --noEmit"

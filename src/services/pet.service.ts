@@ -1,12 +1,12 @@
-import { db } from '../db/prisma';
-import PetCacheRepository from '../repository/petCacheRepository';
+import { db } from '@api/db/prisma';
+import PetCacheRepository from '@api/repository/petCacheRepository';
 import {
   CreatePetInput,
   DeletePetInput,
   GetPetInput,
   UpdatePetInput,
-} from '../schema/pet.schema';
-import logger from '../utils/logger';
+} from '@api/schema/pet.schema';
+import logger from '@api/utils/logger';
 
 export default class PetService {
   private readonly petCacheRepository: PetCacheRepository;
