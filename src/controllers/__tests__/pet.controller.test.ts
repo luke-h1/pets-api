@@ -1,5 +1,6 @@
 import { db } from '@api/db/prisma';
 import server from '@api/server';
+import { testImages } from '@api/test/testImages';
 import supertest from 'supertest';
 import { pets } from '../__mocks__/pet';
 import { user, user2 } from '../__mocks__/user';
@@ -60,10 +61,7 @@ describe('pet', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Whiskers',
           status: 'PENDING',
           tags: ['dog'],
@@ -77,10 +75,7 @@ describe('pet', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Max',
           status: 'ADOPTED',
           tags: ['dog'],
@@ -121,10 +116,7 @@ describe('pet', () => {
           birthDate: '2022',
           breed: 'cat',
           description: 'cat',
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           status: 'PENDING',
           createdAt: new Date('2022-01-01'),
           creatorId: u.id,
@@ -135,10 +127,7 @@ describe('pet', () => {
           birthDate: '2022',
           breed: 'dog',
           description: 'dog',
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           status: 'ADOPTED',
           createdAt: new Date('2024-01-01'),
           creatorId: u.id,
@@ -172,10 +161,7 @@ describe('pet', () => {
           creatorId: u.id,
           description: 'cat',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'bob',
           status: 'PENDING',
           tags: [],
@@ -189,10 +175,7 @@ describe('pet', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Tiffany',
           status: 'ADOPTED',
           tags: [],
@@ -213,10 +196,7 @@ describe('pet', () => {
           birthDate: '2022',
           breed: 'cat',
           description: 'cat',
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           status: 'PENDING',
           createdAt: new Date('2022-01-01'),
           creatorId: u.id,
@@ -227,10 +207,7 @@ describe('pet', () => {
           birthDate: '2022',
           breed: 'dog',
           description: 'dog',
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           status: 'ADOPTED',
           createdAt: new Date('2024-01-01'),
           creatorId: u.id,
@@ -264,10 +241,7 @@ describe('pet', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Tiffany',
           status: 'ADOPTED',
           tags: [],
@@ -281,10 +255,7 @@ describe('pet', () => {
           creatorId: u.id,
           description: 'cat',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'bob',
           status: 'PENDING',
           tags: [],
