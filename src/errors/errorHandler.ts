@@ -50,7 +50,9 @@ const errorHandler: ErrorRequestHandler<{}, ApiError | string> = (
       });
     }
 
-    logger.error(`An unexpected error occurred: err -> ${err}`);
+    logger.error(
+      `[errorHandler]: An unexpected error occurred: err -> ${JSON.stringify(err, null, 2)}`,
+    );
 
     return new InternalServerError();
   };

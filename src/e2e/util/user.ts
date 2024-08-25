@@ -2,6 +2,8 @@ import { LoginRequest, RegisterRequest } from '@api/requests/auth.requests';
 import { faker } from '@faker-js/faker';
 import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { User } from '@prisma/client';
+import crypto from 'crypto';
+import { v4 } from 'uuid';
 import { Dictionary } from '../../types/util';
 
 export const createUser = async (
@@ -11,11 +13,14 @@ export const createUser = async (
   userPassword: string;
 }> => {
   // arrange
+
+  const randomPassword = crypto.randomBytes(20).toString('hex');
+
   const u: RegisterRequest['body'] = {
-    firstName: faker.person.firstName(),
-    lastName: faker.person.lastName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
+    firstName: `TEST_USER-${faker.person.firstName()}`,
+    lastName: `TEST_USER-${faker.person.lastName()}`,
+    email: `TEST_USER-${v4()}em@email.com`,
+    password: randomPassword,
   };
 
   const created = await request.post('/api/auth/register', {
@@ -25,6 +30,7 @@ export const createUser = async (
   });
   expect(created.status()).toEqual(201);
   const response = await created.json();
+
   return {
     response,
     userPassword: u.password,

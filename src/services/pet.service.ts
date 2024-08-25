@@ -51,25 +51,22 @@ export default class PetService {
 
   async getPet(id: GetPetInput['params']['id']) {
     const cachedPet = await this.petCacheRepository.getPet(id);
+    logger.info('cachedPet', JSON.stringify(cachedPet, null, 2));
 
     if (cachedPet) {
       return cachedPet;
     }
 
-    try {
-      const pet = await db.pet.findUniqueOrThrow({
-        where: {
-          id: id.toString(),
-        },
-      });
+    const pet = await db.pet.findFirst({
+      where: {
+        id: id.toString(),
+      },
+    });
+
+    if (pet) {
       await this.petCacheRepository.setPet(pet);
-      return pet;
-    } catch (error) {
-      if ((error as { code: string }).code === 'P2025') {
-        return null;
-      }
     }
-    return null;
+    return pet;
   }
 
   async createPet(pet: CreatePetInput['body'], userId: string) {

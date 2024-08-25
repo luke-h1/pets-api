@@ -54,7 +54,46 @@ resource "aws_iam_role" "ecr_pull" {
   }
 }
 
+resource "aws_launch_template" "launch" {
+  name_prefix   = "pets-api-"
+  image_id      = "ami-0c0493bbac867d427"
+  instance_type = "t2.micro"
 
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "ag" {
+  desired_capacity      = 1
+  max_size              = 2
+  min_size              = 1
+  availability_zones    = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+  protect_from_scale_in = true
+  launch_template {
+    id      = aws_launch_template.launch.id
+    version = "$Latest"
+  }
+
+  tag {
+    key                 = "Name"
+    value               = "asg-pet-api-${var.env}"
+    propagate_at_launch = true
+  }
+}
+
+
+resource "aws_ecs_cluster_capacity_providers" "ecs" {
+  cluster_name = aws_ecs_cluster.app_cluster.name
+
+  capacity_providers = ["FARGATE_SPOT", "FARGATE"]
+
+  default_capacity_provider_strategy {
+    base              = 1
+    weight            = 100
+    capacity_provider = "FARGATE"
+  }
+}
 
 resource "aws_ecs_task_definition" "app_task" {
   family                = "${var.project_name}-${var.env}"
@@ -92,6 +131,22 @@ resource "aws_ecs_task_definition" "app_task" {
           {
             "name": "ENVIRONMENT",
             "value": "${var.env}"
+          }
+          {
+            "name": "S3_ASSETS_BUCKET",
+            "value": "${var.s3_assets_bucket}"
+          },
+          {
+            "name": "S3_ASSETS_BUCKET_REGION",
+            "value": "${var.s3_assets_region}"
+          },
+          {
+            "name": "S3_ASSETS_ACCESS_KEY_ID",
+            "value": "${var.s3_assets_access_key_id}"
+          },
+          {
+            "name": "S3_ASSETS_SECRET_ACCESS_KEY",
+            "value": "${var.s3_assets_secret_access_key}"
           }
         ],
         "portMappings": [
@@ -152,7 +207,6 @@ resource "aws_ecs_service" "app_ecs" {
   name                               = "${var.project_name}-${var.env}-cluster"
   cluster                            = aws_ecs_cluster.app_cluster.id
   task_definition                    = aws_ecs_task_definition.app_task.arn
-  launch_type                        = "FARGATE"
   desired_count                      = var.task_count
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50 # Using 50% ensures the service is available but makes rolling updates much faster
@@ -177,6 +231,16 @@ resource "aws_ecs_service" "app_ecs" {
 
   triggers = {
     redeployment = timestamp()
+  }
+
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    weight            = 1
+    base              = 2
+  }
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 2
   }
 }
 

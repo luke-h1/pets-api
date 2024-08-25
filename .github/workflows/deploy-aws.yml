@@ -1,4 +1,4 @@
-name: Deploy to staging
+name: Deploy to staging (aws)
 on:
   workflow_dispatch:
   # push:
@@ -20,6 +20,18 @@ env:
   TF_VAR_certificate_chain: ${{ secrets.CERTIFICATE_CHAIN }}
   TF_VAR_zone_id: ${{ secrets.ZONE_ID }}
   TF_VAR_docker_image_tag: ${{ github.sha }}
+  TF_VAR_s3_assets_bucket: pets-api-staging-assets
+  TF_VAR_s3_assets_region: eu-west-2
+  TF_VAR_s3_assets_access_key_id: ${{ secrets.ASSETS_KEY }}
+  TF_VAR_s3_assets_secret_access_key: ${{ secrets.ASSETS_SECRET }}
+  # needed for tests
+  S3_ASSETS_BUCKET: pets-api-staging-assets
+  S3_ASSETS_REGION: eu-west-2
+  S3_ASSETS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  S3_ASSETS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  DATABASE_URL: postgres://pets:pets@localhost:5432/pets
+  REDIS_URL: redis://localhost:6379
+  API_BASE_URL: http://localhost:8000
 
 jobs:
   provision-ecr:

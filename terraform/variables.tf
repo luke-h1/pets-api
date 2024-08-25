@@ -84,7 +84,7 @@ variable "cpu" {
 variable "task_count" {
   type        = number
   description = "The number of tasks to run"
-  default     = 1
+  default     = 2
 }
 
 variable "health_check_path" {
@@ -119,4 +119,26 @@ variable "session_domain" {
   type        = string
   description = "The domain to use for the session cookie. This should not start with https://"
   default     = "pets-api.lhowsam.com"
+}
+
+variable "s3_assets_bucket" {
+  type        = string
+  description = "The name of the S3 bucket to store assets"
+  default     = "pets-api-staging-assets"
+}
+
+variable "s3_assets_region" {
+  type        = string
+  description = "The region of the S3 bucket to store assets"
+  default     = "eu-west-2"
+}
+
+variable "s3_assets_access_key_id" {
+  type        = string
+  description = "The access key id for the S3 bucket"
+}
+
+variable "s3_assets_secret_access_key" {
+  type        = string
+  description = "The secret access key to grant access to the s3 bucket"
 }

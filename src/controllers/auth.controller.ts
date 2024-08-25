@@ -36,8 +36,6 @@ export default class AuthController {
       });
     }
 
-    // req.session.userId = result?.id;
-
     return res.status(201).json(omit(result, 'password'));
   }
 

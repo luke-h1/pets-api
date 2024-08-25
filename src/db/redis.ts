@@ -20,7 +20,10 @@ class RedisDatabase {
       this.instance =
         process.env.NODE_ENV === 'test'
           ? testRedis
-          : new Redis(process.env.REDIS_URL);
+          : new Redis(process.env.REDIS_URL, {
+              commandTimeout: 20000,
+              enableAutoPipelining: true,
+            });
     }
     return this.instance;
   }

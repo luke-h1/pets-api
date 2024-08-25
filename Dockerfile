@@ -37,7 +37,7 @@ RUN corepack enable
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm --prod --ignore-scripts --frozen-lockfile install
 
-RUN apk add --no-cache bash tzdata git make clang
+# RUN apk add --no-cache bash tzdata git make clang
 
 ENV NODE_ENV=production
 

@@ -97,7 +97,6 @@ export default class PetCacheRepository {
         tag: 'redis',
       },
     );
-
     return this.cacheToJSON(cachedPet);
   }
 

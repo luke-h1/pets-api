@@ -18,10 +18,6 @@ export default class AuthService {
   }
 
   async register(user: CreateUserInput['body']) {
-    const hashedPassword = await this.passwordService.hashPassword(
-      user.password,
-    );
-
     const existingUser = await db.user.findFirst({
       where: {
         email: user.email,
@@ -36,6 +32,11 @@ export default class AuthService {
       logger.warn(`${authErrorCodes.EmailAlreadyExists} triggered`);
       return authErrorCodes.EmailAlreadyExists;
     }
+
+    const hashedPassword = await this.passwordService.hashPassword(
+      user.password,
+    );
+
     const u = await db.user.create({
       data: {
         ...user,
@@ -45,7 +46,6 @@ export default class AuthService {
       select: {
         id: true,
         email: true,
-        password: false,
       },
     });
     return u;
