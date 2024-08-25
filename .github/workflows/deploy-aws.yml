@@ -1,9 +1,9 @@
 name: Deploy to staging (aws)
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
 env:
   TERRAFORM_ROOT: terraform
   DOCKER_ENV: production
@@ -24,6 +24,7 @@ env:
   TF_VAR_s3_assets_region: eu-west-2
   TF_VAR_s3_assets_access_key_id: ${{ secrets.ASSETS_KEY }}
   TF_VAR_s3_assets_secret_access_key: ${{ secrets.ASSETS_SECRET }}
+  TF_VAR_git_sha: ${{ github.sha }}
   # needed for tests
   S3_ASSETS_BUCKET: pets-api-staging-assets
   S3_ASSETS_REGION: eu-west-2
@@ -38,9 +39,7 @@ jobs:
     name: Provision ECR repository if needed
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+    concurrency: deploy-aws-staging-group
     steps:
       - name: Install moreutils
         run: sudo apt install moreutils
@@ -242,6 +241,12 @@ jobs:
         run: terraform apply ./app.out
         working-directory: ${{ env.TERRAFORM_ROOT }}
 
+      # TODO: add a script that polls /version
+      # and looks for the GIT_SHA to match what we have in ci
+      # so we know when the containers
+      # have finished swapping over during
+      # blue green deployment rollouts
+      # otherwise we'll be testing the old container :)
       # - name: e2e-staging
       #   uses: ./.github/actions/e2e
       #   with:

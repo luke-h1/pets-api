@@ -147,6 +147,10 @@ resource "aws_ecs_task_definition" "app_task" {
           {
             "name": "S3_ASSETS_SECRET_ACCESS_KEY",
             "value": "${var.s3_assets_secret_access_key}"
+          },
+          {
+            "name": "GIT_SHA",
+            "value": "${var.git_sha}"
           }
         ],
         "portMappings": [
