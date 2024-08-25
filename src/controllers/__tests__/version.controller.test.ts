@@ -13,6 +13,7 @@ describe('version', () => {
       expect(body).toEqual({
         deployedAt: 'local',
         deployedBy: 'luke-h1',
+        gitSha: 'unknown',
       });
       expect(statusCode).toBe(200);
     });
@@ -24,7 +25,7 @@ describe('version', () => {
 
       expect(statusCode).toBe(200);
       expect(text).toEqual(
-        '<version><deployedBy>luke-h1</deployedBy><deployedAt>local</deployedAt></version>',
+        '<version><deployedBy>luke-h1</deployedBy><deployedAt>local</deployedAt><gitSha>unknown</gitSha></version>',
       );
     });
   });

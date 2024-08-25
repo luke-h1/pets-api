@@ -7,6 +7,7 @@ export default class VersionService {
         version: [
           { deployedBy: process.env.DEPLOYED_BY ?? 'luke-h1' },
           { deployedAt: process.env.DEPLOYED_AT ?? 'local' },
+          { gitSha: process.env.GIT_SHA ?? 'unknown' },
         ],
       });
     }
@@ -14,6 +15,7 @@ export default class VersionService {
     return {
       deployedBy: process.env.DEPLOYED_BY ?? 'luke-h1',
       deployedAt: process.env.DEPLOYED_AT ?? 'local',
+      gitSha: process.env.GIT_SHA ?? 'unknown',
     };
   }
 }
