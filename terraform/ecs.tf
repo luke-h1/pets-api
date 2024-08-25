@@ -131,7 +131,7 @@ resource "aws_ecs_task_definition" "app_task" {
           {
             "name": "ENVIRONMENT",
             "value": "${var.env}"
-          }
+          },
           {
             "name": "S3_ASSETS_BUCKET",
             "value": "${var.s3_assets_bucket}"

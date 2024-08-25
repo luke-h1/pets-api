@@ -84,7 +84,7 @@ variable "cpu" {
 variable "task_count" {
   type        = number
   description = "The number of tasks to run"
-  default     = 2
+  default     = 1
 }
 
 variable "health_check_path" {
@@ -93,7 +93,7 @@ variable "health_check_path" {
   default     = "/api/healthcheck"
 }
 
-// env vars 
+// env vars
 variable "redis_url" {
   type        = string
   description = "The URL of the redis server"
