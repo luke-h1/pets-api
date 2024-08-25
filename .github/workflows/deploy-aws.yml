@@ -38,8 +38,10 @@ jobs:
   provision-ecr:
     name: Provision ECR repository if needed
     runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-group
+
     timeout-minutes: 10
-    concurrency: deploy-aws-staging-group
     steps:
       - name: Install moreutils
         run: sudo apt install moreutils
