@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { PetStatus, Role } from '@prisma/client';
 import { db } from '../src/db/prisma';
+import { testImages } from '../src/test/testImages';
 
 async function main() {
   await db.user.upsert({
@@ -49,9 +50,7 @@ async function main() {
               status: PetStatus.PENDING,
               description:
                 'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
-              images: [
-                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-              ],
+              images: testImages,
               tags: ['cute', 'fluffy'],
             },
             {
@@ -62,9 +61,7 @@ async function main() {
               status: PetStatus.ADOPTED,
               description:
                 'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
-              images: [
-                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-              ],
+              images: testImages,
               tags: ['cute', 'fluffy'],
             },
           ],
@@ -92,9 +89,7 @@ async function main() {
               status: PetStatus.AVAILABLE,
               description:
                 'Chloe is a unique Sphynx cat who loves to stay warm.',
-              images: [
-                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-              ],
+              images: testImages,
               tags: ['unique', 'warm'],
             },
             {
@@ -105,9 +100,7 @@ async function main() {
               status: PetStatus.AVAILABLE,
               description:
                 'Leo is a friendly British Shorthair cat who loves to play.',
-              images: [
-                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-              ],
+              images: testImages,
               tags: ['friendly', 'playful'],
             },
             {
@@ -118,9 +111,7 @@ async function main() {
               status: PetStatus.AVAILABLE,
               description:
                 'Nala is a graceful Russian Blue cat with a calm demeanor.',
-              images: [
-                'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-              ],
+              images: testImages,
               tags: ['graceful', 'calm'],
             },
           ],
