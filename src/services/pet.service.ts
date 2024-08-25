@@ -59,7 +59,7 @@ export default class PetService {
 
     const pet = await db.pet.findFirst({
       where: {
-        id: id.toString(),
+        id,
       },
     });
 

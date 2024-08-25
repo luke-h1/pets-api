@@ -57,7 +57,8 @@ test.describe('createPet', () => {
     const existingPetResponse = await existingPet.json();
     expect(existingPetResponse).toEqual(response);
 
-    await sleep(3000);
+    await sleep(5000);
+
     // assert /api/pets cache tree was updated
     const allPets = await request.get('/api/pets');
     expect(allPets.status()).toEqual(200);

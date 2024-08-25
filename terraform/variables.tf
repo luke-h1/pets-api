@@ -144,6 +144,6 @@ variable "s3_assets_secret_access_key" {
 }
 
 variable "git_sha" {
-  type = string
+  type        = string
   description = "The git sha of the commit being deployed"
 }
