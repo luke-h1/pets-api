@@ -17,11 +17,11 @@ resource "aws_alb" "app_load_balancer" {
   name               = "${var.project_name}-${var.env}-lb"
   load_balancer_type = "application"
   subnets = [
-    "${aws_default_subnet.application_subnet_a.id}",
-    "${aws_default_subnet.application_subnet_b.id}",
-    "${aws_default_subnet.application_subnet_c.id}"
+    aws_default_subnet.application_subnet_a.id,
+    aws_default_subnet.application_subnet_b.id,
+    aws_default_subnet.application_subnet_c.id
   ]
-  security_groups = ["${aws_security_group.app_load_balancer_security_group.id}"]
+  security_groups = [aws_security_group.app_load_balancer_security_group.id]
   tags = merge(var.tags, {
     "Name" = "${var.project_name}-${var.env}-lb"
   })
@@ -104,6 +104,30 @@ resource "aws_lb_listener" "web_http" {
   }
 }
 
+# redirect www to non-www
+resource "aws_lb_listener_rule" "redirect_www" {
+  listener_arn = aws_lb_listener.web_http.arn
+  priority     = 1
+
+  action {
+    type = "redirect"
+    redirect {
+      host        = "${var.project_name}-${var.env}.lhowsam.com"
+      path        = "/{path}"
+      port        = "443"
+      protocol    = "HTTPS"
+      query       = "{query}"
+      status_code = "HTTP_301"
+    }
+  }
+
+  condition {
+    host_header {
+      values = ["www.${var.project_name}-${var.env}.lhowsam.com"]
+    }
+  }
+}
+
 resource "aws_default_subnet" "application_subnet_a" {
   availability_zone = "eu-west-2a"
 }
@@ -148,14 +172,14 @@ resource "aws_security_group" "app_service_security_group" {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"
-    security_groups = ["${aws_security_group.app_load_balancer_security_group.id}"]
+    security_groups = [aws_security_group.app_load_balancer_security_group.id]
   }
 
   ingress {
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.app_load_balancer_security_group.id}"]
+    security_groups = [aws_security_group.app_load_balancer_security_group.id]
   }
 
   egress {
