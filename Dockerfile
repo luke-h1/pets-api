@@ -51,4 +51,4 @@ USER node
 
 ENV TZ=Europe/London
 
-CMD ["pnpm", "run", "start:prod"]
+CMD ["pnpm", "run", "start"]
