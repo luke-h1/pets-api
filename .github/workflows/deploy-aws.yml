@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: deploy-group
-
+      cancel-in-progress: true
     timeout-minutes: 10
     steps:
       - name: Install moreutils
@@ -100,6 +100,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: provision-ecr
+    concurrency:
+      group: deploy-build-group
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -118,6 +120,8 @@ jobs:
     needs: [provision-ecr, build]
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: deploy-docker-group
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -179,6 +183,8 @@ jobs:
     needs: [build-and-push-docker]
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    concurrency:
+      group: deploy-migratedb-group
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -197,6 +203,8 @@ jobs:
     needs: [build-and-push-docker, migrate-db]
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: deploy-infra-group
     steps:
       - name: Install moreutils
         run: sudo apt install moreutils
