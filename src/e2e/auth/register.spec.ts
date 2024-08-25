@@ -1,6 +1,6 @@
+import { RegisterRequest } from '@api/requests/auth.requests';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
-import { RegisterRequest } from '../../requests/auth.requests';
 import { createUser } from '../util/user';
 
 test.describe('register', () => {

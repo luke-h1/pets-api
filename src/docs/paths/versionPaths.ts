@@ -1,5 +1,5 @@
+import { versionSchema } from '@api/schema/version.schema';
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { versionSchema } from '../../schema/version.schema';
 
 const versionPaths = (registry: OpenAPIRegistry) => {
   registry.registerPath({

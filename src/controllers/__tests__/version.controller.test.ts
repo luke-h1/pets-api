@@ -1,5 +1,5 @@
+import server from '@api/server';
 import supertest from 'supertest';
-import server from '../../server';
 
 describe('version', () => {
   const app = server.init();

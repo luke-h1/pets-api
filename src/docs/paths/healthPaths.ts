@@ -1,5 +1,5 @@
+import { healthSchema } from '@api/schema/health.schema';
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { healthSchema } from '../../schema/health.schema';
 
 const healthPaths = (registry: OpenAPIRegistry) => {
   registry.registerPath({

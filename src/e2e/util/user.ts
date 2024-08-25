@@ -1,7 +1,7 @@
+import { LoginRequest, RegisterRequest } from '@api/requests/auth.requests';
 import { faker } from '@faker-js/faker';
 import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { User } from '@prisma/client';
-import { LoginRequest, RegisterRequest } from '../../requests/auth.requests';
 import { Dictionary } from '../../types/util';
 
 export const createUser = async (

@@ -1,6 +1,6 @@
+import { db } from '@api/db/prisma';
+import server from '@api/server';
 import supertest from 'supertest';
-import { db } from '../../db/prisma';
-import server from '../../server';
 import { pets } from '../__mocks__/pet';
 import { user, user2 } from '../__mocks__/user';
 
@@ -22,7 +22,7 @@ describe('pet', () => {
 
       const { body, statusCode } = await supertest(app).get('/api/pets');
       expect(statusCode).toBe(200);
-      expect(body).toHaveLength(6);
+      expect(body.pets).toHaveLength(6);
     });
   });
 
@@ -40,12 +40,72 @@ describe('pet', () => {
     const { body, statusCode } = await supertest(app).get(
       '/api/pets?page=1&pageSize=2',
     );
-    expect(body).toHaveLength(2);
+
+    expect(body).toEqual({
+      _links: {
+        self: { href: expect.any(String) },
+      },
+      paging: {
+        page: 1,
+        query: { page: '1', pageSize: '2' },
+        totalPages: 1,
+        totalResults: 2,
+      },
+      pets: [
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Maine Coon',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Whiskers',
+          status: 'PENDING',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Beagle',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Max',
+          status: 'ADOPTED',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+      ],
+    });
     expect(statusCode).toBe(200);
 
     const { body: secondPageBody, statusCode: secondPageStatusCode } =
       await supertest(app).get('/api/pets?page=200&pageSize=300');
-    expect(secondPageBody).toHaveLength(0);
+
+    // assert that we return totalPages: 0, totalResults: 0 for when we have 0 results
+    expect(secondPageBody).toEqual({
+      _links: {
+        self: { href: expect.any(String) },
+      },
+      paging: {
+        page: 200,
+        query: { page: '200', pageSize: '300' },
+        totalPages: 0,
+        totalResults: 0,
+      },
+      pets: [],
+    });
     expect(secondPageStatusCode).toBe(200);
   });
 
@@ -91,42 +151,55 @@ describe('pet', () => {
     );
 
     expect(statusCode).toBe(200);
-    expect(body).toEqual([
-      {
-        age: '12',
-        birthDate: '2022',
-        breed: 'cat',
-        createdAt: expect.any(String),
-        creatorId: u.id,
-        description: 'cat',
-        id: expect.any(String),
-        images: [
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        ],
-        name: 'bob',
-        status: 'PENDING',
-        tags: [],
-        updatedAt: expect.any(String),
+    expect(body).toEqual({
+      _links: {
+        self: {
+          href: expect.any(String),
+        },
       },
-      {
-        age: '15',
-        birthDate: '2022',
-        breed: 'dog',
-        createdAt: expect.any(String),
-        creatorId: u.id,
-        description: 'dog',
-        id: expect.any(String),
-        images: [
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        ],
-        name: 'Tiffany',
-        status: 'ADOPTED',
-        tags: [],
-        updatedAt: expect.any(String),
+      paging: {
+        page: 1,
+        query: { order: 'asc', page: '1', pageSize: '2' },
+        totalPages: 1,
+        totalResults: 2,
       },
-    ]);
+      pets: [
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'cat',
+          createdAt: '2022-01-01T00:00:00.000Z',
+          creatorId: u.id,
+          description: 'cat',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'bob',
+          status: 'PENDING',
+          tags: [],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '15',
+          birthDate: '2022',
+          breed: 'dog',
+          createdAt: '2024-01-01T00:00:00.000Z',
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Tiffany',
+          status: 'ADOPTED',
+          tags: [],
+          updatedAt: expect.any(String),
+        },
+      ],
+    });
   });
   test('sortOrder desc', async () => {
     const u = await db.user.create({
@@ -170,42 +243,55 @@ describe('pet', () => {
     );
 
     expect(statusCode).toBe(200);
-    expect(body).toEqual([
-      {
-        age: '15',
-        birthDate: '2022',
-        breed: 'dog',
-        createdAt: expect.any(String),
-        creatorId: u.id,
-        description: 'dog',
-        id: expect.any(String),
-        images: [
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        ],
-        name: 'Tiffany',
-        status: 'ADOPTED',
-        tags: [],
-        updatedAt: expect.any(String),
+    expect(body).toEqual({
+      _links: {
+        self: {
+          href: expect.any(String),
+        },
       },
-      {
-        age: '12',
-        birthDate: '2022',
-        breed: 'cat',
-        createdAt: expect.any(String),
-        creatorId: u.id,
-        description: 'cat',
-        id: expect.any(String),
-        images: [
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        ],
-        name: 'bob',
-        status: 'PENDING',
-        tags: [],
-        updatedAt: expect.any(String),
+      paging: {
+        page: 1,
+        query: { order: 'desc', page: '1', pageSize: '2' },
+        totalPages: 1,
+        totalResults: 2,
       },
-    ]);
+      pets: [
+        {
+          age: '15',
+          birthDate: '2022',
+          breed: 'dog',
+          createdAt: '2024-01-01T00:00:00.000Z',
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Tiffany',
+          status: 'ADOPTED',
+          tags: [],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'cat',
+          createdAt: '2022-01-01T00:00:00.000Z',
+          creatorId: u.id,
+          description: 'cat',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'bob',
+          status: 'PENDING',
+          tags: [],
+          updatedAt: expect.any(String),
+        },
+      ],
+    });
   });
 
   test('getPet', async () => {

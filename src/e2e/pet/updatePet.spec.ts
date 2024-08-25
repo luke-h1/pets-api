@@ -1,7 +1,7 @@
+import { CreatePetInput } from '@api/schema/pet.schema';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
-import { CreatePetInput } from '../../schema/pet.schema';
 import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
 
 test.describe('updatePet', () => {
@@ -73,7 +73,7 @@ test.describe('updatePet', () => {
     const allPets = await request.get('/api/pets');
     expect(allPets.status()).toEqual(200);
     const allPetsResponse = await allPets.json();
-    expect(allPetsResponse).toContainEqual(updatedBody);
+    expect(allPetsResponse.pets).toContainEqual(updatedBody);
   });
 
   test('returns 404 when pet doesnt exist', async ({ request }) => {

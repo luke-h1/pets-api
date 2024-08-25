@@ -1,14 +1,16 @@
-import { Request, Response } from 'express';
-import NotFoundError from '../errors/NotFoundError';
+import NotFoundError from '@api/errors/NotFoundError';
 import {
   CreatePetRequest,
   DeletePetReqeust,
   GetPetRequest,
   UpdatePetRequest,
-} from '../requests/pet.requests';
-import PetService from '../services/pet.service';
-import parsePaginationParams from '../utils/parsePaginationParams';
-import parseSortParams from '../utils/parseSortParams';
+} from '@api/requests/pet.requests';
+import PetService from '@api/services/pet.service';
+import createLinks from '@api/utils/createLinks';
+import parsePaginationParams from '@api/utils/parsePaginationParams';
+import parseSortParams from '@api/utils/parseSortParams';
+import { getFullRequestUrl } from '@api/utils/requestUtils';
+import { Request, Response } from 'express';
 
 export default class PetController {
   private readonly petService: PetService;
@@ -18,10 +20,27 @@ export default class PetController {
   }
 
   async getPets(req: Request, res: Response) {
-    const { page, pageSize } = parsePaginationParams(req.query);
+    const { page = 1, pageSize = 10 } = parsePaginationParams(req.query);
     const { sortOrder } = parseSortParams(req.query);
     const pets = await this.petService.getPets(page, pageSize, sortOrder);
-    return res.status(200).json(pets);
+
+    const totalPages = pageSize > 0 ? Math.ceil(pets!.length / pageSize) : 0;
+
+    return res.status(200).json({
+      pets,
+      _links: createLinks({
+        self: {
+          url: getFullRequestUrl(req),
+          method: req.method,
+        },
+      }),
+      paging: {
+        query: req.query,
+        page,
+        totalPages,
+        totalResults: pets!.length,
+      },
+    });
   }
 
   async getPet(req: GetPetRequest, res: Response) {

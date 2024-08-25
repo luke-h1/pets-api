@@ -1,4 +1,4 @@
-import { CreatePetInput } from '../../schema/pet.schema';
+import { CreatePetInput } from '@api/schema/pet.schema';
 
 export const testImages: CreatePetInput['body']['images'] = [
   'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',

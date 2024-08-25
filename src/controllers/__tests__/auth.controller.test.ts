@@ -1,8 +1,8 @@
+import { db } from '@api/db/prisma';
+import { LoginRequest, RegisterRequest } from '@api/requests/auth.requests';
+import server from '@api/server';
 import supertest from 'supertest';
 import { v4 } from 'uuid';
-import { db } from '../../db/prisma';
-import { LoginRequest, RegisterRequest } from '../../requests/auth.requests';
-import server from '../../server';
 
 describe('auth', () => {
   const app = server.init();
