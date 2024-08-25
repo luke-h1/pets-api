@@ -16,10 +16,10 @@ export default class PetService {
   }
 
   async getPets(page?: number, pageSize?: number, sortOrder?: 'asc' | 'desc') {
-    if (page) {
+    if (page && pageSize) {
       const cachedPets = await this.petCacheRepository.getPaginatedPets(
         page,
-        pageSize,
+        pageSize as number,
         sortOrder,
       );
 
@@ -28,7 +28,7 @@ export default class PetService {
         await this.petCacheRepository.setPets(pets);
         const updatedCache = await this.petCacheRepository.getPaginatedPets(
           page,
-          pageSize,
+          pageSize as number,
           sortOrder,
         );
 
@@ -43,7 +43,7 @@ export default class PetService {
     if (!pets) {
       const dbPets = await db.pet.findMany({});
       await this.petCacheRepository.setPets(dbPets);
-      return this.petCacheRepository.getPets();
+      return dbPets;
     }
 
     return pets;
@@ -56,19 +56,20 @@ export default class PetService {
       return cachedPet;
     }
 
-    const pet = await db.pet.findFirst({
-      where: {
-        id: id.toString(),
-      },
-    });
-
-    if (!pet) {
-      return null;
+    try {
+      const pet = await db.pet.findUniqueOrThrow({
+        where: {
+          id: id.toString(),
+        },
+      });
+      await this.petCacheRepository.setPet(pet);
+      return pet;
+    } catch (error) {
+      if ((error as { code: string }).code === 'P2025') {
+        return null;
+      }
     }
-
-    await this.petCacheRepository.setPet(pet);
-
-    return pet;
+    return null;
   }
 
   async createPet(pet: CreatePetInput['body'], userId: string) {
@@ -80,7 +81,6 @@ export default class PetService {
     });
 
     await this.petCacheRepository.setPet(newPet);
-    await this.petCacheRepository.deletePets();
     return newPet;
   }
 
@@ -97,8 +97,8 @@ export default class PetService {
       },
     });
 
-    await this.petCacheRepository.setPet(updatedPet);
-    await this.petCacheRepository.deletePets();
+    await this.petCacheRepository.removePet(updatedPet.id);
+
     return updatedPet;
   }
 
@@ -106,8 +106,7 @@ export default class PetService {
     try {
       await Promise.allSettled([
         db.pet.delete({ where: { id: id.toString() } }),
-        this.petCacheRepository.deletePet(id),
-        this.petCacheRepository.deletePets(),
+        this.petCacheRepository.removePet(id),
       ]);
       return null;
     } catch (error) {

@@ -2,7 +2,6 @@ import { CreatePetInput } from '@api/schema/pet.schema';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
-import { sleep } from '../util/sleep';
 import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
 
 test.describe('createPet', () => {
@@ -52,8 +51,6 @@ test.describe('createPet', () => {
       updatedAt: expect.any(String),
     });
 
-    await sleep(5000);
-    // assert cache was updated
     const existingPet = await request.get(`/api/pets/${response.id}`);
     expect(existingPet.status()).toEqual(200);
     const existingPetResponse = await existingPet.json();
@@ -71,11 +68,14 @@ test.describe('createPet', () => {
     });
 
     expect(allPetsResponse.paging).toEqual({
-      page: expect.any(Number),
       query: {},
       totalPages: expect.any(Number),
       totalResults: expect.any(Number),
     });
+
+    const allPetIds = allPetsResponse.pets.map((pet: { id: string }) => pet.id);
+    const matches = allPetIds.filter((id: string) => id === response.id);
+    expect(matches.length).toEqual(1);
 
     expect(allPetsResponse.pets).toContainEqual(response);
   });

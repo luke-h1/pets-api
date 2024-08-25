@@ -30,8 +30,8 @@ describe('petService', () => {
           ...pet,
           creatorId: u.id,
           id: expect.any(String),
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         })),
       ]);
     });
