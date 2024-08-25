@@ -104,29 +104,6 @@ resource "aws_lb_listener" "web_http" {
   }
 }
 
-# redirect www to non-www
-resource "aws_lb_listener_rule" "redirect_www" {
-  listener_arn = aws_lb_listener.web_http.arn
-  priority     = 1
-
-  action {
-    type = "redirect"
-    redirect {
-      host        = "${var.project_name}-${var.env}.lhowsam.com"
-      path        = "/{path}"
-      port        = "443"
-      protocol    = "HTTPS"
-      query       = "{query}"
-      status_code = "HTTP_301"
-    }
-  }
-
-  condition {
-    host_header {
-      values = ["www.${var.project_name}-${var.env}.lhowsam.com"]
-    }
-  }
-}
 
 resource "aws_default_subnet" "application_subnet_a" {
   availability_zone = "eu-west-2a"
