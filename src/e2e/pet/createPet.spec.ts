@@ -1,3 +1,4 @@
+import { sleep } from '@api/e2e/util/sleep';
 import { CreatePetInput } from '@api/schema/pet.schema';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
@@ -56,6 +57,7 @@ test.describe('createPet', () => {
     const existingPetResponse = await existingPet.json();
     expect(existingPetResponse).toEqual(response);
 
+    await sleep(3000);
     // assert /api/pets cache tree was updated
     const allPets = await request.get('/api/pets');
     expect(allPets.status()).toEqual(200);

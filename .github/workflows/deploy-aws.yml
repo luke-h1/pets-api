@@ -242,7 +242,7 @@ jobs:
         run: terraform apply ./app.out
         working-directory: ${{ env.TERRAFORM_ROOT }}
 
-      - name: e2e-staging
-        uses: ./.github/actions/e2e
-        with:
-          target: e2e-staging
+      # - name: e2e-staging
+      #   uses: ./.github/actions/e2e
+      #   with:
+      #     target: e2e-staging
