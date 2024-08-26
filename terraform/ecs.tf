@@ -70,6 +70,12 @@ resource "aws_autoscaling_group" "ag" {
   min_size              = 1
   availability_zones    = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
   protect_from_scale_in = true
+  load_balancers = [
+    aws_alb.app_load_balancer.name
+  ]
+  target_group_arns = [
+    aws_lb_target_group.app_target_group.arn
+  ]
   launch_template {
     id      = aws_launch_template.launch.id
     version = "$Latest"
@@ -91,7 +97,7 @@ resource "aws_ecs_cluster_capacity_providers" "ecs" {
   default_capacity_provider_strategy {
     base              = 1
     weight            = 100
-    capacity_provider = "FARGATE"
+    capacity_provider = "FARGATE_SPOT"
   }
 }
 
@@ -188,14 +194,14 @@ resource "aws_security_group" "application_service_security_group" {
     from_port       = 0
     to_port         = 0
     protocol        = "-1"
-    security_groups = ["${aws_security_group.app_load_balancer_security_group.id}"]
+    security_groups = [aws_security_group.app_load_balancer_security_group.id]
   }
 
   ingress {
     from_port       = 80
     to_port         = 80
     protocol        = "tcp"
-    security_groups = ["${aws_security_group.app_load_balancer_security_group.id}"]
+    security_groups = [aws_security_group.app_load_balancer_security_group.id]
   }
 
   egress {
@@ -228,23 +234,20 @@ resource "aws_ecs_service" "app_ecs" {
   }
 
   network_configuration {
-    subnets          = ["${aws_default_subnet.application_subnet_a.id}", "${aws_default_subnet.application_subnet_b.id}", "${aws_default_subnet.application_subnet_c.id}"]
+    subnets          = [aws_default_subnet.application_subnet_a.id, aws_default_subnet.application_subnet_b.id, aws_default_subnet.application_subnet_c.id]
     assign_public_ip = true
-    security_groups  = ["${aws_security_group.application_service_security_group.id}"]
+    security_groups  = [aws_security_group.application_service_security_group.id]
   }
 
   triggers = {
     redeployment = timestamp()
   }
 
-  capacity_provider_strategy {
-    capacity_provider = "FARGATE"
-    weight            = 1
-    base              = 2
-  }
+
   capacity_provider_strategy {
     capacity_provider = "FARGATE_SPOT"
     weight            = 2
+    base              = 1
   }
 }
 
