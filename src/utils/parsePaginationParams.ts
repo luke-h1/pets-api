@@ -11,16 +11,14 @@ export default function parsePaginationParams(
   let page: number | undefined;
   let pageSize: number | undefined;
 
-  const DEFAULT_PAGE = 1;
-  const DEFAULT_PAGE_SIZE = 10;
-
   if (
     typeof query.page === 'number' ||
     (typeof query.page === 'string' && isInt(query.page))
   ) {
     page = Number(query.page);
+
     if (page < 1) {
-      page = DEFAULT_PAGE;
+      page = 1;
     }
   }
 
@@ -30,7 +28,7 @@ export default function parsePaginationParams(
   ) {
     pageSize = Number(query.pageSize);
     if (pageSize < 1) {
-      pageSize = DEFAULT_PAGE_SIZE;
+      pageSize = 10;
     }
   }
 

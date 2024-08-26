@@ -7,6 +7,7 @@ import {
   UpdatePetInput,
 } from '@api/schema/pet.schema';
 import logger from '@api/utils/logger';
+import { Pet } from '@prisma/client';
 
 export default class PetService {
   private readonly petCacheRepository: PetCacheRepository;
@@ -15,7 +16,11 @@ export default class PetService {
     this.petCacheRepository = new PetCacheRepository();
   }
 
-  async getPets(page?: number, pageSize?: number, sortOrder?: 'asc' | 'desc') {
+  async getPets(
+    page?: number,
+    pageSize?: number,
+    sortOrder?: 'asc' | 'desc',
+  ): Promise<Pet[]> {
     if (page && pageSize) {
       const cachedPets = await this.petCacheRepository.getPaginatedPets(
         page,
@@ -23,7 +28,7 @@ export default class PetService {
         sortOrder,
       );
 
-      if (!cachedPets) {
+      if (!cachedPets.length) {
         const pets = await db.pet.findMany();
         await this.petCacheRepository.setPets(pets);
         const updatedCache = await this.petCacheRepository.getPaginatedPets(

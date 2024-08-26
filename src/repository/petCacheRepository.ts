@@ -104,7 +104,7 @@ export default class PetCacheRepository {
     page: number,
     pageSize: number,
     sortOrder?: 'asc' | 'desc',
-  ): Promise<Pet[] | null> {
+  ): Promise<Pet[]> {
     const db = this.redis.getInstance();
 
     const start = (page - 1) * pageSize;
@@ -114,7 +114,7 @@ export default class PetCacheRepository {
 
     if (!cachedPets) {
       logger.info(`[REDIS]: pets not found in cache`, { tag: 'redis' });
-      return null;
+      return [];
     }
 
     const parsedPets = this.cacheToJSON(cachedPets);

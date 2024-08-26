@@ -88,10 +88,12 @@ describe('pet', () => {
     const { body: secondPageBody, statusCode: secondPageStatusCode } =
       await supertest(app).get('/api/pets?page=200&pageSize=300');
 
-    // assert that we return totalPages: 0, totalResults: 0 for when we have 0 results
     expect(secondPageBody).toEqual({
       _links: {
         self: { href: expect.any(String) },
+        prev: {
+          href: expect.stringContaining('/api/pets?page=199&pageSize=300'),
+        },
       },
       paging: {
         page: 200,
