@@ -8,6 +8,9 @@ const config = {
     '<rootDir>/test/**/*.(test).{js,jsx,ts,tsx}',
   ],
   verbose: true,
+  testEnvironmentOptions: {
+    url: 'http://localhost:8000/',
+  },
   setupFiles: ['dotenv/config', './src/test/setEnvVars.js'],
   resetMocks: true,
   testPathIgnorePatterns: ['/node_modules/', '/dist/', 'e2e'],

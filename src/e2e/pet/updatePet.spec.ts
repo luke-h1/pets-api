@@ -72,7 +72,7 @@ test.describe('updatePet', () => {
 
     await sleep(2000);
     // assert /pets endpoint cache tree was updated
-    const allPets = await request.get('/api/pets');
+    const allPets = await request.get('/api/pets?page=1&pageSize=1000');
     expect(allPets.status()).toEqual(200);
     const allPetsResponse = await allPets.json();
 

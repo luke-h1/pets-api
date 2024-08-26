@@ -57,22 +57,26 @@ test.describe('createPet', () => {
     const existingPetResponse = await existingPet.json();
     expect(existingPetResponse).toEqual(response);
 
+    // deployed envs can take a while to update cache
     await sleep(5000);
 
     // assert /api/pets cache tree was updated
-    const allPets = await request.get('/api/pets');
+    const allPets = await request.get('/api/pets?page=1&pageSize=1000');
     expect(allPets.status()).toEqual(200);
 
     const allPetsResponse = await allPets.json();
 
     // eslint-disable-next-line no-underscore-dangle
     expect(allPetsResponse._links).toEqual({
-      self: { href: `${process.env.API_BASE_URL}/api/pets` },
+      self: {
+        href: `${process.env.API_BASE_URL}/api/pets?page=1&pageSize=1000`,
+      },
     });
 
     expect(allPetsResponse.paging).toEqual({
-      query: {},
-      totalPages: expect.any(Number),
+      page: 1,
+      query: { page: '1', pageSize: '1000' },
+      totalPages: 1,
       totalResults: expect.any(Number),
     });
 
