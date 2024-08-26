@@ -10,17 +10,17 @@ export default class HealthController {
   }
 
   public async health(req: Request, res: Response) {
-    const isXml = req.accepts('text/xml');
+    const isXml = req.accepts('application/xml');
     const { cache, db } = await this.healthService.health();
 
     if (!db || !cache) {
       const message = `Cannot connect to ${!db ? 'DB' : ''}${!db && !cache ? ' and ' : ''}${!cache ? 'cache' : ''}`;
 
-      if (isXml === 'text/xml') {
+      if (isXml === 'application/xml') {
         const xmlResponse = xml({
           health: [{ db }, { cache }, { status: 'ERROR' }, { message }],
         });
-        return res.status(500).type('text/xml').send(xmlResponse);
+        return res.status(500).type('application/xml').send(xmlResponse);
       }
       return res.status(500).json({
         db: !!db,
@@ -30,11 +30,11 @@ export default class HealthController {
       });
     }
 
-    if (isXml === 'text/xml') {
+    if (isXml === 'application/xml') {
       const xmlResponse = xml({
         health: [{ db }, { cache }, { status: 'OK' }],
       });
-      return res.status(200).type('text/xml').send(xmlResponse);
+      return res.status(200).type('application/xml').send(xmlResponse);
     }
 
     return res.status(200).json({

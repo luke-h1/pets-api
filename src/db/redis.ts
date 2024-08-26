@@ -22,7 +22,6 @@ class RedisDatabase {
           ? testRedis
           : new Redis(process.env.REDIS_URL, {
               commandTimeout: 20000,
-              enableAutoPipelining: true,
             });
     }
     return this.instance;

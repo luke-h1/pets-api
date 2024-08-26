@@ -15,7 +15,7 @@ describe('health', () => {
   test('healthcheck responds when db & cache is ok in xml', async () => {
     const { text, statusCode } = await supertest(app)
       .get('/api/healthcheck')
-      .set('Accept', 'text/xml');
+      .set('Accept', 'application/xml');
     expect(statusCode).toBe(200);
     expect(text).toEqual(
       '<health><db>true</db><cache>true</cache><status>OK</status></health>',

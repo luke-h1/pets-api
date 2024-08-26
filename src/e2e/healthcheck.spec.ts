@@ -21,7 +21,7 @@ test.describe('healthcheck', () => {
     // set the accept header to application/xml
     const result = await request.get('/api/healthcheck', {
       headers: {
-        accept: 'application/xml',
+        accept: 'text/xml',
       },
     });
     expect(result.status()).toBe(200);

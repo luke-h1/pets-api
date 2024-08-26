@@ -204,8 +204,11 @@ resource "aws_security_group" "application_service_security_group" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
 
+  tags = {
+    Environment = var.env
+  }
+}
 
 resource "aws_ecs_service" "app_ecs" {
   name                               = "${var.project_name}-${var.env}-cluster"

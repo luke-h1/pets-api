@@ -15,6 +15,9 @@ const versionPaths = (registry: OpenAPIRegistry) => {
           'application/json': {
             schema: versionSchema,
           },
+          'application/xml': {
+            schema: versionSchema,
+          },
         },
       },
     },
