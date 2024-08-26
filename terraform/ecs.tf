@@ -70,9 +70,6 @@ resource "aws_autoscaling_group" "ag" {
   min_size              = 1
   availability_zones    = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
   protect_from_scale_in = true
-  target_group_arns = [
-    aws_lb_target_group.app_target_group.arn
-  ]
   launch_template {
     id      = aws_launch_template.launch.id
     version = "$Latest"
