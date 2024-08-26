@@ -9,11 +9,11 @@ export default class VersionController {
   }
 
   async getVersion(req: Request, res: Response) {
-    const isXml = req.accepts('text/xml');
+    const isXml = req.accepts('application/xml');
     const version = this.versionService.getVersion(isXml);
 
-    if (isXml === 'text/xml') {
-      return res.status(200).type('text/xml').send(version);
+    if (isXml === 'application/xml') {
+      return res.status(200).type('application/xml').send(version);
     }
 
     return res.status(200).json(version);

@@ -21,7 +21,7 @@ describe('version', () => {
     test('getVersion returns xml if requested', async () => {
       const { text, statusCode } = await supertest(app)
         .get('/api/version')
-        .set('Accept', 'text/xml');
+        .set('Accept', 'application/xml');
 
       expect(statusCode).toBe(200);
       expect(text).toEqual(

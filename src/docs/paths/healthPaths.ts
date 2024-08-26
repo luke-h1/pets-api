@@ -23,6 +23,9 @@ const healthPaths = (registry: OpenAPIRegistry) => {
           'application/json': {
             schema: healthSchema,
           },
+          'application/xml': {
+            schema: healthSchema,
+          },
         },
       },
     },
