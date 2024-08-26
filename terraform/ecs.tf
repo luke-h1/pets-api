@@ -70,9 +70,6 @@ resource "aws_autoscaling_group" "ag" {
   min_size              = 1
   availability_zones    = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
   protect_from_scale_in = true
-  load_balancers = [
-    aws_alb.app_load_balancer.name
-  ]
   target_group_arns = [
     aws_lb_target_group.app_target_group.arn
   ]
