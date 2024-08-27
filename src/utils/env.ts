@@ -21,7 +21,7 @@ export const envSchema = z.object({
   // Runtime
   DEPLOYED_AT: z.string().default(new Date().getTime().toString()),
   DEPLOYED_BY: z.string().default('luke-h1'),
-  ENVIRONMENT: z.enum(['local', 'staging', 'production']).default('local'),
+  ENVIRONMENT: z.string().default('local'),
 
   // AWS s3 assets
   S3_ASSETS_BUCKET: z.string(),
