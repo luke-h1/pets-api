@@ -12,6 +12,7 @@ env:
   TF_VAR_session_secret: ${{ secrets.SESSION_SECRET }}
   TF_VAR_database_url: ${{ secrets.DATABASE_URL }}
   TF_VAR_deployed_by: ${{ github.actor }}
+  TF_VAR_deployed_at: ${{ github.actor }}
   TF_VAR_private_key: ${{ secrets.STG_PRIVATE_KEY }}
   TF_VAR_certificate_body: ${{ secrets.STG_CERT_BODY }}
   TF_VAR_certificate_chain: ${{ secrets.CERTIFICATE_CHAIN }}
@@ -22,6 +23,7 @@ env:
   TF_VAR_s3_assets_region: eu-west-2
   TF_VAR_s3_assets_access_key_id: ${{ secrets.ASSETS_KEY }}
   TF_VAR_s3_assets_secret_access_key: ${{ secrets.ASSETS_SECRET }}
+  TF_VAR_git_sha: 1
 jobs:
   destroy-infra:
     name: destroy infrastructure
