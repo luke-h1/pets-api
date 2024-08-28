@@ -13,47 +13,93 @@ resource "aws_default_subnet" "app_subnet_c" {
   availability_zone = "eu-west-2c"
 }
 
-resource "aws_alb" "app_load_balancer" {
-  name               = "${var.project_name}-${var.env}-lb"
-  load_balancer_type = "application"
-  subnets = [
-    aws_default_subnet.application_subnet_a.id,
-    aws_default_subnet.application_subnet_b.id,
-    aws_default_subnet.application_subnet_c.id
-  ]
-  security_groups = [aws_security_group.app_load_balancer_security_group.id]
-  tags = merge(var.tags, {
-    "Name" = "${var.project_name}-${var.env}-lb"
-  })
-  preserve_host_header = true
+
+resource "aws_default_subnet" "application_subnet_a" {
+  availability_zone = "eu-west-2a"
 }
 
-resource "aws_security_group" "app_load_balancer_security_group" {
-  name = "${var.project_name}-${var.env}-lb-security-group"
-  tags = merge(var.tags, {
-    "Name" = "${var.project_name}-${var.env}-lb-security-group"
-  })
+resource "aws_default_subnet" "application_subnet_b" {
+  availability_zone = "eu-west-2b"
+}
 
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+resource "aws_default_subnet" "application_subnet_c" {
+  availability_zone = "eu-west-2c"
+}
+
+
+
+module "alb" {
+  source             = "terraform-aws-modules/alb/aws"
+  load_balancer_type = ""
+
+  name   = "${var.project_name}-${var.env}-alb"
+  vpc_id = aws_default_vpc.default_vpc.id
+  subnets = [
+    aws_default_subnet.app_subnet_a.id,
+    aws_default_subnet.app_subnet_b.id,
+    aws_default_subnet.app_subnet_c.id,
+  ]
+
+  # Security Group
+  security_group_ingress_rules = {
+    all_http = {
+      from_port   = 80
+      to_port     = 80
+      ip_protocol = "tcp"
+      description = "HTTP web traffic"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+    all_https = {
+      from_port   = 443
+      to_port     = 443
+      ip_protocol = "tcp"
+      description = "HTTPS web traffic"
+      cidr_ipv4   = "0.0.0.0/0"
+    }
+  }
+  security_group_egress_rules = {
+    all = {
+      ip_protocol = "-1"
+      cidr_ipv4   = "10.0.0.0/16"
+    }
   }
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  #   access_logs = {
+  #     bucket = "my-alb-logs"
+  #   }
+
+  listeners = {
+    ex-http-https-redirect = {
+      port     = 80
+      protocol = "HTTP"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+    ex-https = {
+      port            = 443
+      protocol        = "HTTPS"
+      certificate_arn = aws_acm_certificate.domain.arn
+
+      forward = {
+        target_group_key = "ex-instance"
+      }
+    }
   }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  target_groups = {
+    ex-instance = {
+      name_prefix = "h1"
+      protocol    = "HTTP"
+      port        = 80
+      target_type = "instance"
+      target_id   = aws_lb_target_group.app_target_group.arn
+    }
   }
+
+  tags = var.tags
 }
 
 resource "aws_lb_target_group" "app_target_group" {
@@ -80,89 +126,5 @@ resource "aws_lb_target_group" "app_target_group" {
     cookie_duration = 3600
     enabled         = true
     type            = "lb_cookie"
-  }
-}
-
-
-# add a listener to redirect any http traffic to https
-resource "aws_lb_listener" "web_http" {
-  load_balancer_arn = aws_alb.app_load_balancer.arn
-  port              = 80
-  protocol          = "HTTP"
-  tags = merge(var.tags, {
-    "Name"        = "${var.project_name}-${var.env}-http-listener"
-    "Description" = "Redirect HTTP to HTTPS listener"
-  })
-  default_action {
-    type = "redirect"
-
-    redirect {
-      port        = 443
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
-
-
-resource "aws_default_subnet" "application_subnet_a" {
-  availability_zone = "eu-west-2a"
-}
-
-resource "aws_default_subnet" "application_subnet_b" {
-  availability_zone = "eu-west-2b"
-}
-
-resource "aws_default_subnet" "application_subnet_c" {
-  availability_zone = "eu-west-2c"
-}
-
-resource "aws_lb_listener_certificate" "cert" {
-  certificate_arn = aws_acm_certificate.cert.arn
-  listener_arn    = aws_lb_listener.web_https.arn
-}
-
-# forward https traffic to the target group
-resource "aws_lb_listener" "web_https" {
-  load_balancer_arn = aws_alb.app_load_balancer.arn
-  port              = 443
-  protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate.cert.arn
-  tags = merge(var.tags, {
-    "Name"        = "${var.project_name}-${var.env}-https-listener"
-    "Description" = "Forward HTTPS traffic to the target group"
-  })
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.app_target_group.arn
-  }
-}
-
-resource "aws_security_group" "app_service_security_group" {
-  tags = merge(var.tags, {
-    "Name"        = "${var.project_name}-${var.env}-sg-group"
-    "Description" = "Security group for ${var.project_name}-${var.env}"
-  })
-
-  ingress {
-    from_port       = 0
-    to_port         = 0
-    protocol        = "-1"
-    security_groups = [aws_security_group.app_load_balancer_security_group.id]
-  }
-
-  ingress {
-    from_port       = 80
-    to_port         = 80
-    protocol        = "tcp"
-    security_groups = [aws_security_group.app_load_balancer_security_group.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
   }
 }

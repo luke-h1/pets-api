@@ -35,8 +35,8 @@ resource "aws_route53_record" "alb" {
   type    = "A"
 
   alias {
-    name                   = aws_alb.app_load_balancer.dns_name
-    zone_id                = aws_alb.app_load_balancer.zone_id
+    name                   = module.alb.dns_name
+    zone_id                = module.alb.zone_id
     evaluate_target_health = true
   }
 }
