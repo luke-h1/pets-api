@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "ecr_repo" {
-  name = var.project_name
+  name = "${var.project_name}-${var.env}-ecr-repo"
   # required if we need to do a full teardown
   force_delete = true
 
