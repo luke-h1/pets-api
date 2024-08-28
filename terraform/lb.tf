@@ -16,6 +16,9 @@ resource "aws_default_subnet" "app_subnet_c" {
 resource "aws_alb" "app_load_balancer" {
   name               = "${var.project_name}-${var.env}-lb"
   load_balancer_type = "application"
+  connection {
+    timeout = "30"
+  }
   subnets = [
     aws_default_subnet.application_subnet_a.id,
     aws_default_subnet.application_subnet_b.id,
@@ -61,17 +64,16 @@ resource "aws_lb_target_group" "app_target_group" {
   tags = merge(var.tags, {
     "Name" = "${var.project_name}-${var.env}-tg"
   })
-  port                          = 80
-  protocol                      = "HTTP"
-  target_type                   = "ip"
-  vpc_id                        = aws_default_vpc.default_vpc.id
-  deregistration_delay          = 300
-  load_balancing_algorithm_type = "least_outstanding_requests"
-
+  connection_termination = true
+  port                   = 80
+  protocol               = "HTTP"
+  target_type            = "ip"
+  vpc_id                 = aws_default_vpc.default_vpc.id
+  deregistration_delay   = 30
   health_check {
     matcher           = "200,301,302"
     path              = "/api/healthcheck"
-    interval          = 60
+    interval          = 120
     timeout           = 30
     healthy_threshold = 3
   }
@@ -95,7 +97,6 @@ resource "aws_lb_listener" "web_http" {
   })
   default_action {
     type = "redirect"
-
     redirect {
       port        = 443
       protocol    = "HTTPS"
@@ -144,6 +145,7 @@ resource "aws_security_group" "app_service_security_group" {
     "Name"        = "${var.project_name}-${var.env}-sg-group"
     "Description" = "Security group for ${var.project_name}-${var.env}"
   })
+
 
   ingress {
     from_port       = 0
