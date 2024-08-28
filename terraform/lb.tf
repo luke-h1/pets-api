@@ -64,12 +64,10 @@ resource "aws_lb_target_group" "app_target_group" {
   tags = merge(var.tags, {
     "Name" = "${var.project_name}-${var.env}-tg"
   })
-  connection_termination = true
-  port                   = 80
-  protocol               = "HTTP"
-  target_type            = "ip"
-  vpc_id                 = aws_default_vpc.default_vpc.id
-  deregistration_delay   = 30
+  port        = 80
+  protocol    = "HTTP"
+  target_type = "ip"
+  vpc_id      = aws_default_vpc.default_vpc.id
   health_check {
     matcher           = "200,301,302"
     path              = "/api/healthcheck"
