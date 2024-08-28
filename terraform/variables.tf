@@ -118,7 +118,7 @@ variable "database_url" {
 variable "session_domain" {
   type        = string
   description = "The domain to use for the session cookie. This should not start with https://"
-  default     = "pets-api.lhowsam.com"
+  default     = "pets-staging.lhowsam.com"
 }
 
 variable "s3_assets_bucket" {

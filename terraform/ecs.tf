@@ -151,6 +151,10 @@ resource "aws_ecs_task_definition" "app_task" {
           {
             "name": "GIT_SHA",
             "value": "${var.git_sha}"
+          },
+          {
+            "name": "SESSION_DOMAIN",
+            "value": "${var.session_domain}"
           }
         ],
         "portMappings": [

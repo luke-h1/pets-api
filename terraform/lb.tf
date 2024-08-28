@@ -16,9 +16,6 @@ resource "aws_default_subnet" "app_subnet_c" {
 resource "aws_alb" "app_load_balancer" {
   name               = "${var.project_name}-${var.env}-lb"
   load_balancer_type = "application"
-  connection {
-    timeout = "30"
-  }
   subnets = [
     aws_default_subnet.application_subnet_a.id,
     aws_default_subnet.application_subnet_b.id,
@@ -102,7 +99,6 @@ resource "aws_lb_listener" "web_http" {
     }
   }
 }
-
 
 resource "aws_default_subnet" "application_subnet_a" {
   availability_zone = "eu-west-2a"
