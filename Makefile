@@ -21,8 +21,3 @@ e2e-local:
 .PHONY: e2e-staging
 e2e-staging:
 	API_BASE_URL=https://pets-staging.lhowsam.com ./node_modules/.bin/playwright test --config=playwright-stg.config.ts ${tests}
-
-
-.PHONY: e2e-staging-render
-e2e-staging-render:
-	API_BASE_URL=https://pets-api-staging.onrender.com ./node_modules/.bin/playwright test --config=playwright-render.config.ts ${tests}
