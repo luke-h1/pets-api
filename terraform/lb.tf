@@ -30,10 +30,9 @@ resource "aws_default_subnet" "application_subnet_c" {
 
 module "alb" {
   source             = "terraform-aws-modules/alb/aws"
-  load_balancer_type = ""
-
-  name   = "${var.project_name}-${var.env}-alb"
-  vpc_id = aws_default_vpc.default_vpc.id
+  name               = "${var.project_name}-${var.env}-alb"
+  vpc_id             = aws_default_vpc.default_vpc.id
+  load_balancer_type = "application"
   subnets = [
     aws_default_subnet.app_subnet_a.id,
     aws_default_subnet.app_subnet_b.id,
