@@ -69,8 +69,8 @@ jobs:
 
       - name: Terraform init
         id: init
-        run: terraform init
-        working-directory: ${{ env.TERRAFORM_ROOT }}
+        run: |
+          terraform init -backend-config="key=vpc/${{ env.TF_VAR_env }}.tfstate" -backend-config="bucket=pets-api-${{ env.TF_VAR_env }}-terraform-state" -input=false        working-directory: ${{ env.TERRAFORM_ROOT }}
 
       - name: Terraform fmt -check
         id: fmt
@@ -145,7 +145,8 @@ jobs:
 
       - name: Terraform init
         id: init
-        run: terraform init
+        run: |
+          terraform init -backend-config="key=vpc/${{ env.TF_VAR_env }}.tfstate" -backend-config="bucket=pets-api-${{ env.TF_VAR_env }}-terraform-state" -input=false
         working-directory: ${{ env.TERRAFORM_ROOT }}
 
       - name: terraform plan
@@ -231,7 +232,7 @@ jobs:
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -backend-config="key=vpc/${{ env.TF_VAR_env }}.tfstate" -backend-config="bucket=pets-api-${{ env.TF_VAR_env }}-terraform-state" -input=false
         working-directory: ${{ env.TERRAFORM_ROOT }}
 
       - name: Terraform Validate
