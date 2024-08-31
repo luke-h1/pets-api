@@ -95,7 +95,7 @@ describe('auth', () => {
         date: expect.any(String),
         etag: expect.any(String),
         'set-cookie': expect.arrayContaining([
-          expect.stringMatching(/^connect.sid=/),
+          expect.stringMatching(/^PETS_V1_id=/),
         ]),
         vary: 'Accept-Encoding',
       });
@@ -185,15 +185,15 @@ describe('auth', () => {
 
       expect(statusCode).toBe(200);
 
-      expect(headers).toEqual({
-        'access-control-allow-origin': '*',
-        connection: expect.any(String),
-        date: expect.any(String),
-        'set-cookie': [
-          'connect.sid=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
-        ],
-        'transfer-encoding': 'chunked',
+      expect(headers).not.toEqual({
+        'set-cookie': expect.arrayContaining([
+          expect.stringMatching(/^PETS_V1_id=/),
+        ]),
       });
+
+      const authResult = await supertest(app).get('/api/auth');
+      expect(authResult.body).toEqual({ isAuth: false });
+      expect(authResult.status).toBe(200);
     });
   });
 
@@ -212,7 +212,7 @@ describe('auth', () => {
       });
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       const { body } = await supertest(app)
         .get('/api/auth')

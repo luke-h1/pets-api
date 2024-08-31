@@ -13,7 +13,7 @@ describe('image', () => {
         password: user.password,
       });
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
       // form data
       const formData = new FormData();
       formData.append('images', '../__mocks__/cat.png');

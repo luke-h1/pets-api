@@ -28,7 +28,7 @@ export default class AuthService {
       },
     });
 
-    if (existingUser?.email === user.email) {
+    if (existingUser && existingUser.email === user.email) {
       logger.warn(`${authErrorCodes.EmailAlreadyExists} triggered`);
       return authErrorCodes.EmailAlreadyExists;
     }
