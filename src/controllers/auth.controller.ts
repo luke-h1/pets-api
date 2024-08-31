@@ -1,3 +1,9 @@
+import {
+  ACCESS_TOKEN_COOKIE,
+  checkToken,
+  sendAuthTokens,
+} from '@api/utils/createAuthTokens';
+import { User } from '@prisma/client';
 import { Request, Response } from 'express';
 import omit from 'lodash/omit';
 import BadRequestError from '../errors/BadRequestError';
@@ -78,22 +84,16 @@ export default class AuthController {
         ],
       });
     }
-    // auth user with express-session
-    req.session.userId = result.id;
+    // auth user
+    sendAuthTokens(res, result as User);
 
     return res.status(200).json(omit(result, 'password'));
   }
 
   async logout(req: Request, res: Response) {
-    req.session.destroy((e: unknown) => {
-      res.clearCookie('connect.sid');
-      if (e) {
-        return res.status(400).json({
-          msg: 'issue clearing cookie',
-        });
-      }
-      return res.status(200).send();
-    });
+    res.clearCookie(ACCESS_TOKEN_COOKIE);
+
+    return res.status(200).json({ message: 'Logged out' });
   }
 
   // async resetPassword(req: ResetPasswordRequest, res: Response) {
@@ -117,9 +117,18 @@ export default class AuthController {
   }
 
   async isAuthenticated(req: Request, res: Response) {
-    const isAuth = req.session && req.session.userId;
-    return res.status(200).json({
-      isAuth: !!isAuth,
-    });
+    const accessToken = req.cookies[ACCESS_TOKEN_COOKIE];
+
+    if (!accessToken) {
+      return res.status(200).json({ isAuth: false });
+    }
+
+    const result = await checkToken(accessToken);
+
+    if (!result || !result.user || !result.userId) {
+      return res.status(200).json({ isAuth: false });
+    }
+
+    return res.status(200).json({ isAuth: true });
   }
 }

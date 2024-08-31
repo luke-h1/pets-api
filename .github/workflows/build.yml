@@ -12,6 +12,8 @@ env:
   S3_ASSETS_REGION: eu-west-2
   S3_ASSETS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   S3_ASSETS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  REFRESH_TOKEN_SECRET: 'pets'
+  ACCESS_TOKEN_SECRET: 'pets-access-token'
 
 jobs:
   build:

@@ -66,7 +66,7 @@ export default class PetController {
   async createPet(req: CreatePetRequest, res: Response) {
     const newPet = await this.petService.createPet(
       req.body,
-      req.session.userId,
+      req.userId as string,
     );
     return res.status(201).json(newPet);
   }

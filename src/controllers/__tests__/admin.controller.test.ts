@@ -12,11 +12,11 @@ describe('admin', () => {
         await supertest(app).post('/api/admin/flush');
 
       expect(body).toEqual({
-        code: 'Forbidden',
+        code: 'forbidden',
         errors: [],
         message: 'You are not authorized to perform this action',
         statusCode: 401,
-        title: 'Forbidden',
+        title: 'You are not authorized to perform this action',
         type: 'Forbidden',
       });
 
@@ -36,7 +36,7 @@ describe('admin', () => {
       expect(authStatusCode).toBe(200);
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       const { body, statusCode } = await supertest(app)
         .post('/api/admin/flush')
@@ -67,7 +67,7 @@ describe('admin', () => {
       expect(authStatusCode).toBe(200);
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       // set user to an admin in the DB
       await db.$queryRaw`UPDATE "users" SET role = 'ADMIN' WHERE email = ${user.email}`;

@@ -308,7 +308,7 @@ describe('pet', () => {
         errors: [],
         message: 'You are not authorized to perform this action',
         statusCode: 401,
-        title: 'Forbidden',
+        title: 'You are not authorized to perform this action',
         type: 'Forbidden',
       });
     });
@@ -326,7 +326,7 @@ describe('pet', () => {
       expect(statusCode).toBe(200);
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       const { body, statusCode: petStatusCode } = await supertest(app)
         .post('/api/pets')
@@ -358,7 +358,7 @@ describe('pet', () => {
       expect(statusCode).toBe(200);
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       const { body: createdPet } = await supertest(app)
         .post('/api/pets')
@@ -399,7 +399,7 @@ describe('pet', () => {
       expect(statusCode).toBe(200);
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       // create a pet authenticated as user1
       const { body: createdPet } = await supertest(app)
@@ -459,7 +459,7 @@ describe('pet', () => {
       expect(statusCode).toBe(200);
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       // create a pet authenticated as user1
       const { body: createdPet } = await supertest(app)
@@ -478,7 +478,7 @@ describe('pet', () => {
         errors: [],
         message: 'You are not authorized to perform this action',
         statusCode: 401,
-        title: 'Forbidden',
+        title: 'You are not authorized to perform this action',
         type: 'Forbidden',
       });
     });
@@ -496,7 +496,7 @@ describe('pet', () => {
       expect(statusCode).toBe(200);
 
       const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
-      const cookieName = 'connect.sid';
+      const cookieName = 'PETS_V1_id';
 
       // create a pet authenticated as user1
       const { body: createdPet } = await supertest(app)

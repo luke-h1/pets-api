@@ -116,7 +116,7 @@ test.describe('createPet', () => {
       errors: [],
       message: 'You are not authorized to perform this action',
       statusCode: 401,
-      title: 'Forbidden',
+      title: 'You are not authorized to perform this action',
       type: 'Forbidden',
     });
   });
