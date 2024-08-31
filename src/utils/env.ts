@@ -12,10 +12,11 @@ export const envSchema = z.object({
   // redis
   REDIS_URL: z.string().default('redis://localhost:6379'),
 
-  // auth
-  REFRESH_TOKEN_SECRET: z.string().default('pets'),
-  ACCESS_TOKEN_SECRET: z.string().default('pets-access-token'),
-  COOKIE_DOMAIN: z.string().optional(),
+  // session auth
+  SESSION_SECRET: z.string().default('pets'),
+
+  // ONLY set in deployed environments
+  SESSION_DOMAIN: z.string().optional(),
 
   // Runtime
   DEPLOYED_AT: z.string().default(new Date().getTime().toString()),

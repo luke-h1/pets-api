@@ -27,9 +27,9 @@ const isPetOwner = <TRequest extends Request>() => {
         });
       }
 
-      if (pet.creatorId !== req.userId) {
+      if (pet.creatorId !== req.session.userId) {
         logger.info(
-          `${petErrorCodes.PetUpdateNotAuthorised} triggered. User ${req.userId} is not authorised to perform operations on ${pet.id}`,
+          `${petErrorCodes.PetUpdateNotAuthorised} triggered. User ${req.session.userId} is not authorised to perform operations on ${pet.id}`,
         );
 
         return res.status(401).json({

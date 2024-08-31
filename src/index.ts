@@ -13,10 +13,9 @@ class Main {
       // redis
       REDIS_URL: process.env.REDIS_URL,
 
-      // auth
-      REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
-      ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
-      COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
+      // session auth
+      SESSION_SECRET: process.env.SESSION_SECRET,
+      SESSION_DOMAIN: process.env.SESSION_DOMAIN,
 
       // version
       DEPLOYED_AT: process.env.DEPLOYED_AT,
@@ -38,7 +37,7 @@ class Main {
       );
       throw new Error('issue reading environment variables');
     } else {
-      logger.info('parsed env variables successfully');
+      logger.info('parsed env variables succesfully');
     }
   }
 

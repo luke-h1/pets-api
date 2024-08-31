@@ -16,6 +16,7 @@ model User {
   createdAt DateTime @default(now())
   // favorited listings
 
+
   updatedAt DateTime @updatedAt
 
   @@map("users")
