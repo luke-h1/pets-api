@@ -31,6 +31,7 @@ class Main {
       S3_ASSETS_ACCESS_KEY_ID: process.env.S3_ASSETS_ACCESS_KEY_ID,
       S3_ASSETS_SECRET_ACCESS_KEY: process.env.S3_ASSETS_SECRET_ACCESS_KEY,
     });
+
     if (!environmentVariables.success) {
       logger.error(
         `${JSON.stringify(environmentVariables.error.issues, null, 2)}`,
