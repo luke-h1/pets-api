@@ -1,9 +1,6 @@
 name: Deploy to staging (aws)
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 env:
   TERRAFORM_ROOT: terraform
   DOCKER_ENV: production
