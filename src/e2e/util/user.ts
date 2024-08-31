@@ -58,13 +58,14 @@ export const getCookieFromHeaders = async (headers: Dictionary<string>) => {
 
   if (process.env.API_BASE_URL !== 'http://localhost:8000') {
     const setCookieHeader = headers['set-cookie'];
-    const accessToken = setCookieHeader
+    const cookie = setCookieHeader
       .split(',')
-      .find(c => c.includes('PETS_V1_id'));
-    const cookieValue = accessToken?.split(';')[0].split('=')[1];
+      .find(c => c.includes('connect.sid'));
+
+    const cookieValue = cookie?.split(';')[0].split('=')[1];
+
     return cookieValue as string;
   }
 
-  const result = headers['set-cookie'].split(';')[0].split('=')[1] as string;
-  return `PETS_V1_id=${result}`;
+  return headers['set-cookie'][0].split(';')[0].split('=')[1] as string;
 };

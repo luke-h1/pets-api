@@ -87,7 +87,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
         },
       },
       cookies: z.object({
-        PETS_V1_id: z.string(),
+        'connect.sid': z.string(),
       }),
     },
     responses: {
@@ -119,7 +119,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
     request: {
       params: z.object({ id: z.string() }),
       cookies: z.object({
-        PETS_V1_id: z.string(),
+        'connect.sid': z.string(),
       }),
     },
     responses: {
@@ -159,7 +159,7 @@ const registerPetPaths = (registry: OpenAPIRegistry) => {
     request: {
       params: z.object({ id: z.string() }),
       cookies: z.object({
-        PETS_V1_id: z.string(),
+        'connect.sid': z.string(),
       }),
     },
     responses: {

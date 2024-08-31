@@ -20,4 +20,4 @@ e2e-local:
 
 .PHONY: e2e-staging
 e2e-staging:
-	API_BASE_URL=https://pets-api-live.fly.dev/ ./node_modules/.bin/playwright test --config=playwright-stg.config.ts ${tests}
+	API_BASE_URL=https://pets-staging.lhowsam.com ./node_modules/.bin/playwright test --config=playwright-stg.config.ts ${tests}
