@@ -1,134 +1,120 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
-import { PetStatus, Role } from '@prisma/client';
+import { Pet, PetStatus, Role, User } from '@prisma/client';
 import { db } from '../src/db/prisma';
 import { testImages } from '../src/test/testImages';
 
-async function main() {
-  await db.user.upsert({
-    where: { email: 'luke@test.com' },
-    update: {},
-    create: {
-      email: 'luke@test.com',
-      firstName: 'luke',
-      lastName: 'test',
-      password: 'password123',
-      role: Role.ADMIN,
-      pets: {
-        create: {
-          name: 'Buddy',
-          age: '3',
-          birthDate: '2020-05-15',
-          breed: 'Golden Retriever',
-          description:
-            'Buddy is a friendly and energetic Golden Retriever who loves to play fetch.',
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-          ],
-          status: PetStatus.AVAILABLE,
-          tags: ['friendly', 'energetic'],
-        },
-      },
-    },
-  });
-  await db.user.upsert({
-    where: { email: 'bob@test.com' },
-    update: {},
-    create: {
-      email: 'bob@test.com',
-      firstName: 'bob',
-      lastName: 'test',
-      password: 'password123',
-      role: Role.USER,
-      pets: {
-        createMany: {
-          data: [
-            {
-              name: 'Mittens',
-              age: '4',
-              birthDate: '2019-02-20',
-              breed: 'Tabby',
-              status: PetStatus.PENDING,
-              description:
-                'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
-              images: testImages,
-              tags: ['cute', 'fluffy'],
-            },
-            {
-              name: 'Mittens',
-              age: '4',
-              birthDate: '2019-02-20',
-              breed: 'Tabby',
-              status: PetStatus.ADOPTED,
-              description:
-                'Mittens is a sweet and affectionate Tabby cat who loves to cuddle.',
-              images: testImages,
-              tags: ['cute', 'fluffy'],
-            },
-          ],
-        },
-      },
-    },
-  });
-  await db.user.upsert({
-    where: { email: 'alisce@test.com' },
-    update: {},
-    create: {
-      email: 'alice@test.com',
-      firstName: 'alice',
-      lastName: 'test',
-      password: 'password123',
-      role: Role.USER,
-      pets: {
-        createMany: {
-          data: [
-            {
-              name: 'Chloe',
-              age: '2',
-              birthDate: '2021-06-18',
-              breed: 'Sphynx',
-              status: PetStatus.AVAILABLE,
-              description:
-                'Chloe is a unique Sphynx cat who loves to stay warm.',
-              images: testImages,
-              tags: ['unique', 'warm'],
-            },
-            {
-              name: 'Leo',
-              age: '3',
-              birthDate: '2020-09-22',
-              breed: 'British Shorthair',
-              status: PetStatus.AVAILABLE,
-              description:
-                'Leo is a friendly British Shorthair cat who loves to play.',
-              images: testImages,
-              tags: ['friendly', 'playful'],
-            },
-            {
-              name: 'Nala',
-              age: '5',
-              birthDate: '2018-04-14',
-              breed: 'Russian Blue',
-              status: PetStatus.AVAILABLE,
-              description:
-                'Nala is a graceful Russian Blue cat with a calm demeanor.',
-              images: testImages,
-              tags: ['graceful', 'calm'],
-            },
-          ],
-        },
-      },
-    },
-  });
+const USER_BATCH_SIZE = 10; // Number of users per batch
+const PETS_PER_USER = 1000; // Number of pets per user
+const TOTAL_USERS = 50; // Total number of users (50,000 pets / 1,000 pets per user)
+
+type UserWithoutPrismaKeys = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;
+
+type PetWithoutPrismaKeys = Omit<
+  Pet,
+  'id' | 'createdAt' | 'updatedAt' | 'creatorId'
+> & { creatorId: string };
+
+// Function to generate user data
+function generateUserData(index: number): UserWithoutPrismaKeys {
+  return {
+    email: `user${index}@test.com`,
+    firstName: `firstName${index}`,
+    lastName: `lastName${index}`,
+    password: 'password123',
+    role: Role.USER,
+  };
 }
-console.info('Seeding database...');
-console.info('-------------------');
-console.info('seeded DB...');
+
+function generatePetData(
+  index: number,
+  creatorId: string,
+): PetWithoutPrismaKeys {
+  return {
+    name: `pet${index}`,
+    status: PetStatus.AVAILABLE,
+    age: '1',
+    birthDate: '1',
+    breed: 'breed',
+    description: 'description',
+    images: testImages,
+    tags: ['tag1', 'tag2'],
+    creatorId,
+  };
+}
+
+async function main() {
+  console.info('Seeding database...');
+  console.info('-------------------');
+
+  for (let i = 0; i < TOTAL_USERS; i += USER_BATCH_SIZE) {
+    const users: UserWithoutPrismaKeys[] = [];
+    for (let j = 0; j < USER_BATCH_SIZE; j += 1) {
+      const userIndex = i + j;
+      if (userIndex >= TOTAL_USERS) break;
+      users.push(generateUserData(userIndex));
+    }
+
+    console.time('Inserting batch');
+    await db.$transaction(
+      async prisma => {
+        await prisma.user.createMany({
+          data: users,
+          skipDuplicates: true,
+        });
+
+        const createdUsers = await prisma.user.findMany({
+          where: {
+            email: {
+              in: users.map(user => user.email),
+            },
+          },
+        });
+
+        for (const user of createdUsers) {
+          const pets: PetWithoutPrismaKeys[] = [];
+          for (let k = 0; k < PETS_PER_USER; k += 1) {
+            pets.push(generatePetData(k, user.id));
+          }
+
+          // Batch insert pets for each user
+          const PET_BATCH_SIZE = 1000; // Adjust batch size as needed
+          for (let l = 0; l < pets.length; l += PET_BATCH_SIZE) {
+            const petBatch = pets.slice(l, l + PET_BATCH_SIZE);
+            await prisma.pet.createMany({
+              data: petBatch,
+              skipDuplicates: true,
+            });
+          }
+        }
+      },
+      { timeout: 1000000 },
+    );
+
+    // Log the current number of records in the User and Pet tables
+    const userCount = await db.user.count();
+    const petCount = await db.pet.count();
+    console.info(`Inserted batch ${i / USER_BATCH_SIZE + 1}`);
+    console.info(`Current number of users: ${userCount}`);
+    console.info(`Current number of pets: ${petCount}`);
+
+    console.timeEnd('Inserting batch');
+
+    // Update progress indicator
+    process.stdout.write(
+      `Progress: ${(((i + USER_BATCH_SIZE) / TOTAL_USERS) * 100).toFixed(2)}% complete\r`,
+    );
+  }
+
+  console.info('\nSeeding completed.');
+}
+
 main()
   .then(async () => {
     await db.$disconnect();
   })
   .catch(async e => {
-    // eslint-disable-next-line no-console
     console.error(e);
     await db.$disconnect();
     process.exit(1);
