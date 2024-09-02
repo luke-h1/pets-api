@@ -1,3 +1,4 @@
+import { db } from '@api/db/prisma';
 import NotFoundError from '@api/errors/NotFoundError';
 import {
   CreatePetRequest,
@@ -24,7 +25,8 @@ export default class PetController {
     const { sortOrder } = parseSortParams(req.query);
     const pets = await this.petService.getPets(page, pageSize, sortOrder);
 
-    const totalPages = pageSize > 0 ? Math.ceil(pets.length / pageSize) : 0;
+    const totalResults = await db.pet.count();
+    const totalPages = pageSize > 0 ? Math.ceil(totalResults / pageSize) : 0;
 
     return res.status(200).json({
       pets,
@@ -37,14 +39,14 @@ export default class PetController {
           query: req.query,
           page,
           totalPages,
-          totalResults: pets.length,
+          totalResults,
         },
       }),
       paging: {
         query: req.query,
         page: page ?? undefined,
         totalPages,
-        totalResults: pets.length,
+        totalResults,
       },
     });
   }
