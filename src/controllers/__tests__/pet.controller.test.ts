@@ -44,13 +44,18 @@ describe('pet', () => {
 
     expect(body).toEqual({
       _links: {
-        self: { href: expect.any(String) },
+        self: {
+          href: expect.stringContaining('/api/pets?page=1&pageSize=2'),
+        },
+        next: {
+          href: expect.stringContaining('/api/pets?page=2&pageSize=2'),
+        },
       },
       paging: {
         page: 1,
         query: { page: '1', pageSize: '2' },
-        totalPages: 1,
-        totalResults: 2,
+        totalPages: 2,
+        totalResults: 3,
       },
       pets: [
         {
@@ -98,8 +103,8 @@ describe('pet', () => {
       paging: {
         page: 200,
         query: { page: '200', pageSize: '300' },
-        totalPages: 0,
-        totalResults: 0,
+        totalPages: 1,
+        totalResults: 3,
       },
       pets: [],
     });

@@ -7,28 +7,27 @@ config({
   path: '.env.test',
 });
 
-jest.setTimeout(30000);
-
-beforeAll(async () => {
+const doCleanup = async () => {
   const instance = redis.getInstance();
   await db.$connect();
   const deletePet = db.pet.deleteMany();
   const deleteUser = db.user.deleteMany();
   instance.flushall();
   await db.$transaction([deletePet, deleteUser]);
+};
+
+jest.setTimeout(30000);
+
+beforeAll(async () => {
+  await doCleanup();
 });
 
 beforeEach(async () => {
-  const instance = redis.getInstance();
   jest.resetAllMocks();
-
-  const deletePet = db.pet.deleteMany();
-  const deleteUser = db.user.deleteMany();
-  instance.flushall();
-
-  await db.$transaction([deletePet, deleteUser]);
+  await doCleanup();
 });
 
 afterAll(async () => {
   await db.$disconnect();
+  await doCleanup();
 });
