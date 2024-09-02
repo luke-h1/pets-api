@@ -15,7 +15,7 @@ const isRole = <TRole extends Role>(role: TRole) => {
       });
     }
 
-    const user = await db.user.findFirst({
+    const user = await db.user.findUnique({
       where: {
         id: req.session.userId,
       },

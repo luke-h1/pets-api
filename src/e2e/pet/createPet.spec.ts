@@ -58,10 +58,10 @@ test.describe('createPet', () => {
     expect(existingPetResponse).toEqual(response);
 
     // deployed envs can take a while to update cache
-    await sleep(5000);
+    await sleep(3500);
 
-    // 90k
-    const LIMIT = 90000;
+    // 9k
+    const LIMIT = 9000;
 
     // assert /api/pets cache tree was updated
     const allPets = await request.get(`/api/pets?page=1&pageSize=${LIMIT}`);

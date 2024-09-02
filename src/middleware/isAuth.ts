@@ -11,8 +11,9 @@ const isAuth = () => {
         title: 'Forbidden',
         errors: [],
       });
+    } else {
+      next();
     }
-    next();
     // eslint-disable-next-line consistent-return, no-useless-return
     return;
   };

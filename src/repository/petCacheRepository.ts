@@ -11,14 +11,8 @@ export default class PetCacheRepository {
 
   async removePet(id: string): Promise<void> {
     const db = this.redis.getInstance();
-    const pipeline = db.pipeline();
-
-    pipeline.del(`pets:${id}`);
-    pipeline.del('pets');
-    await pipeline.exec();
-
+    await db.del(`pets:${id}`);
     const allPets = await db.get('pets');
-
     if (!allPets) {
       return;
     }
@@ -44,7 +38,14 @@ export default class PetCacheRepository {
       };
     }
 
-    let parsedPets = this.cacheToJSON(cachedPets as string) as Pet[];
+    let parsedPets = this.cacheToJSON(cachedPets) as Pet[];
+
+    if (!parsedPets.length) {
+      return {
+        pets: [],
+        totalResults: 0,
+      };
+    }
 
     if (page && pageSize) {
       const start = (page - 1) * pageSize;
@@ -85,27 +86,22 @@ export default class PetCacheRepository {
   async setPets(pets: Pet[]) {
     const db = this.redis.getInstance();
     await db.set('pets', JSON.stringify(pets));
-    const cachedPets = await db.get('pets');
-    return this.cacheToJSON(cachedPets as string);
   }
 
   async setPet(pet: Pet) {
     const db = this.redis.getInstance();
-    await db.del(`pets:${pet.id}`);
     await db.set(`pets:${pet.id}`, JSON.stringify(pet));
 
     const allPets = await db.get('pets');
     if (!allPets) {
       logger.info(`[REDIS]: setPet - pets not found in cache!`);
-      return null;
+      return [];
     }
 
-    // await db.set('pets', JSON.stringify([...this.cacheToJSON(allPets), pet]));
-
-    const mergedPets = [...this.cacheToJSON(allPets), pet];
-
-    await db.set('pets', JSON.stringify(mergedPets));
-
+    await db.set(
+      'pets',
+      JSON.stringify([...this.cacheToJSON(allPets), JSON.stringify(pet)]),
+    );
     logger.info(`[REDIS]: pet added to pets and pet cache tree`);
     return null;
   }
@@ -133,19 +129,12 @@ export default class PetCacheRepository {
     await db.del('pets');
   }
 
-  private cacheToJSON(data: string[] | unknown[] | string | null) {
+  private cacheToJSON(data: string[] | string) {
     if (Array.isArray(data)) {
       return data.map(item =>
         JSON.parse(typeof item === 'string' ? item : JSON.stringify(item)),
       );
     }
-
-    if (!data || typeof data === 'undefined') {
-      logger.warn('no data passed to cacheToJSON');
-      // eslint-disable-next-line consistent-return
-      return;
-    }
-
     return JSON.parse(data);
   }
 }

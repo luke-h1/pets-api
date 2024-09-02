@@ -20,9 +20,7 @@ class RedisDatabase {
       this.instance =
         process.env.NODE_ENV === 'test'
           ? testRedis
-          : new Redis(process.env.REDIS_URL, {
-              commandTimeout: 20000,
-            });
+          : new Redis(process.env.REDIS_URL);
     }
     return this.instance;
   }
@@ -34,9 +32,7 @@ class RedisDatabase {
       logger.info(`[REDIS]: got key: ${key} successfully`, { tag: 'redis' });
       return result as TData;
     } catch (e) {
-      logger.error(`Error getting key ${key}, error -> ${e}`, {
-        tag: 'Redis',
-      });
+      logger.error(`Error getting key ${key}, error -> ${e}`);
       return null;
     }
   }

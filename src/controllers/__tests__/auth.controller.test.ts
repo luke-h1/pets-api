@@ -42,7 +42,12 @@ describe('auth', () => {
 
       const { body, statusCode } = await supertest(app)
         .post('/api/auth/register')
-        .send(user);
+        .send({
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          password: user.password,
+        });
 
       expect(statusCode).toBe(400);
 

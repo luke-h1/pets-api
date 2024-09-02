@@ -40,6 +40,7 @@ test.describe('deletePet', () => {
       },
     });
 
+    expect(petResponse.status()).toEqual(201);
     const body = await petResponse.json();
 
     const result = await request.delete(`/api/pets/${body.id}`, {

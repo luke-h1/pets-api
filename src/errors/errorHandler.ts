@@ -50,7 +50,8 @@ const errorHandler: ErrorRequestHandler<{}, ApiError | string> = (
       });
     }
 
-    logger.error(
+    // eslint-disable-next-line no-console
+    console.error(
       `[errorHandler]: An unexpected error occurred: err -> ${JSON.stringify(err, null, 2)}`,
     );
 

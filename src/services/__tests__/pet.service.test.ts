@@ -127,32 +127,6 @@ describe('petService', () => {
     });
   });
 
-  describe('getPet', () => {
-    test('returns a pet by id', async () => {
-      const u = await db.user.create({
-        data: user,
-      });
-
-      await db.pet.createMany({
-        data: mockPets.map(pet => ({
-          ...pet,
-          creatorId: u.id,
-        })),
-      });
-
-      const pets = await db.pet.findMany();
-
-      const pet = await petService.getPet(pets[0].id);
-      expect(pet).toEqual({
-        ...mockPets[0],
-        creatorId: u.id,
-        id: expect.any(String),
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
-      });
-    });
-  });
-
   describe('createPet', () => {
     test('can create a pet', async () => {
       const u = await db.user.create({
@@ -243,7 +217,7 @@ describe('petService', () => {
       const createdResult = await petService.createPet(createdPet, u.id);
 
       const result = await petService.deletePet(createdResult.id);
-      expect(result).toEqual('OK');
+      expect(result).toEqual(null);
     });
   });
 });

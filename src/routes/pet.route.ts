@@ -52,7 +52,7 @@ export default class PetRoutes {
     this.app.put(
       '/api/pets/:id',
       isAuth(),
-      isPetOwner<UpdatePetRequest>(),
+      isPetOwner(),
       validateResource(updatePetSchema),
       async (req: UpdatePetRequest, res: Response) => {
         return this.petController.updatePet(req, res);
@@ -62,7 +62,6 @@ export default class PetRoutes {
     this.app.delete(
       '/api/pets/:id',
       isAuth(),
-      isPetOwner<DeletePetReqeust>(),
       validateResource(deletePetSchema),
       async (req: DeletePetReqeust, res: Response) => {
         return this.petController.deletePet(req, res);

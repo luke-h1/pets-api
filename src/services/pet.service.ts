@@ -1,5 +1,4 @@
 import { db } from '@api/db/prisma';
-import NotFoundError from '@api/errors/NotFoundError';
 import PetCacheRepository from '@api/repository/petCacheRepository';
 import {
   CreatePetInput,
@@ -29,6 +28,7 @@ export default class PetService {
       logger.warn('No cached pets found, fetching from db');
       const pets = await db.pet.findMany();
       logger.info(`found ${pets.length} pets from DB`);
+
       await this.petCacheRepository.setPets(pets);
 
       const { pets: updatedCache, totalResults } =
@@ -39,6 +39,7 @@ export default class PetService {
         totalResults,
       };
     }
+
     return {
       pets: cachedPets,
       totalResults: tr,
@@ -52,7 +53,7 @@ export default class PetService {
       return cachedPet;
     }
 
-    const pet = await db.pet.findFirst({
+    const pet = await db.pet.findUnique({
       where: {
         id,
       },
@@ -78,53 +79,32 @@ export default class PetService {
     id: UpdatePetInput['params']['id'],
     pet: UpdatePetInput['body'],
   ) {
-    const existingPet = await db.pet.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!existingPet) {
-      throw new NotFoundError({
-        title: 'Pet not found',
-        code: 'UpdatePetNotFound',
-        message: 'Pet not found',
-        statusCode: 404,
-      });
-    }
-
     const updatedPet = await db.pet.update({
       where: {
-        id,
+        id: id.toString(),
       },
       data: {
         ...pet,
       },
     });
 
-    await this.petCacheRepository.setPet(updatedPet);
+    await this.petCacheRepository.removePet(updatedPet.id);
 
     return updatedPet;
   }
 
   async deletePet(id: DeletePetInput['params']['id']) {
-    const existingPet = await db.pet.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!existingPet) {
-      throw new NotFoundError({
-        title: 'Pet not found',
-        code: 'DeletePetNotFound',
-        message: 'Pet not found',
-        statusCode: 404,
+    try {
+      await Promise.allSettled([
+        db.pet.delete({ where: { id: id.toString() } }),
+        this.petCacheRepository.removePet(id),
+      ]);
+      return null;
+    } catch (error) {
+      logger.error(`Failed to delete pet: ${error}`, {
+        tag: 'pet',
       });
+      throw error;
     }
-
-    await db.pet.delete({ where: { id: existingPet.id } });
-    await this.petCacheRepository.removePet(existingPet.id);
-    return 'OK';
   }
 }

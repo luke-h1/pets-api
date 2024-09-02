@@ -511,7 +511,6 @@ describe('pet', () => {
         .split(';')[0]
         .split('=')[1];
 
-      await sleep(2000);
       const { statusCode: updatedStatusCode, body: updatedBody } =
         await supertest(app)
           .put(`/api/pets/${createdPet.id}`)
@@ -592,12 +591,14 @@ describe('pet', () => {
         .set('Cookie', `${cookieName}=${cookieValue}`)
         .send(pets[0]);
 
+      await sleep(1000);
+
       const { body, statusCode: deleteStatusCode } = await supertest(app)
         .delete(`/api/pets/${createdPet.id}`)
         .set('Cookie', `${cookieName}=${cookieValue}`);
 
       expect(deleteStatusCode).toBe(200);
-      expect(body).toEqual('');
+      expect(body).toEqual({});
     });
   });
 });

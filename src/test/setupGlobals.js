@@ -1,16 +1,15 @@
 import './setEnvVars';
 import { config } from 'dotenv';
 import { db } from '../db/prisma';
-import testRedis from './redis';
+import redis from '../db/redis';
 
 const doCleanup = async () => {
+  const instance = redis.getInstance();
+  instance.flushall();
   await db.$connect();
   const deletePet = db.pet.deleteMany();
   const deleteUser = db.user.deleteMany();
   await db.$transaction([deletePet, deleteUser]);
-  await db.$disconnect();
-
-  await testRedis.flushall();
 };
 
 config({
@@ -20,7 +19,6 @@ config({
 jest.setTimeout(30000);
 
 beforeAll(async () => {
-  // reset and migrate the database
   await doCleanup();
 });
 
@@ -29,6 +27,17 @@ beforeEach(async () => {
   await doCleanup();
 });
 
+afterEach(async () => {
+  // Cleanup any fake timers that have been set, or
+  // these will leak out to other test cases.
+  if (jest.isMockFunction(setTimeout) || setTimeout.clock) {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  }
+  await doCleanup();
+});
+
 afterAll(async () => {
   await doCleanup();
+  await db.$disconnect();
 });

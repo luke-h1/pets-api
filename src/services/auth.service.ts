@@ -18,7 +18,7 @@ export default class AuthService {
   }
 
   async register(user: CreateUserInput['body']) {
-    const existingUser = await db.user.findFirst({
+    const existingUser = await db.user.findUnique({
       where: {
         email: user.email,
       },
@@ -52,7 +52,7 @@ export default class AuthService {
   }
 
   async login(user: LoginUserInput['body']) {
-    const u = await db.user.findFirst({
+    const u = await db.user.findUnique({
       where: {
         email: user.email,
       },
@@ -86,7 +86,7 @@ export default class AuthService {
   }
 
   // async resetPassword(user: ResetPasswordInput['body']): Promise<boolean> {
-  //   const u = await db.user.findFirst({
+  //   const u = await db.user.findUnique({
   //     where: {
   //       email: user.email,
   //     },
@@ -108,21 +108,6 @@ export default class AuthService {
   // }
 
   async deleteAccount(id: string) {
-    const user = await db.user.findFirst({
-      where: {
-        id,
-      },
-    });
-
-    if (!user) {
-      throw new NotFoundError({
-        code: authErrorCodes.UserNotFound,
-        title: 'User not found',
-        message: 'User not found',
-        statusCode: 404,
-      });
-    }
-
     try {
       await db.user.delete({
         where: { id },

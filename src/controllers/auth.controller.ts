@@ -77,11 +77,12 @@ export default class AuthController {
           },
         ],
       });
-    }
-    // auth user with express-session
-    req.session.userId = result.id;
+    } else {
+      // auth user with express-session
+      req.session.userId = result.id;
 
-    return res.status(200).json(omit(result, 'password'));
+      return res.status(200).json(omit(result, 'password'));
+    }
   }
 
   async logout(req: Request, res: Response) {

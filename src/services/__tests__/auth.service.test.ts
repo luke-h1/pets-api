@@ -1,6 +1,7 @@
 import { db } from '@api/db/prisma';
 import { authErrorCodes } from '@api/errors/auth';
 import { CreateUserInput } from '@api/schema/auth.schema';
+import { faker } from '@faker-js/faker';
 import AuthService from '../auth.service';
 
 describe('AuthService', () => {
@@ -44,7 +45,7 @@ describe('AuthService', () => {
   describe('login', () => {
     test('authenticates existing user', async () => {
       const user: CreateUserInput['body'] = {
-        email: 'bob@bob.com',
+        email: faker.internet.email(),
         firstName: 'bob',
         lastName: 'bob',
         password: 'password12345',
@@ -57,14 +58,14 @@ describe('AuthService', () => {
       });
 
       expect(result).toEqual({
-        email: 'bob@bob.com',
+        email: user.email,
         id: expect.any(String),
       });
     });
 
     test(`throws ${authErrorCodes.InvalidCredentials} error if bad credentials are supplied`, async () => {
       const user: CreateUserInput['body'] = {
-        email: 'bob@bob.com',
+        email: faker.internet.email(),
         firstName: 'bob',
         lastName: 'bob',
         password: 'password12345',
@@ -81,7 +82,7 @@ describe('AuthService', () => {
 
     test(`throws ${authErrorCodes.UserNotFound} if no user is found`, async () => {
       const result = await authService.login({
-        email: 'test@test.com',
+        email: faker.internet.email(),
         password: '123',
       });
 
@@ -92,7 +93,7 @@ describe('AuthService', () => {
   describe('deleteAccount', () => {
     test('deletes account', async () => {
       const user: CreateUserInput['body'] = {
-        email: 'bob@bob.com',
+        email: faker.internet.email(),
         firstName: 'bob',
         lastName: 'bob',
         password: 'password12345',

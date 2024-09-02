@@ -43,6 +43,8 @@ test.describe('updatePet', () => {
 
     const body = await petResponse.json();
 
+    await sleep(3000);
+
     const result = await request.put(`/api/pets/${body.id}`, {
       headers: {
         Cookie: cookie,
