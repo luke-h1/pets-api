@@ -35,8 +35,9 @@ export default class PetRoutes {
     this.app.get(
       '/api/pets/:id',
       validateResource(getPetSchema),
-      (req: GetPetRequest, res: Response) =>
-        this.petController.getPet(req, res),
+      (req: GetPetRequest, res: Response) => {
+        return this.petController.getPet(req, res);
+      },
     );
 
     this.app.post(
@@ -51,8 +52,8 @@ export default class PetRoutes {
     this.app.put(
       '/api/pets/:id',
       isAuth(),
-      validateResource(updatePetSchema),
       isPetOwner<UpdatePetRequest>(),
+      validateResource(updatePetSchema),
       async (req: UpdatePetRequest, res: Response) => {
         return this.petController.updatePet(req, res);
       },
@@ -61,8 +62,8 @@ export default class PetRoutes {
     this.app.delete(
       '/api/pets/:id',
       isAuth(),
-      validateResource(deletePetSchema),
       isPetOwner<DeletePetReqeust>(),
+      validateResource(deletePetSchema),
       async (req: DeletePetReqeust, res: Response) => {
         return this.petController.deletePet(req, res);
       },

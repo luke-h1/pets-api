@@ -1,4 +1,5 @@
 import { db } from '@api/db/prisma';
+import NotFoundError from '@api/errors/NotFoundError';
 import PetCacheRepository from '@api/repository/petCacheRepository';
 import {
   CreatePetInput,
@@ -20,43 +21,32 @@ export default class PetService {
     page?: number,
     pageSize?: number,
     sortOrder?: 'asc' | 'desc',
-  ): Promise<Pet[]> {
-    if (page && pageSize) {
-      const cachedPets = await this.petCacheRepository.getPaginatedPets(
-        page,
-        pageSize as number,
-        sortOrder,
-      );
+  ): Promise<{ pets: Pet[]; totalResults: number }> {
+    const { pets: cachedPets, totalResults: tr } =
+      await this.petCacheRepository.getPets(page, pageSize, sortOrder);
 
-      if (!cachedPets.length) {
-        const pets = await db.pet.findMany();
-        await this.petCacheRepository.setPets(pets);
-        const updatedCache = await this.petCacheRepository.getPaginatedPets(
-          page,
-          pageSize as number,
-          sortOrder,
-        );
+    if (!cachedPets.length) {
+      logger.warn('No cached pets found, fetching from db');
+      const pets = await db.pet.findMany();
+      logger.info(`found ${pets.length} pets from DB`);
+      await this.petCacheRepository.setPets(pets);
 
-        return updatedCache;
-      }
+      const { pets: updatedCache, totalResults } =
+        await this.petCacheRepository.getPets(page, pageSize, sortOrder);
 
-      return cachedPets;
+      return {
+        pets: updatedCache,
+        totalResults,
+      };
     }
-
-    const pets = await this.petCacheRepository.getPets(sortOrder);
-
-    if (!pets) {
-      const dbPets = await db.pet.findMany({});
-      await this.petCacheRepository.setPets(dbPets);
-      return dbPets;
-    }
-
-    return pets;
+    return {
+      pets: cachedPets,
+      totalResults: tr,
+    };
   }
 
   async getPet(id: GetPetInput['params']['id']) {
     const cachedPet = await this.petCacheRepository.getPet(id);
-    logger.info('cachedPet', JSON.stringify(cachedPet, null, 2));
 
     if (cachedPet) {
       return cachedPet;
@@ -68,9 +58,7 @@ export default class PetService {
       },
     });
 
-    if (pet) {
-      await this.petCacheRepository.setPet(pet);
-    }
+    await this.petCacheRepository.setPet(pet as Pet);
     return pet;
   }
 
@@ -90,32 +78,53 @@ export default class PetService {
     id: UpdatePetInput['params']['id'],
     pet: UpdatePetInput['body'],
   ) {
+    const existingPet = await db.pet.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingPet) {
+      throw new NotFoundError({
+        title: 'Pet not found',
+        code: 'UpdatePetNotFound',
+        message: 'Pet not found',
+        statusCode: 404,
+      });
+    }
+
     const updatedPet = await db.pet.update({
       where: {
-        id: id.toString(),
+        id,
       },
       data: {
         ...pet,
       },
     });
 
-    await this.petCacheRepository.removePet(updatedPet.id);
+    await this.petCacheRepository.setPet(updatedPet);
 
     return updatedPet;
   }
 
   async deletePet(id: DeletePetInput['params']['id']) {
-    try {
-      await Promise.allSettled([
-        db.pet.delete({ where: { id: id.toString() } }),
-        this.petCacheRepository.removePet(id),
-      ]);
-      return null;
-    } catch (error) {
-      logger.error(`Failed to delete pet: ${error}`, {
-        tag: 'pet',
+    const existingPet = await db.pet.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!existingPet) {
+      throw new NotFoundError({
+        title: 'Pet not found',
+        code: 'DeletePetNotFound',
+        message: 'Pet not found',
+        statusCode: 404,
       });
-      throw error;
     }
+
+    await db.pet.delete({ where: { id: existingPet.id } });
+    await this.petCacheRepository.removePet(existingPet.id);
+    return 'OK';
   }
 }

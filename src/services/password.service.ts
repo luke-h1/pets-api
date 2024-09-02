@@ -1,4 +1,3 @@
-import logger from '@api/utils/logger';
 import bcrypt from 'bcryptjs';
 
 export default class PasswordService {
@@ -15,14 +14,10 @@ export default class PasswordService {
     plainTextPassword: string;
     hashedPassword: string;
   }): Promise<boolean> {
-    const result = await bcrypt.compare(plainTextPassword, hashedPassword);
-    console.info('isvalidpassword ->', result);
-    return result;
+    return bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
   async hashPassword(plainTextPassword: string): Promise<string> {
-    const hash = await bcrypt.hash(plainTextPassword, this.saltRounds);
-    logger.info('hashedPassword success');
-    return hash;
+    return bcrypt.hash(plainTextPassword, this.saltRounds);
   }
 }

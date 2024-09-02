@@ -22,7 +22,11 @@ export default class PetController {
   async getPets(req: Request, res: Response) {
     const { page = 1, pageSize = 20 } = parsePaginationParams(req.query);
     const { sortOrder } = parseSortParams(req.query);
-    const pets = await this.petService.getPets(page, pageSize, sortOrder);
+    const { pets, totalResults } = await this.petService.getPets(
+      page,
+      pageSize,
+      sortOrder,
+    );
 
     const totalPages = pageSize > 0 ? Math.ceil(pets.length / pageSize) : 0;
 
@@ -37,21 +41,20 @@ export default class PetController {
           query: req.query,
           page,
           totalPages,
-          totalResults: pets.length,
+          totalResults,
         },
       }),
       paging: {
         query: req.query,
         page: page ?? undefined,
         totalPages,
-        totalResults: pets.length,
+        totalResults,
       },
     });
   }
 
   async getPet(req: GetPetRequest, res: Response) {
     const pet = await this.petService.getPet(req.params.id);
-
     if (!pet) {
       throw new NotFoundError({
         title: 'Pet not found',

@@ -24,15 +24,105 @@ describe('petService', () => {
           creatorId: u.id,
         })),
       });
-      const pets = await petService.getPets();
+
+      const { pets } = await petService.getPets(1, 10000, 'asc');
       expect(pets).toEqual([
-        ...mockPets.map(pet => ({
-          ...pet,
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Golden Retriever',
+          createdAt: expect.any(String),
           creatorId: u.id,
+          description: 'dog',
           id: expect.any(String),
-          createdAt: expect.any(Date),
-          updatedAt: expect.any(Date),
-        })),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Buddy',
+          status: 'AVAILABLE',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Siamese',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Mittens',
+          status: 'ADOPTED',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Labrador Retriever',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Charlie',
+          status: 'AVAILABLE',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Maine Coon',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Whiskers',
+          status: 'PENDING',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Beagle',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Max',
+          status: 'ADOPTED',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Bengal',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Luna',
+          status: 'AVAILABLE',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
       ]);
     });
   });
@@ -153,7 +243,7 @@ describe('petService', () => {
       const createdResult = await petService.createPet(createdPet, u.id);
 
       const result = await petService.deletePet(createdResult.id);
-      expect(result).toEqual(null);
+      expect(result).toEqual('OK');
     });
   });
 });

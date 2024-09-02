@@ -7,12 +7,10 @@ import { NextFunction, Request, Response } from 'express';
  * Middleware to validate if the user is the owner of the pet
  */
 const isPetOwner = <TRequest extends Request>() => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
   // eslint-disable-next-line consistent-return
   return async (req: TRequest, res: Response, next: NextFunction) => {
     try {
-      const pet = await db.pet.findFirst({
+      const pet = await db.pet.findFirstOrThrow({
         where: {
           id: req.params.id,
         },
@@ -43,7 +41,7 @@ const isPetOwner = <TRequest extends Request>() => {
       }
 
       logger.info('[isPetOwner]: validation passed');
-      next();
+      return next();
     } catch (error) {
       logger.warn('isPetOwner exception caught', error);
     }

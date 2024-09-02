@@ -11,8 +11,14 @@ export default class PetCacheRepository {
 
   async removePet(id: string): Promise<void> {
     const db = this.redis.getInstance();
-    await db.del(`pets:${id}`);
+    const pipeline = db.pipeline();
+
+    pipeline.del(`pets:${id}`);
+    pipeline.del('pets');
+    await pipeline.exec();
+
     const allPets = await db.get('pets');
+
     if (!allPets) {
       return;
     }
@@ -22,114 +28,99 @@ export default class PetCacheRepository {
     await db.set('pets', JSON.stringify(updatedPets));
   }
 
-  async getPets(sortOrder?: 'asc' | 'desc'): Promise<Pet[] | null> {
+  async getPets(
+    page?: number,
+    pageSize?: number,
+    sortOrder?: 'asc' | 'desc',
+  ): Promise<{ pets: Pet[]; totalResults: number }> {
     const db = this.redis.getInstance();
 
     const cachedPets = await db.get('pets');
 
     if (!cachedPets) {
-      logger.info(`[REDIS]: pets not found in cache`, { tag: 'redis' });
-      return null;
+      return {
+        pets: [],
+        totalResults: 0,
+      };
     }
 
-    const parsedPets = this.cacheToJSON(cachedPets);
+    let parsedPets = this.cacheToJSON(cachedPets as string) as Pet[];
 
-    if (!sortOrder) {
-      return parsedPets;
+    if (page && pageSize) {
+      const start = (page - 1) * pageSize;
+      const end = start + pageSize;
+      parsedPets = parsedPets.slice(start, end);
     }
 
-    if (sortOrder === 'asc') {
-      parsedPets.sort((a: Pet, b: Pet) => {
-        return a.createdAt < b.createdAt ? -1 : 1;
-      });
+    switch (sortOrder) {
+      case 'asc': {
+        parsedPets.sort((a: Pet, b: Pet) => {
+          return a.createdAt < b.createdAt ? -1 : 1;
+        });
+        return {
+          pets: parsedPets,
+          totalResults: parsedPets.length,
+        };
+      }
+
+      case 'desc': {
+        parsedPets.sort((a: Pet, b: Pet) => {
+          return a.createdAt > b.createdAt ? -1 : 1;
+        });
+        return {
+          pets: parsedPets,
+          totalResults: parsedPets.length,
+        };
+      }
+
+      default: {
+        return {
+          pets: parsedPets,
+          totalResults: parsedPets.length,
+        };
+      }
     }
-    if (sortOrder === 'desc') {
-      parsedPets.sort((a: Pet, b: Pet) => {
-        return a.createdAt > b.createdAt ? -1 : 1;
-      });
-    }
-    return null;
   }
 
   async setPets(pets: Pet[]) {
     const db = this.redis.getInstance();
-    try {
-      await db.set('pets', JSON.stringify(pets));
-      const cachedPets = await db.get('pets');
-      return this.cacheToJSON(cachedPets as string);
-    } catch (error) {
-      return null;
-    }
+    await db.set('pets', JSON.stringify(pets));
+    const cachedPets = await db.get('pets');
+    return this.cacheToJSON(cachedPets as string);
   }
 
-  async setPet(pet: Pet): Promise<null> {
+  async setPet(pet: Pet) {
     const db = this.redis.getInstance();
     await db.del(`pets:${pet.id}`);
     await db.set(`pets:${pet.id}`, JSON.stringify(pet));
 
     const allPets = await db.get('pets');
     if (!allPets) {
-      logger.info(`[REDIS]: setPet - pets not found in cache!`, {
-        tag: 'redis',
-      });
+      logger.info(`[REDIS]: setPet - pets not found in cache!`);
       return null;
     }
-    await db.set('pets', JSON.stringify([...this.cacheToJSON(allPets), pet]));
 
-    logger.info(`[REDIS]: pet added to pets and pet cache tree`, {
-      tag: 'redis',
-    });
+    // await db.set('pets', JSON.stringify([...this.cacheToJSON(allPets), pet]));
+
+    const mergedPets = [...this.cacheToJSON(allPets), pet];
+
+    await db.set('pets', JSON.stringify(mergedPets));
+
+    logger.info(`[REDIS]: pet added to pets and pet cache tree`);
     return null;
   }
 
-  async getPet(id: string): Promise<Pet[] | null> {
+  async getPet(id: string): Promise<Pet | null> {
     const db = this.redis.getInstance();
     const cachedPet = await db.get(`pets:${id}`);
 
     if (!cachedPet) {
-      logger.info(`[REDIS]: getPet - pet not found in cache`, { tag: 'redis' });
+      logger.info(`[REDIS]: getPet - pet not found in cache`);
       return null;
     }
 
-    logger.info(
-      `[REDIS]: pet found in cache with id: ${this.cacheToJSON(cachedPet).id}`,
-      {
-        tag: 'redis',
-      },
-    );
+    logger.info(`[REDIS]: pet found in cache with id: ${id}`);
     return this.cacheToJSON(cachedPet);
-  }
-
-  async getPaginatedPets(
-    page: number,
-    pageSize: number,
-    sortOrder?: 'asc' | 'desc',
-  ): Promise<Pet[]> {
-    const db = this.redis.getInstance();
-
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-
-    const cachedPets = await db.get('pets');
-
-    if (!cachedPets) {
-      logger.info(`[REDIS]: pets not found in cache`, { tag: 'redis' });
-      return [];
-    }
-
-    const parsedPets = this.cacheToJSON(cachedPets);
-
-    if (sortOrder === 'asc') {
-      parsedPets.sort((a: Pet, b: Pet) => {
-        return a.createdAt < b.createdAt ? -1 : 1;
-      });
-    } else if (sortOrder === 'desc') {
-      parsedPets.sort((a: Pet, b: Pet) => {
-        return a.createdAt > b.createdAt ? -1 : 1;
-      });
-    }
-
-    return parsedPets.slice(start, end);
   }
 
   async deletePet(id: string): Promise<void> {
@@ -142,9 +133,17 @@ export default class PetCacheRepository {
     await db.del('pets');
   }
 
-  private cacheToJSON(data: string[] | string) {
+  private cacheToJSON(data: string[] | unknown[] | string | null) {
     if (Array.isArray(data)) {
-      return data.map(item => JSON.parse(item));
+      return data.map(item =>
+        JSON.parse(typeof item === 'string' ? item : JSON.stringify(item)),
+      );
+    }
+
+    if (!data || typeof data === 'undefined') {
+      logger.warn('no data passed to cacheToJSON');
+      // eslint-disable-next-line consistent-return
+      return;
     }
 
     return JSON.parse(data);

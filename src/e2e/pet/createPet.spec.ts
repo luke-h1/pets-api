@@ -78,7 +78,7 @@ test.describe('createPet', () => {
 
     expect(allPetsResponse.paging).toEqual({
       page: 1,
-      query: { page: '1', pageSize: `${LIMIT}` },
+      query: { page: '1', pageSize: LIMIT.toString() },
       totalPages: 1,
       totalResults: expect.any(Number),
     });
