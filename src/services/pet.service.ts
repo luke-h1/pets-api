@@ -17,41 +17,23 @@ export default class PetService {
   }
 
   async getPets(
-    page?: number,
-    pageSize?: number,
+    page: number,
+    pageSize: number,
     sortOrder?: 'asc' | 'desc',
   ): Promise<Pet[]> {
-    if (page && pageSize) {
-      const cachedPets = await this.petCacheRepository.getPaginatedPets(
-        page,
-        pageSize as number,
-        sortOrder,
-      );
+    const cachedPets = await this.petCacheRepository.getPaginatedPets(
+      page,
+      pageSize as number,
+      sortOrder,
+    );
 
-      if (!cachedPets.length) {
-        const pets = await db.pet.findMany();
-        await this.petCacheRepository.setPets(pets);
-        const updatedCache = await this.petCacheRepository.getPaginatedPets(
-          page,
-          pageSize as number,
-          sortOrder,
-        );
-
-        return updatedCache;
-      }
-
-      return cachedPets;
+    if (!cachedPets.length) {
+      const pets = await db.pet.findMany();
+      await this.petCacheRepository.setPets(pets);
+      return pets.slice((page - 1) * pageSize, page * pageSize);
     }
 
-    const pets = await this.petCacheRepository.getPets(sortOrder);
-
-    if (!pets) {
-      const dbPets = await db.pet.findMany({});
-      await this.petCacheRepository.setPets(dbPets);
-      return dbPets;
-    }
-
-    return pets;
+    return cachedPets;
   }
 
   async getPet(id: GetPetInput['params']['id']) {
