@@ -76,6 +76,14 @@ Install the project's PNPM dependencies by simply running:
 pnpm i
 ```
 
+### Running the server
+
+cd into the api directory for the following commands
+
+```sh
+cd apps/api
+```
+
 ### setup databases
 
 ```
