@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "isolatedModules": true,
+    "module": "ESNext",
+    "jsx": "preserve",
+    "lib": ["dom", "DOM.iterable", "esnext"],
+    "incremental": true,
+    "baseUrl": ".",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@frontend/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "test", "next-env.d.ts", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", ".next"]
+}
