@@ -14,6 +14,7 @@ import dotenv from 'dotenv';
 import express, { Express } from 'express';
 import session from 'express-session';
 import swaggerUi from 'swagger-ui-express';
+import { parseQueryString } from './utils/queryStringParsers';
 
 const dotenvFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({
@@ -53,7 +54,7 @@ class CreateServer {
     // *order is important*
 
     // middleware
-    // this.app.set('query parser', parseQueryString);
+    this.app.set('query parser', parseQueryString);
     // logging
     this.app.enable('trust proxy');
     this.app.use(

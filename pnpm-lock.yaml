@@ -7,6 +7,63 @@ settings:
 importers:
 
   .:
+    devDependencies:
+      '@commitlint/cli':
+        specifier: ^19.3.0
+        version: 19.3.0(@types/node@20.14.13)(typescript@5.5.4)
+      '@commitlint/config-conventional':
+        specifier: ^19.2.2
+        version: 19.2.2
+      '@types/node':
+        specifier: ^20.8.6
+        version: 20.14.13
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.14.1
+        version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)
+      '@typescript-eslint/parser':
+        specifier: ^7.14.1
+        version: 7.18.0(eslint@8.57.0)(typescript@5.5.4)
+      check-node-version:
+        specifier: ^4.2.1
+        version: 4.2.1
+      commitizen:
+        specifier: 4.3.0
+        version: 4.3.0(@types/node@20.14.13)(typescript@5.5.4)
+      cz-conventional-changelog:
+        specifier: ^3.3.0
+        version: 3.3.0(@types/node@20.14.13)(typescript@5.5.4)
+      eslint:
+        specifier: ^8.52.0
+        version: 8.57.0
+      eslint-config-airbnb:
+        specifier: ^19.0.4
+        version: 19.0.4(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0))(eslint-plugin-jsx-a11y@6.9.0(eslint@8.57.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.35.0(eslint@8.57.0))(eslint@8.57.0)
+      eslint-config-next:
+        specifier: ^14.2.4
+        version: 14.2.5(eslint@8.57.0)(typescript@5.5.4)
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@8.57.0)
+      eslint-plugin-import:
+        specifier: ^2.29.1
+        version: 2.29.1(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)
+      git-cz:
+        specifier: ^4.9.0
+        version: 4.9.0
+      husky:
+        specifier: ^9.0.11
+        version: 9.1.4
+      lint-staged:
+        specifier: 15.2.7
+        version: 15.2.7
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+      typescript:
+        specifier: ^5.2.2
+        version: 5.5.4
+
+  apps/api:
     dependencies:
       '@asteasolutions/zod-to-openapi':
         specifier: ^7.1.1
@@ -18,10 +75,10 @@ importers:
         specifier: ^3.633.0
         version: 3.633.0(@aws-sdk/client-s3@3.633.0)
       '@prisma/client':
-        specifier: ^5.17.0
+        specifier: 5.17.0
         version: 5.17.0(prisma@5.17.0)
       '@prisma/generator-helper':
-        specifier: ^5.17.0
+        specifier: 5.17.0
         version: 5.17.0
       bcryptjs:
         specifier: ^2.4.3
@@ -84,7 +141,7 @@ importers:
         specifier: ^9.1.0
         version: 9.4.1
       prisma:
-        specifier: ^5.17.0
+        specifier: 5.17.0
         version: 5.17.0
       qs:
         specifier: ^6.13.0
@@ -111,12 +168,6 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
-      '@commitlint/cli':
-        specifier: ^19.3.0
-        version: 19.3.0(@types/node@20.14.13)(typescript@5.5.4)
-      '@commitlint/config-conventional':
-        specifier: ^19.2.2
-        version: 19.2.2
       '@faker-js/faker':
         specifier: ^8.4.1
         version: 8.4.1
@@ -201,36 +252,12 @@ importers:
       babel-jest:
         specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.24.9)
-      commitizen:
-        specifier: 4.3.0
-        version: 4.3.0(@types/node@20.14.13)(typescript@5.5.4)
       concurrently:
         specifier: ^8.2.1
         version: 8.2.2
-      cz-conventional-changelog:
-        specifier: ^3.3.0
-        version: 3.3.0(@types/node@20.14.13)(typescript@5.5.4)
       eslint:
         specifier: ^8.52.0
         version: 8.57.0
-      eslint-config-airbnb:
-        specifier: ^19.0.4
-        version: 19.0.4(eslint-plugin-import@2.29.1(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0))(eslint-plugin-jsx-a11y@6.9.0(eslint@8.57.0))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.0))(eslint-plugin-react@7.35.0(eslint@8.57.0))(eslint@8.57.0)
-      eslint-config-next:
-        specifier: ^14.2.4
-        version: 14.2.5(eslint@8.57.0)(typescript@5.5.4)
-      eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@8.57.0)
-      eslint-plugin-import:
-        specifier: ^2.29.1
-        version: 2.29.1(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)
-      git-cz:
-        specifier: ^4.9.0
-        version: 4.9.0
-      husky:
-        specifier: ^9.0.11
-        version: 9.1.4
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@20.14.13)(ts-node@10.9.2(@types/node@20.14.13)(typescript@5.5.4))
@@ -1665,6 +1692,10 @@ packages:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
 
+  chalk@3.0.0:
+    resolution: {integrity: sha512-4D3B6Wf41KOYRFdszmDqMCGq5VV/uMAB273JILmO+3jAlh8X4qDtdtgCR3fxtbLEMzSx22QdhnDcJvu2u1fVwg==}
+    engines: {node: '>=8'}
+
   chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
     engines: {node: '>=10'}
@@ -1679,6 +1710,11 @@ packages:
 
   chardet@0.7.0:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
+
+  check-node-version@4.2.1:
+    resolution: {integrity: sha512-YYmFYHV/X7kSJhuN/QYHUu998n/TRuDe8UenM3+m5NrkiH670lb9ILqHIvBencvJc4SDh+XcbXMR4b+TtubJiw==}
+    engines: {node: '>=8.3.0'}
+    hasBin: true
 
   chokidar@3.6.0:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
@@ -3238,6 +3274,9 @@ packages:
   makeerror@1.0.12:
     resolution: {integrity: sha512-JmqCvUhmt43madlpFzG4BQzG2Z3m6tvQDNKdClZnO3VbIudJYmxsT0FNJMeiB2+JTSlTQTSbU8QdesVmwJcmLg==}
 
+  map-values@1.0.1:
+    resolution: {integrity: sha512-BbShUnr5OartXJe1GeccAWtfro11hhgNJg6G9/UtWKjVGvV5U4C09cg5nk8JUevhXODaXY+hQ3xxMUKSs62ONQ==}
+
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
@@ -3385,6 +3424,9 @@ packages:
   object-assign@4.1.1:
     resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
     engines: {node: '>=0.10.0'}
+
+  object-filter@1.0.2:
+    resolution: {integrity: sha512-NahvP2vZcy1ZiiYah30CEPw0FpDcSkSePJBMpzl5EQgCmISijiGuJm3SPYp7U+Lf2TljyaIw3E5EgkEx/TNEVA==}
 
   object-inspect@1.13.2:
     resolution: {integrity: sha512-IRZSRuzJiynemAXPYtPe5BoI/RESNYR7TYm50MC5Mqbd3Jmw5y790sErYw3V6SryFJD64b74qQQs9wn5Bg/k3g==}
@@ -6573,6 +6615,11 @@ snapshots:
       escape-string-regexp: 1.0.5
       supports-color: 5.5.0
 
+  chalk@3.0.0:
+    dependencies:
+      ansi-styles: 4.3.0
+      supports-color: 7.2.0
+
   chalk@4.1.2:
     dependencies:
       ansi-styles: 4.3.0
@@ -6583,6 +6630,15 @@ snapshots:
   char-regex@1.0.2: {}
 
   chardet@0.7.0: {}
+
+  check-node-version@4.2.1:
+    dependencies:
+      chalk: 3.0.0
+      map-values: 1.0.1
+      minimist: 1.2.8
+      object-filter: 1.0.2
+      run-parallel: 1.2.0
+      semver: 6.3.1
 
   chokidar@3.6.0:
     dependencies:
@@ -8594,6 +8650,8 @@ snapshots:
     dependencies:
       tmpl: 1.0.5
 
+  map-values@1.0.1: {}
+
   media-typer@0.3.0: {}
 
   meow@12.1.1: {}
@@ -8704,6 +8762,8 @@ snapshots:
       path-key: 4.0.0
 
   object-assign@4.1.1: {}
+
+  object-filter@1.0.2: {}
 
   object-inspect@1.13.2: {}
 

@@ -20,6 +20,7 @@ runs:
 
     - name: start test DB
       run: docker compose up -d
+      working-directory: apps/api
       shell: bash
 
     - name: jest
@@ -40,5 +41,6 @@ runs:
         target: e2e-local
 
     - name: docker compose down
+      working-directory: apps/api
       run: docker compose down
       shell: bash
