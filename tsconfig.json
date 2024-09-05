@@ -7,7 +7,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "outDir": "dist",
     "strict": true,
     "strictNullChecks": true,
     "target": "esnext",
@@ -21,12 +20,11 @@
     "strictPropertyInitialization": false,
     "baseUrl": ".",
     "isolatedModules": true,
-    "noEmit": false,
+    "noEmit": true,
     "noImplicitReturns": true,
     "paths": {
-      "@api/*": ["./src/*"]
+      "@api/*": ["apps/api/src/*"]
     }
   },
-  "include": ["src", "test", "src/types/env.d.ts"],
   "exclude": ["node_modules"]
 }
