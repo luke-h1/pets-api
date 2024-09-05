@@ -9,15 +9,6 @@ WORKDIR /app
 
 FROM base AS builder
 
-ARG GIT_SHA
-ENV GIT_SHA=$GIT_SHA
-
-ARG DEPLOYED_AT
-ENV DEPLOYED_AT=$DEPLOYED_AT
-
-ARG DEPLOYED_BY
-ENV DEPLOYED_BY=$DEPLOYED_BY
-
 COPY .npmrc .
 COPY package.json .
 COPY pnpm-lock.yaml .
@@ -32,6 +23,16 @@ RUN pnpm --filter=@pets/api db:generate
 RUN pnpm --filter=@pets/api build
 
 FROM base AS runner
+
+ARG GIT_SHA
+ENV GIT_SHA=$GIT_SHA
+
+ARG DEPLOYED_AT
+ENV DEPLOYED_AT=$DEPLOYED_AT
+
+ARG DEPLOYED_BY
+ENV DEPLOYED_BY=$DEPLOYED_BY
+
 
 COPY --from=builder /app/.npmrc .
 COPY --from=builder /app/package.json .
