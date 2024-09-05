@@ -141,5 +141,5 @@ make e2e-local
 Run one test
 
 ```sh
-make e2e-local <name of test>
+tests=test-name make e2e-local
 ```
