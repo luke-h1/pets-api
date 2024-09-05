@@ -1,5 +1,5 @@
-name: 'Build server'
-description: 'Build server'
+name: 'Build'
+description: 'Build'
 runs:
   using: 'composite'
   steps:
@@ -23,8 +23,8 @@ runs:
       working-directory: apps/api
       shell: bash
 
-    - name: jest
-      run: pnpm test:ci
+    - name: jest (server)
+      run: pnpm --filter=@pets/api test:ci
       shell: bash
 
     - name: tsc
@@ -35,7 +35,7 @@ runs:
       run: pnpm build
       shell: bash
 
-    - name: e2e local
+    - name: e2e local server
       uses: ./.github/actions/e2e
       with:
         target: e2e-local

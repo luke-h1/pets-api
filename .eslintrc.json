@@ -6,7 +6,9 @@
     "plugin:import/typescript",
     "prettier",
     "prettier/prettier",
-    "plugin:@typescript-eslint/strict"
+    "plugin:@typescript-eslint/strict",
+    "next/core-web-vitals",
+    "next/typescript"
   ],
   "settings": {
     "import/resolver": {
@@ -22,6 +24,10 @@
     "node": true
   },
   "rules": {
+    "react/jsx-filename-extension": [
+      2,
+      { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
+    ],
     "@typescript-eslint/no-use-before-define": [
       "error",
       {
