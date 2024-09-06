@@ -1,9 +1,72 @@
 import { db } from '@api/db/prisma';
+import { CreatePetInput } from '@api/schema/pet.schema';
 import server from '@api/server';
 import { testImages } from '@api/test/testImages';
 import supertest from 'supertest';
-import { pets } from '../__mocks__/pet';
 import { user, user2 } from '../__mocks__/user';
+
+const pets: CreatePetInput['body'][] = [
+  {
+    name: 'Buddy',
+    breed: 'Golden Retriever',
+    status: 'AVAILABLE',
+    age: '12',
+    birthDate: '2022',
+    description: 'dog',
+    tags: ['dog'],
+    images: testImages,
+  },
+  {
+    name: 'Mittens',
+    breed: 'Siamese',
+    status: 'ADOPTED',
+    age: '12',
+    birthDate: '2022',
+    description: 'dog',
+    tags: ['dog'],
+    images: testImages,
+  },
+  {
+    name: 'Charlie',
+    breed: 'Labrador Retriever',
+    status: 'AVAILABLE',
+    age: '12',
+    birthDate: '2022',
+    description: 'dog',
+    tags: ['dog'],
+    images: testImages,
+  },
+  {
+    name: 'Whiskers',
+    breed: 'Maine Coon',
+    status: 'PENDING',
+    age: '12',
+    birthDate: '2022',
+    description: 'dog',
+    tags: ['dog'],
+    images: testImages,
+  },
+  {
+    name: 'Max',
+    breed: 'Beagle',
+    status: 'ADOPTED',
+    age: '12',
+    birthDate: '2022',
+    description: 'dog',
+    tags: ['dog'],
+    images: testImages,
+  },
+  {
+    name: 'Luna',
+    breed: 'Bengal',
+    status: 'AVAILABLE',
+    age: '12',
+    birthDate: '2022',
+    description: 'dog',
+    tags: ['dog'],
+    images: testImages,
+  },
+];
 
 describe('pet', () => {
   const app = server.init();
@@ -32,83 +95,228 @@ describe('pet', () => {
       data: user,
     });
     await db.pet.createMany({
-      data: pets.slice(3).map(p => ({
+      data: pets.map(p => ({
         ...p,
         creatorId: u.id,
       })),
     });
 
     const { body, statusCode } = await supertest(app).get(
-      '/api/pets?page=1&pageSize=2',
+      '/api/pets?page=1&pageSize=1',
     );
 
     expect(body).toEqual({
       _links: {
         self: {
-          href: expect.stringContaining('/api/pets?page=1&pageSize=2'),
+          href: expect.stringContaining('/api/pets?page=1&pageSize=1'),
         },
         next: {
-          href: expect.stringContaining('/api/pets?page=2&pageSize=2'),
+          href: expect.stringContaining('/api/pets?page=2&pageSize=1'),
         },
       },
       paging: {
         page: 1,
-        query: { page: '1', pageSize: '2' },
-        totalPages: 2,
-        totalResults: 3,
+        query: { page: '1', pageSize: '1' },
+        totalPages: 6,
+        totalResults: 6,
+      },
+      pets: [
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Golden Retriever',
+          createdAt: expect.any(String),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: testImages,
+          name: 'Buddy',
+          status: 'AVAILABLE',
+          tags: ['dog'],
+          updatedAt: expect.any(String),
+        },
+      ],
+    });
+    expect(statusCode).toEqual(200);
+
+    const { body: secondPageBody, statusCode: secondPageStatusCode } =
+      await supertest(app).get('/api/pets?page=2&pageSize=1');
+
+    expect(secondPageBody).toEqual({
+      _links: {
+        next: {
+          href: expect.stringContaining('/api/pets?page=3&pageSize=1'),
+        },
+        prev: {
+          href: expect.stringContaining('/api/pets?page=1&pageSize=1'),
+        },
+        self: {
+          href: expect.stringContaining('/api/pets?page=2&pageSize=1'),
+        },
+      },
+      paging: {
+        page: 2,
+        query: {
+          page: '2',
+          pageSize: '1',
+        },
+        totalPages: 6,
+        totalResults: 6,
+      },
+      pets: [
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Siamese',
+          createdAt: expect.anything(),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Mittens',
+          status: 'ADOPTED',
+          tags: ['dog'],
+          updatedAt: expect.anything(),
+        },
+      ],
+    });
+    expect(secondPageStatusCode).toEqual(200);
+
+    const { body: thirdPageBody, statusCode: thirdPageStatusCode } =
+      await supertest(app).get('/api/pets?page=3&pageSize=1');
+
+    expect(thirdPageStatusCode).toEqual(200);
+
+    expect(thirdPageBody).toEqual({
+      _links: {
+        next: { href: expect.stringContaining('/api/pets?page=4&pageSize=1') },
+        prev: { href: expect.stringContaining('/api/pets?page=2&pageSize=1') },
+        self: { href: expect.stringContaining('/api/pets?page=3&pageSize=1') },
+      },
+      paging: {
+        page: 3,
+        query: { page: '3', pageSize: '1' },
+        totalPages: 6,
+        totalResults: 6,
+      },
+      pets: [
+        {
+          age: '12',
+          birthDate: '2022',
+          breed: 'Labrador Retriever',
+          createdAt: expect.anything(),
+          creatorId: u.id,
+          description: 'dog',
+          id: expect.any(String),
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
+          name: 'Charlie',
+          status: 'AVAILABLE',
+          tags: ['dog'],
+          updatedAt: expect.anything(),
+        },
+      ],
+    });
+
+    const { body: fourthPagebody, statusCode: fourthPageStatusCode } =
+      await supertest(app).get('/api/pets?page=4&pageSize=1');
+
+    expect(fourthPageStatusCode).toEqual(200);
+
+    expect(fourthPagebody).toEqual({
+      _links: {
+        next: { href: expect.stringContaining('/api/pets?page=5&pageSize=1') },
+        prev: { href: expect.stringContaining('/api/pets?page=3&pageSize=1') },
+        self: { href: expect.stringContaining('/api/pets?page=4&pageSize=1') },
+      },
+      paging: {
+        page: 4,
+        query: { page: '4', pageSize: '1' },
+        totalPages: 6,
+        totalResults: 6,
       },
       pets: [
         {
           age: '12',
           birthDate: '2022',
           breed: 'Maine Coon',
-          createdAt: expect.any(String),
+          createdAt: expect.anything(),
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: testImages,
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
           name: 'Whiskers',
           status: 'PENDING',
           tags: ['dog'],
-          updatedAt: expect.any(String),
+          updatedAt: expect.anything(),
         },
+      ],
+    });
+
+    const { body: fifthPageBody, statusCode: fifthPageStatusCode } =
+      await supertest(app).get('/api/pets?page=5&pageSize=1');
+
+    expect(fifthPageStatusCode).toEqual(200);
+
+    expect(fifthPageBody).toEqual({
+      _links: {
+        next: { href: expect.stringContaining('/api/pets?page=6&pageSize=1') },
+        prev: { href: expect.stringContaining('/api/pets?page=4&pageSize=1') },
+        self: { href: expect.stringContaining('/api/pets?page=5&pageSize=1') },
+      },
+      paging: {
+        page: 5,
+        query: { page: '5', pageSize: '1' },
+        totalPages: 6,
+        totalResults: 6,
+      },
+      pets: [
         {
           age: '12',
           birthDate: '2022',
           breed: 'Beagle',
-          createdAt: expect.any(String),
+          createdAt: expect.anything(),
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: testImages,
+          images: [
+            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
+          ],
           name: 'Max',
           status: 'ADOPTED',
           tags: ['dog'],
-          updatedAt: expect.any(String),
+          updatedAt: expect.anything(),
         },
       ],
     });
-    expect(statusCode).toBe(200);
 
-    const { body: secondPageBody, statusCode: secondPageStatusCode } =
-      await supertest(app).get('/api/pets?page=200&pageSize=300');
+    const { body: twoHundredthPageBody, statusCode: twoHundrethStatusCode } =
+      await supertest(app).get('/api/pets?page=200&pageSize=1');
 
-    expect(secondPageBody).toEqual({
+    expect(twoHundrethStatusCode).toEqual(200);
+
+    expect(twoHundredthPageBody).toEqual({
       _links: {
-        self: { href: expect.any(String) },
         prev: {
-          href: expect.stringContaining('/api/pets?page=199&pageSize=300'),
+          href: expect.stringContaining('/api/pets?page=199&pageSize=1'),
+        },
+        self: {
+          href: expect.stringContaining('/api/pets?page=200&pageSize=1'),
         },
       },
       paging: {
         page: 200,
-        query: { page: '200', pageSize: '300' },
-        totalPages: 1,
-        totalResults: 3,
+        query: { page: '200', pageSize: '1' },
+        totalPages: 6,
+        totalResults: 6,
       },
       pets: [],
     });
-    expect(secondPageStatusCode).toBe(200);
   });
 
   test('sortOrder asc', async () => {
