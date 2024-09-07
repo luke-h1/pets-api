@@ -2,7 +2,7 @@ import ForbiddenError from '@api/errors/ForbiddenError';
 import { NextFunction, Request, Response } from 'express';
 
 const isAuth = () => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.session.userId) {
       throw new ForbiddenError({
         message: 'You are not authorized to perform this action',

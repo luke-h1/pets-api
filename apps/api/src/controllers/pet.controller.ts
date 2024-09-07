@@ -1,4 +1,5 @@
 import { db } from '@api/db/prisma';
+import BadRequestError from '@api/errors/BadRequestError';
 import NotFoundError from '@api/errors/NotFoundError';
 import {
   CreatePetRequest,
@@ -70,18 +71,24 @@ export default class PetController {
       req.body,
       req.session.userId,
     );
-    return res.status(201).json(newPet);
+
+    if (newPet) {
+      return res.status(201).json(newPet);
+    }
+    throw new BadRequestError();
   }
 
   async updatePet(req: UpdatePetRequest, res: Response) {
     const pet = req.body;
     const updatedPet = await this.petService.updatePet(req.params.id, pet);
-
-    return res.status(200).json(updatedPet);
+    if (updatedPet) {
+      return res.status(200).json(updatedPet);
+    }
+    throw new BadRequestError();
   }
 
   async deletePet(req: DeletePetReqeust, res: Response) {
-    await this.petService.deletePet(req.params.id);
-    return res.status(200).json();
+    const result = await this.petService.deletePet(req.params.id);
+    return res.status(200).json(result);
   }
 }
