@@ -726,7 +726,7 @@ describe('pet', () => {
         .set('Cookie', `${cookieName}=${cookieValue}`);
 
       expect(deleteStatusCode).toBe(200);
-      expect(body).toEqual('');
+      expect(body).toEqual(null);
     });
   });
 });

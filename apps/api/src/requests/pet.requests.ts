@@ -10,6 +10,10 @@ export type GetPetRequest = Request<GetPetInput['params']>;
 
 export type CreatePetRequest = Request<{}, {}, CreatePetInput['body']>;
 
-export type UpdatePetRequest = Request<UpdatePetInput['params']>;
+export type UpdatePetRequest = Request<
+  UpdatePetInput['params'],
+  {},
+  UpdatePetInput['body']
+>;
 
 export type DeletePetReqeust = Request<DeletePetInput['params']>;

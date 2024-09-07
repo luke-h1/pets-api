@@ -5,11 +5,11 @@ import { AnyZodObject, z } from 'zod';
 /**
  * Middleware to validate a request body, query, and params against a {@param schema} Zod schema
  */
-const validateResource = (schema: AnyZodObject) => {
+const validateResource = <TRequest extends Request>(schema: AnyZodObject) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   // eslint-disable-next-line consistent-return
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: TRequest, res: Response, next: NextFunction) => {
     try {
       await schema.parseAsync({
         body: req.body,

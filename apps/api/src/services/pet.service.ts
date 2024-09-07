@@ -7,6 +7,7 @@ import {
   UpdatePetInput,
 } from '@api/schema/pet.schema';
 import logger from '@api/utils/logger';
+import { SortParams } from '@api/utils/parseSortParams';
 import { Pet } from '@prisma/client';
 
 export default class PetService {
@@ -19,26 +20,29 @@ export default class PetService {
   async getPets(
     page: number,
     pageSize: number,
-    sortOrder?: 'asc' | 'desc',
-  ): Promise<Pet[]> {
-    const cachedPets = await this.petCacheRepository.getPaginatedPets(
-      page,
-      pageSize as number,
-      sortOrder,
-    );
+    sortOrder: SortParams['sortOrder'],
+  ): Promise<Pet[] | null> {
+    try {
+      const cachedPets = await this.petCacheRepository.getPets(
+        page,
+        pageSize,
+        sortOrder,
+      );
 
-    if (!cachedPets.length) {
-      const pets = await db.pet.findMany();
-      await this.petCacheRepository.setPets(pets);
-      return pets.slice((page - 1) * pageSize, page * pageSize);
+      if (!cachedPets.length) {
+        const pets = await db.pet.findMany();
+        await this.petCacheRepository.setPets(pets);
+        return pets.slice((page - 1) * pageSize, page * pageSize);
+      }
+
+      return cachedPets;
+    } catch (error) {
+      return null;
     }
-
-    return cachedPets;
   }
 
   async getPet(id: GetPetInput['params']['id']) {
     const cachedPet = await this.petCacheRepository.getPet(id);
-    logger.info('cachedPet', JSON.stringify(cachedPet, null, 2));
 
     if (cachedPet) {
       return cachedPet;
@@ -57,47 +61,54 @@ export default class PetService {
   }
 
   async createPet(pet: CreatePetInput['body'], userId: string) {
-    const newPet = await db.pet.create({
-      data: {
-        ...pet,
-        creatorId: userId,
-      },
-    });
+    try {
+      const newPet = await db.pet.create({
+        data: {
+          ...pet,
+          creatorId: userId,
+        },
+      });
 
-    await this.petCacheRepository.setPet(newPet);
-    return newPet;
+      await this.petCacheRepository.setPet(newPet);
+      return newPet;
+    } catch (error) {
+      return null;
+    }
   }
 
   async updatePet(
     id: UpdatePetInput['params']['id'],
     pet: UpdatePetInput['body'],
   ) {
-    const updatedPet = await db.pet.update({
-      where: {
-        id: id.toString(),
-      },
-      data: {
-        ...pet,
-      },
-    });
+    try {
+      const updatedPet = await db.pet.update({
+        where: {
+          id,
+        },
+        data: {
+          ...pet,
+        },
+      });
 
-    await this.petCacheRepository.removePet(updatedPet.id);
+      await this.petCacheRepository.removePet(updatedPet.id);
 
-    return updatedPet;
+      return updatedPet;
+    } catch (e) {
+      logger.error(`Failed to update pet: ${e}`);
+      return null;
+    }
   }
 
   async deletePet(id: DeletePetInput['params']['id']) {
     try {
       await Promise.allSettled([
-        db.pet.delete({ where: { id: id.toString() } }),
+        db.pet.delete({ where: { id } }),
         this.petCacheRepository.removePet(id),
       ]);
       return null;
     } catch (error) {
-      logger.error(`Failed to delete pet: ${error}`, {
-        tag: 'pet',
-      });
-      throw error;
+      logger.error(`Failed to delete pet: ${error}`);
+      return null;
     }
   }
 }

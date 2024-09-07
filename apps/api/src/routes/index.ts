@@ -4,6 +4,7 @@ import AuthRoutes from './auth.route';
 import HealthRoutes from './health.route';
 import ImageRoutes from './image.route';
 import PetRoutes from './pet.route';
+import UserRoutes from './user.route';
 import VersionRoutes from './version.route';
 
 export default class Routes {
@@ -21,6 +22,8 @@ export default class Routes {
 
   private readonly adminRoutes: AdminRoutes;
 
+  private readonly userRoutes: UserRoutes;
+
   constructor(app: Express) {
     this.app = app;
     this.healthRoutes = new HealthRoutes(app);
@@ -29,6 +32,7 @@ export default class Routes {
     this.versionRoutes = new VersionRoutes(app);
     this.imageRoutes = new ImageRoutes(app);
     this.adminRoutes = new AdminRoutes(app);
+    this.userRoutes = new UserRoutes(app);
   }
 
   public setupRoutes(): void {
@@ -38,5 +42,6 @@ export default class Routes {
     this.authRoutes.setupRoutes();
     this.imageRoutes.setupRoutes();
     this.adminRoutes.setupRoutes();
+    this.userRoutes.setupRoutes();
   }
 }

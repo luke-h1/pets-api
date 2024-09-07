@@ -1,5 +1,6 @@
 import RedisDatabase from '@api/db/redis';
 import logger from '@api/utils/logger';
+import { SortParams } from '@api/utils/parseSortParams';
 import { Pet } from '@prisma/client';
 
 export default class PetCacheRepository {
@@ -22,44 +23,9 @@ export default class PetCacheRepository {
     await db.set('pets', JSON.stringify(updatedPets));
   }
 
-  async getPets(sortOrder?: 'asc' | 'desc'): Promise<Pet[] | null> {
-    const db = this.redis.getInstance();
-
-    const cachedPets = await db.get('pets');
-
-    if (!cachedPets) {
-      logger.info(`[REDIS]: pets not found in cache`, { tag: 'redis' });
-      return null;
-    }
-
-    const parsedPets = this.cacheToJSON(cachedPets);
-
-    if (!sortOrder) {
-      return parsedPets;
-    }
-
-    if (sortOrder === 'asc') {
-      parsedPets.sort((a: Pet, b: Pet) => {
-        return a.createdAt < b.createdAt ? -1 : 1;
-      });
-    }
-    if (sortOrder === 'desc') {
-      parsedPets.sort((a: Pet, b: Pet) => {
-        return a.createdAt > b.createdAt ? -1 : 1;
-      });
-    }
-    return null;
-  }
-
   async setPets(pets: Pet[]) {
     const db = this.redis.getInstance();
-    try {
-      await db.set('pets', JSON.stringify(pets));
-      const cachedPets = await db.get('pets');
-      return this.cacheToJSON(cachedPets as string);
-    } catch (error) {
-      return null;
-    }
+    await db.set('pets', JSON.stringify(pets));
   }
 
   async setPet(pet: Pet): Promise<null> {
@@ -69,16 +35,12 @@ export default class PetCacheRepository {
 
     const allPets = await db.get('pets');
     if (!allPets) {
-      logger.info(`[REDIS]: setPet - pets not found in cache!`, {
-        tag: 'redis',
-      });
+      logger.info(`[REDIS]: cache miss setPet - pets not found in cache!`);
       return null;
     }
     await db.set('pets', JSON.stringify([...this.cacheToJSON(allPets), pet]));
 
-    logger.info(`[REDIS]: pet added to pets and pet cache tree`, {
-      tag: 'redis',
-    });
+    logger.info(`[REDIS]: pet added to pets:{id} and pets cache`);
     return null;
   }
 
@@ -87,7 +49,7 @@ export default class PetCacheRepository {
     const cachedPet = await db.get(`pets:${id}`);
 
     if (!cachedPet) {
-      logger.info(`[REDIS]: getPet - pet not found in cache`, { tag: 'redis' });
+      logger.info(`[REDIS]: getPet - pet not found in cache`);
       return null;
     }
 
@@ -100,10 +62,10 @@ export default class PetCacheRepository {
     return this.cacheToJSON(cachedPet);
   }
 
-  async getPaginatedPets(
+  async getPets(
     page: number,
     pageSize: number,
-    sortOrder?: 'asc' | 'desc',
+    sortOrder: SortParams['sortOrder'],
   ): Promise<Pet[]> {
     const db = this.redis.getInstance();
 
@@ -113,7 +75,7 @@ export default class PetCacheRepository {
     const cachedPets = await db.get('pets');
 
     if (!cachedPets) {
-      logger.info(`[REDIS]: pets not found in cache`, { tag: 'redis' });
+      logger.info(`[REDIS]: cache miss - pets not found in cache`);
       return [];
     }
 
@@ -130,16 +92,6 @@ export default class PetCacheRepository {
     }
 
     return parsedPets.slice(start, end);
-  }
-
-  async deletePet(id: string): Promise<void> {
-    const db = this.redis.getInstance();
-    await db.del(`pets:${id}`);
-  }
-
-  async deletePets(): Promise<void> {
-    const db = this.redis.getInstance();
-    await db.del('pets');
   }
 
   private cacheToJSON(data: string[] | string) {

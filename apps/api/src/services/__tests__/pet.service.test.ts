@@ -12,6 +12,8 @@ describe('petService', () => {
     petService = new PetService();
   });
 
+  // TODO: update test to ensure it gets from DB and then cache
+
   describe('getPets', () => {
     test('returns pets', async () => {
       const u = await db.user.create({
@@ -24,7 +26,7 @@ describe('petService', () => {
           creatorId: u.id,
         })),
       });
-      const pets = await petService.getPets(1, 100);
+      const pets = await petService.getPets(1, 100, undefined);
       expect(pets).toEqual([
         {
           age: '12',
@@ -204,7 +206,7 @@ describe('petService', () => {
 
       const createdResult = await petService.createPet(createdPet, u.id);
 
-      const result = await petService.updatePet(createdResult.id, {
+      const result = await petService.updatePet(createdResult?.id as string, {
         ...createdPet,
         name: 'Updated Pet',
       });
@@ -241,7 +243,7 @@ describe('petService', () => {
 
       const createdResult = await petService.createPet(createdPet, u.id);
 
-      const result = await petService.deletePet(createdResult.id);
+      const result = await petService.deletePet(createdResult?.id as string);
       expect(result).toEqual(null);
     });
   });
