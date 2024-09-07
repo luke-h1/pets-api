@@ -8,6 +8,7 @@ import authPaths from './paths/authPaths';
 import healthPaths from './paths/healthPaths';
 import imagePaths from './paths/imagePaths';
 import registerPetPaths from './paths/petPaths';
+import registerUserPaths from './paths/userPaths';
 import versionPaths from './paths/versionPaths';
 
 const registry = new OpenAPIRegistry();
@@ -23,6 +24,9 @@ imagePaths(registry);
 
 // admin
 adminPaths(registry);
+
+// users
+registerUserPaths(registry);
 
 // version
 versionPaths(registry);
