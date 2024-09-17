@@ -2,7 +2,7 @@ import {
   DeleteUserInput,
   GetUserInput,
   PatchUserInput,
-} from '@api/schema/user.schema';
+} from '@validation/schema/user.schema';
 import { Request } from 'express';
 
 export type GetUserRequest = Request<GetUserInput['params']>;

@@ -1,8 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import { db } from '@api/db/prisma';
-import { PatchUserInput } from '@api/schema/user.schema';
 import server from '@api/server';
 import generateTestUsers from '@api/test/generateTestUsers';
+import { PatchUserInput } from '@validation/schema/user.schema';
 import supertest from 'supertest';
 
 describe('user.controller', () => {

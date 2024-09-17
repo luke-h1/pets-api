@@ -3,7 +3,7 @@ import {
   DeletePetInput,
   GetPetInput,
   UpdatePetInput,
-} from '@api/schema/pet.schema';
+} from '@validation/schema/pet.schema';
 import { Request } from 'express';
 
 export type GetPetRequest = Request<GetPetInput['params']>;

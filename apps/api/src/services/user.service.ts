@@ -1,8 +1,8 @@
 import { db } from '@api/db/prisma';
 import { userErrorCodes } from '@api/errors/user';
 import UserCacheRepository from '@api/repository/userCacheRepository';
-import { PatchUserInput } from '@api/schema/user.schema';
 import { SortParams } from '@api/utils/parseSortParams';
+import { PatchUserInput } from '@validation/index';
 
 export default class UserService {
   private readonly userCacheRepository: UserCacheRepository;

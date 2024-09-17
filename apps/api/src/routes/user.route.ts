@@ -3,7 +3,10 @@ import isAuth from '@api/middleware/isAuth';
 import isUser from '@api/middleware/isUser';
 import validateResource from '@api/middleware/validateResource';
 import { GetUserRequest, PatchUserRequest } from '@api/requests/user.requests';
-import { getUserSchema, updateUserSchema } from '@api/schema/user.schema';
+import {
+  getUserSchema,
+  updateUserSchema,
+} from '@validation/schema/user.schema';
 import { Express } from 'express';
 
 export default class UserRoutes {

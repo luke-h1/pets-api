@@ -1,7 +1,7 @@
 import { db } from '@api/db/prisma';
-import { CreatePetInput } from '@api/schema/pet.schema';
 import server from '@api/server';
 import { testImages } from '@api/test/testImages';
+import { CreatePetInput } from '@validation/schema/pet.schema';
 import supertest from 'supertest';
 import { user, user2 } from '../__mocks__/user';
 

@@ -14,6 +14,7 @@ COPY package.json .
 COPY pnpm-lock.yaml .
 COPY pnpm-workspace.yaml .
 COPY ./apps/api ./apps/api
+COPY ./packages/validation ./packages/validation
 COPY tsconfig.json ./tsconfig.json
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
@@ -40,6 +41,7 @@ COPY --from=builder /app/pnpm-lock.yaml .
 COPY --from=builder /app/pnpm-workspace.yaml .
 COPY --from=builder /app/tsconfig.json .
 COPY --from=builder /app/apps/api ./apps/api/
+COPY --from=builder /app/packages/validation ./packages/validation/
 
 RUN corepack enable
 

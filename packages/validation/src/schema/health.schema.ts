@@ -1,4 +1,4 @@
-import z from '@api/utils/validation';
+import { z } from '@validation/util/validation';
 
 export const healthSchema = z.object({
   db: z.boolean(),

@@ -1,5 +1,5 @@
-import { CreateUserInput } from '@api/schema/auth.schema';
 import { faker } from '@faker-js/faker';
+import { CreateUserInput } from '@validation/schema/auth.schema';
 
 const generateTestUsers = (count: number): CreateUserInput['body'][] => {
   return Array.from({ length: count }, () => ({

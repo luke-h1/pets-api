@@ -36,7 +36,7 @@ healthPaths(registry);
 
 const generator = new OpenApiGeneratorV3(registry.definitions);
 
-const openApiSpec = () =>
+const openApiSpec: () => ReturnType<typeof generator.generateDocument> = () =>
   generator.generateDocument({
     openapi: '3.1.0',
     info: {

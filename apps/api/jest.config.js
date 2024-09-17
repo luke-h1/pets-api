@@ -19,6 +19,7 @@ const config = {
   },
   moduleNameMapper: {
     '^@api/(.*)$': '<rootDir>/src/$1',
+    '^@validation/(.*)$': '<rootDir>/../../packages/validation/src/$1',
   },
   setupFilesAfterEnv: ['<rootDir>/src/test/setupTests.js'],
   coverageThreshold: {

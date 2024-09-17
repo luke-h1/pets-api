@@ -20,7 +20,7 @@
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx,css,scss,html}\"",
     "kill:port": "npx kill-port 8000",
     "lint": "eslint --fix --ext .ts,.tsx,.js,.jsx .",
-    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/src/index.js",
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/apps/api/src/index.js",
     "test": "./scripts/setup-testdb.sh && jest --runInBand",
     "test:ci": "./scripts/setup-testdb.sh && jest --ci --reporters=default --reporters=jest-junit --runInBand",
     "tsc": "tsc --noEmit"
@@ -29,6 +29,7 @@
     "@asteasolutions/zod-to-openapi": "^7.1.1",
     "@aws-sdk/client-s3": "^3.633.0",
     "@aws-sdk/lib-storage": "^3.633.0",
+    "@pets/validation": "workspace:*",
     "@prisma/client": "5.17.0",
     "@prisma/generator-helper": "5.17.0",
     "bcryptjs": "^2.4.3",

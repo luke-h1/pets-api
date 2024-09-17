@@ -1,5 +1,5 @@
-import { responseSchema } from '@api/schema/response.schema';
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
+import { responseSchema } from '@validation/schema/response.schema';
 import { z } from 'zod';
 
 const adminPaths = (registry: OpenAPIRegistry) => {

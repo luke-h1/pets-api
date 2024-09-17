@@ -1,4 +1,4 @@
-import z from '@api/utils/validation';
+import { z } from '@validation/util/validation';
 
 export const userSchema = z.object({
   id: z.string(),
@@ -10,7 +10,7 @@ export const userSchema = z.object({
   role: z.enum(['USER', 'ADMIN', 'MODERATOR']),
 });
 
-export const payload = {
+export const userPayload = {
   body: userSchema
     .omit({
       id: true,
@@ -21,7 +21,7 @@ export const payload = {
     .strict(),
 };
 
-const params = {
+export const params = {
   params: z.object({
     id: z.string({
       required_error: 'ID of the user is required',
@@ -39,7 +39,7 @@ export const getUserSchema = z
 export const updateUserSchema = z
   .object({
     ...params,
-    ...payload,
+    ...userPayload,
   })
   .openapi({ description: 'updateUserSchema' });
 
