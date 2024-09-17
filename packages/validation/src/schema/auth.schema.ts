@@ -1,4 +1,4 @@
-import z from '@api/utils/validation';
+import { z } from '@validation/util/validation';
 import omit from 'lodash/omit';
 
 const loginPayload = {

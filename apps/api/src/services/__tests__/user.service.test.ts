@@ -1,9 +1,9 @@
 import { UserWithoutPrismaKeys } from '@api/controllers/__mocks__/user';
 import { db } from '@api/db/prisma';
 import { userErrorCodes } from '@api/errors/user';
-import { PatchUserInput } from '@api/schema/user.schema';
 import { faker } from '@faker-js/faker';
 import { Role } from '@prisma/client';
+import { PatchUserInput } from '@validation/schema/user.schema';
 import UserService from '../user.service';
 
 const testUsers: UserWithoutPrismaKeys[] = [

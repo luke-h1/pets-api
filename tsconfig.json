@@ -25,7 +25,9 @@
     "lib": ["dom", "dom.iterable", "esnext", "webworker"],
     "jsx": "preserve",
     "paths": {
-      "@api/*": ["apps/api/src/*"]
+      "@api/*": ["apps/api/src/*"],
+      "@frontend/*": ["apps/frontend/src/*"],
+      "@validation/*": ["packages/validation/src/*"]
     }
   },
   "exclude": ["node_modules"]

@@ -1,4 +1,4 @@
-import z from '@api/utils/validation';
+import { z } from '@validation/util/validation';
 
 export const versionSchema = z
   .object({
@@ -7,3 +7,5 @@ export const versionSchema = z
     gitSha: z.string(),
   })
   .strict();
+
+export type VersionSchema = z.infer<typeof versionSchema>;

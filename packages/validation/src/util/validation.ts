@@ -3,4 +3,4 @@ import { z } from 'zod';
 
 extendZodWithOpenApi(z);
 
-export default z;
+export { z };

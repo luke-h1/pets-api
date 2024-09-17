@@ -1,7 +1,10 @@
-import { linksSchema, paginatedLinksSchema } from '@api/schema/links.schema';
-import { petSchema, createPetSchema } from '@api/schema/pet.schema';
-import { responseSchema } from '@api/schema/response.schema';
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
+import {
+  linksSchema,
+  paginatedLinksSchema,
+} from '@validation/schema/links.schema';
+import { petSchema, createPetSchema } from '@validation/schema/pet.schema';
+import { responseSchema } from '@validation/schema/response.schema';
 import { z } from 'zod';
 
 const registerPetPaths = (registry: OpenAPIRegistry) => {

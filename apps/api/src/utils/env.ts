@@ -1,4 +1,4 @@
-import z from './validation';
+import { z } from '@validation/util/validation';
 
 export const envSchema = z.object({
   API_BASE_URL: z.string().default('http://localhost:8000'),

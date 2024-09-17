@@ -1,6 +1,6 @@
 import { db } from '@api/db/prisma';
 import { authErrorCodes } from '@api/errors/auth';
-import { CreateUserInput } from '@api/schema/auth.schema';
+import { CreateUserInput } from '@validation/schema/auth.schema';
 import AuthService from '../auth.service';
 
 describe('AuthService', () => {

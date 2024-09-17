@@ -1,4 +1,4 @@
-import z from '@api/utils/validation';
+import { z } from '@validation/util/validation';
 
 const ALLOWED_IMAGE_DOMAINS = [
   'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com',
@@ -28,7 +28,7 @@ export const petSchema = z
   })
   .openapi('pet');
 
-export const payload = {
+export const petPayload = {
   body: petSchema
     .omit({
       id: true,
@@ -50,14 +50,14 @@ const params = {
 
 export const createPetSchema = z
   .object({
-    ...payload,
+    ...petPayload,
   })
   .openapi({ description: 'createPetSchema' });
 
 export const updatePetSchema = z
   .object({
     ...params,
-    ...payload,
+    ...petPayload,
   })
   .openapi({ description: 'updatePetSchema' });
 

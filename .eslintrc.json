@@ -13,8 +13,11 @@
   "settings": {
     "import/resolver": {
       "typescript": {
-        "project": ["tsconfig.json"]
+        "project": "./tsconfig.json"
       }
+    },
+    "react": {
+      "version": "detect"
     }
   },
   "plugins": ["@typescript-eslint"],
@@ -77,6 +80,15 @@
         "import/no-dynamic-require": "off",
         "no-console": "off"
       }
+    },
+    {
+      "files": ["./apps/frontend/src"],
+      "settings": {
+        "next": {
+          "rootDir": "./apps/frontend/src"
+        }
+      },
+      "extends": ["plugin:@next/next/recommended"]
     }
   ]
 }

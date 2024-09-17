@@ -2,6 +2,12 @@ import PetController from '@api/controllers/pet.controller';
 import isAuth from '@api/middleware/isAuth';
 import isPetOwner from '@api/middleware/isPetOwner';
 import validateResource from '@api/middleware/validateResource';
+import {
+  createPetSchema,
+  deletePetSchema,
+  getPetSchema,
+  updatePetSchema,
+} from '@validation/schema/pet.schema';
 import { Express, Response } from 'express';
 
 import {
@@ -10,12 +16,6 @@ import {
   GetPetRequest,
   UpdatePetRequest,
 } from '../requests/pet.requests';
-import {
-  createPetSchema,
-  deletePetSchema,
-  getPetSchema,
-  updatePetSchema,
-} from '../schema/pet.schema';
 
 export default class PetRoutes {
   private readonly app: Express;

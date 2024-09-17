@@ -1,14 +1,14 @@
 import { db } from '@api/db/prisma';
 import PetCacheRepository from '@api/repository/petCacheRepository';
+import logger from '@api/utils/logger';
+import { SortParams } from '@api/utils/parseSortParams';
+import { Pet } from '@prisma/client';
 import {
   CreatePetInput,
   DeletePetInput,
   GetPetInput,
   UpdatePetInput,
-} from '@api/schema/pet.schema';
-import logger from '@api/utils/logger';
-import { SortParams } from '@api/utils/parseSortParams';
-import { Pet } from '@prisma/client';
+} from '@validation/schema/pet.schema';
 
 export default class PetService {
   private readonly petCacheRepository: PetCacheRepository;

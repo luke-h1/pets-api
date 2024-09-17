@@ -2,7 +2,7 @@ import {
   CreateUserInput,
   LoginUserInput,
   ResetPasswordInput,
-} from '@api/schema/auth.schema';
+} from '@validation/schema/auth.schema';
 import { Request } from 'express';
 
 export type RegisterRequest = Request<{}, {}, CreateUserInput['body']>;

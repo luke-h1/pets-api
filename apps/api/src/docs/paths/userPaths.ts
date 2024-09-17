@@ -1,7 +1,10 @@
-import { linksSchema, paginatedLinksSchema } from '@api/schema/links.schema';
-import { responseSchema } from '@api/schema/response.schema';
-import { updateUserSchema, userSchema } from '@api/schema/user.schema';
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
+import {
+  linksSchema,
+  paginatedLinksSchema,
+} from '@validation/schema/links.schema';
+import { responseSchema } from '@validation/schema/response.schema';
+import { updateUserSchema, userSchema } from '@validation/schema/user.schema';
 import { z } from 'zod';
 
 const registerUserPaths = (registry: OpenAPIRegistry) => {

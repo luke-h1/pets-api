@@ -1,8 +1,8 @@
 import { sleep } from '@api/e2e/util/sleep';
-import { CreatePetInput } from '@api/schema/pet.schema';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
 import { PetStatus } from '@prisma/client';
+import { CreatePetInput } from '@validation/schema/pet.schema';
 import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
 
 test.describe('createPet', () => {

@@ -1,5 +1,5 @@
-import { CreatePetInput } from '@api/schema/pet.schema';
 import { testImages } from '@api/test/testImages';
+import { CreatePetInput } from '@validation/schema/pet.schema';
 
 export const pets: CreatePetInput['body'][] = [
   {

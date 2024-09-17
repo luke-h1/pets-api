@@ -2,8 +2,11 @@ import { db } from '@api/db/prisma';
 import RedisDatabase from '@api/db/redis';
 import NotFoundError from '@api/errors/NotFoundError';
 import { authErrorCodes } from '@api/errors/auth';
-import { CreateUserInput, LoginUserInput } from '@api/schema/auth.schema';
 import logger from '@api/utils/logger';
+import {
+  CreateUserInput,
+  LoginUserInput,
+} from '@validation/schema/auth.schema';
 import omit from 'lodash/omit';
 import PasswordService from './password.service';
 
