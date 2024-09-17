@@ -51,6 +51,8 @@ test.describe('createPet', () => {
       id: expect.any(String),
       updatedAt: expect.any(String),
     });
+    // deployed envs can take a while to update cache
+    await sleep(5000);
 
     const existingPet = await request.get(`/api/pets/${response.id}`);
     expect(existingPet.status()).toEqual(200);
@@ -58,7 +60,7 @@ test.describe('createPet', () => {
     expect(existingPetResponse).toEqual(response);
 
     // deployed envs can take a while to update cache
-    await sleep(5000);
+    await sleep(1500);
 
     // 90k
     const LIMIT = 90000;
