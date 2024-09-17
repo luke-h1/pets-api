@@ -1,10 +1,13 @@
-import { LoginRequest, RegisterRequest } from '@api/requests/auth.requests';
 import { faker } from '@faker-js/faker';
 import { APIRequestContext, APIResponse, expect } from '@playwright/test';
-import { User } from '@prisma/client';
+import { CreateUserInput, LoginUserInput } from '@validation/schema';
+import { User } from '@validation/schema/user.schema';
 import crypto from 'crypto';
 import { v4 } from 'uuid';
-import { Dictionary } from '../../types/util';
+
+export interface Dictionary<T> {
+  [key: string]: T;
+}
 
 export const createUser = async (
   request: APIRequestContext,
@@ -16,7 +19,7 @@ export const createUser = async (
 
   const randomPassword = crypto.randomBytes(20).toString('hex');
 
-  const u: RegisterRequest['body'] = {
+  const u: CreateUserInput['body'] = {
     firstName: `TEST_USER-${faker.person.firstName()}`,
     lastName: `TEST_USER-${faker.person.lastName()}`,
     email: `TEST_USER-${v4()}em@email.com`,
@@ -38,7 +41,7 @@ export const createUser = async (
 };
 
 export const loginUser = async (
-  { email, password }: LoginRequest['body'],
+  { email, password }: LoginUserInput['body'],
   request: APIRequestContext,
 ): Promise<APIResponse> => {
   const result = await request.post('/api/auth/login', {

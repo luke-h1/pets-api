@@ -10,6 +10,8 @@ export const userSchema = z.object({
   role: z.enum(['USER', 'ADMIN', 'MODERATOR']),
 });
 
+export type User = z.infer<typeof userSchema>;
+
 export const userPayload = {
   body: userSchema
     .omit({

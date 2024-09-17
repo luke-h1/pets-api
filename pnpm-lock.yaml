@@ -383,6 +383,25 @@ importers:
         specifier: ^35.2.3
         version: 35.2.4
 
+  packages/e2e-server:
+    dependencies:
+      '@pets/validation':
+        specifier: workspace:*
+        version: link:../validation
+      '@playwright/test':
+        specifier: ^1.45.1
+        version: 1.46.0
+    devDependencies:
+      '@faker-js/faker':
+        specifier: ^8.4.1
+        version: 8.4.1
+      '@types/uuid':
+        specifier: ^10.0.0
+        version: 10.0.0
+      uuid:
+        specifier: ^10.0.0
+        version: 10.0.0
+
   packages/validation:
     dependencies:
       '@asteasolutions/zod-to-openapi':
