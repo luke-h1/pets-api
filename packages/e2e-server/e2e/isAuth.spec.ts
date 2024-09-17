@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { createUser, getCookieFromHeaders, loginUser } from '../util/user';
+import { createUser, getCookieFromHeaders, loginUser } from './util/user';
 
 test.describe('isAuth', () => {
   test('returns true for authenticated user', async ({ request }) => {

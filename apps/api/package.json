@@ -15,7 +15,6 @@
     "db:seed": "ts-node prisma/seed.ts",
     "db:studio": "pnpm prisma studio",
     "dev": "NODE_ENV=development ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/index.ts",
-    "e2e:local": "make e2e-local",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,scss,html}\"",
     "format:check": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx,css,scss,html}\"",
     "kill:port": "npx kill-port 8000",

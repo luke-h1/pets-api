@@ -1,6 +1,6 @@
-import { RegisterRequest } from '@api/requests/auth.requests';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
+import { CreateUserInput } from '@validation/schema';
 import { createUser } from '../util/user';
 
 test.describe('register', () => {
@@ -16,7 +16,7 @@ test.describe('register', () => {
   test('returns validation error when email is invalid', async ({
     request,
   }) => {
-    const u: RegisterRequest['body'] = {
+    const u: CreateUserInput['body'] = {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       email: 'invalid-email',
@@ -48,7 +48,7 @@ test.describe('register', () => {
   test('returns validation error when user already exists', async ({
     request,
   }) => {
-    const u: RegisterRequest['body'] = {
+    const u: CreateUserInput['body'] = {
       firstName: 'bob',
       lastName: faker.person.lastName(),
       email: faker.internet.email(),

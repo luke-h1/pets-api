@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
-import { PetStatus } from '@prisma/client';
 import { CreatePetInput } from '@validation/schema/pet.schema';
 import { createUser, loginUser, getCookieFromHeaders } from '../util/user';
 
@@ -27,7 +26,7 @@ test.describe('deletePet', () => {
         'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
         'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
       ],
-      status: PetStatus.AVAILABLE,
+      status: 'AVAILABLE',
       tags: ['pet', 'cat', 'tag'],
     };
 

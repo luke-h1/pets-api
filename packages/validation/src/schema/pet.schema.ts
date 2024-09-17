@@ -4,6 +4,8 @@ const ALLOWED_IMAGE_DOMAINS = [
   'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com',
 ];
 
+export type Pet = z.infer<typeof petSchema>;
+
 export const petSchema = z
   .object({
     id: z.string(),

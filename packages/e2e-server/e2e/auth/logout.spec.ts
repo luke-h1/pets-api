@@ -1,11 +1,11 @@
-import { RegisterRequest } from '@api/requests/auth.requests';
 import { faker } from '@faker-js/faker';
 import { test, expect } from '@playwright/test';
+import { CreateUserInput } from '@validation/schema';
 
 test.describe('logout', () => {
   test('logs out authenticated user', async ({ request }) => {
     // arrange
-    const u: RegisterRequest['body'] = {
+    const u: CreateUserInput['body'] = {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       email: faker.internet.email(),
