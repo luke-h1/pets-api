@@ -15,8 +15,6 @@ export const createUser = async (
   response: Omit<User, 'password'>;
   userPassword: string;
 }> => {
-  // arrange
-
   const randomPassword = crypto.randomBytes(20).toString('hex');
 
   const u: CreateUserInput['body'] = {

@@ -227,4 +227,47 @@ describe('auth', () => {
       expect(body).toEqual({ isAuth: false });
     });
   });
+
+  describe('me', () => {
+    test('returns current user details', async () => {
+      const user: RegisterRequest['body'] = {
+        email: 'bob@email.com',
+        firstName: 'test',
+        lastName: 'test',
+        password: 'password',
+      };
+      await supertest(app).post('/api/auth/register').send(user);
+      const { headers } = await supertest(app).post('/api/auth/login').send({
+        email: user.email,
+        password: user.password,
+      });
+
+      const cookieValue = headers['set-cookie'][0].split(';')[0].split('=')[1];
+      const cookieName = 'connect.sid';
+
+      const { body } = await supertest(app)
+        .get('/api/auth/me')
+        .set('Cookie', `${cookieName}=${cookieValue}`);
+
+      expect(body).toEqual({
+        email: user.email,
+        firstName: user.firstName,
+        id: expect.any(String),
+        lastName: user.lastName,
+        role: 'USER',
+      });
+    });
+    test('401s when not authenticated', async () => {
+      const { body } = await supertest(app).get('/api/auth/me');
+
+      expect(body).toEqual({
+        code: 'Forbidden',
+        errors: [],
+        message: 'You are not authorized to perform this action',
+        statusCode: 401,
+        title: 'Forbidden',
+        type: 'Forbidden',
+      });
+    });
+  });
 });
