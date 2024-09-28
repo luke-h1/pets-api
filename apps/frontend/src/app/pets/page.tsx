@@ -66,7 +66,8 @@ function PetsContent() {
           Pets
         </Heading>
         <Text fontSize="large" marginBottom="0.75rem">
-          {paging?.totalPages} Total results
+          {paging?.totalResults} Total{' '}
+          {paging?.totalResults === 1 ? 'result' : 'results'}
         </Text>
 
         <Box maxW={200}>

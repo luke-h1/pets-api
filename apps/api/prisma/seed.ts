@@ -2,6 +2,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-console */
 import { Pet, PetStatus, Role, User } from '@prisma/client';
+import crypto from 'crypto';
 import { db } from '../src/db/prisma';
 import { testImages } from '../src/test/testImages';
 
@@ -16,13 +17,14 @@ type PetWithoutPrismaKeys = Omit<
   'id' | 'createdAt' | 'updatedAt' | 'creatorId'
 > & { creatorId: string };
 
-// Function to generate user data
+const randomPassword = crypto.randomBytes(20).toString('hex');
+
 function generateUserData(index: number): UserWithoutPrismaKeys {
   return {
-    email: `user${index}@test.com`,
-    firstName: `firstName${index}`,
-    lastName: `lastName${index}`,
-    password: 'password123',
+    email: `user-${index}@test.com`,
+    firstName: `firstName-${index}`,
+    lastName: `lastName-${index}`,
+    password: randomPassword,
     role: Role.USER,
   };
 }
@@ -32,7 +34,7 @@ function generatePetData(
   creatorId: string,
 ): PetWithoutPrismaKeys {
   return {
-    name: `pet${index}`,
+    name: `a cute cat-${index}`,
     status: PetStatus.AVAILABLE,
     age: '1',
     birthDate: '1',
