@@ -23,8 +23,8 @@ runs:
       working-directory: apps/api
       shell: bash
 
-    - name: jest (server)
-      run: pnpm --filter=@pets/api test:ci
+    - name: jest
+      run: pnpm test:ci
       shell: bash
 
     - name: tsc

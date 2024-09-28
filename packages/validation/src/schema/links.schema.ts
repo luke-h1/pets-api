@@ -17,3 +17,5 @@ export const paginatedLinksSchema = linksSchema.extend({
   totalPages: z.number(),
   totalResults: z.number(),
 });
+
+export type PaginatedLinks = z.infer<typeof paginatedLinksSchema>;

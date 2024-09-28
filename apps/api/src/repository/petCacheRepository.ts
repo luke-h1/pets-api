@@ -25,26 +25,34 @@ export default class PetCacheRepository {
 
   async setPets(pets: Pet[]) {
     const db = this.redis.getInstance();
-    await db.set('pets', JSON.stringify(pets));
+    const pipeline = db.pipeline();
+    pets.forEach(pet => {
+      pipeline.set(`pets:${pet.id}`, JSON.stringify(pet));
+    });
+    pipeline.set('pets', JSON.stringify(pets));
+    await pipeline.exec();
   }
 
   async setPet(pet: Pet): Promise<null> {
     const db = this.redis.getInstance();
-    await db.del(`pets:${pet.id}`);
-    await db.set(`pets:${pet.id}`, JSON.stringify(pet));
+    const pipeline = db.pipeline();
+    pipeline.del(`pets:${pet.id}`);
+    pipeline.set(`pets:${pet.id}`, JSON.stringify(pet));
 
     const allPets = await db.get('pets');
     if (!allPets) {
       logger.info(`[REDIS]: cache miss setPet - pets not found in cache!`);
+      pipeline.exec();
       return null;
     }
-    await db.set('pets', JSON.stringify([...this.cacheToJSON(allPets), pet]));
+    pipeline.set('pets', JSON.stringify([...this.cacheToJSON(allPets), pet]));
 
+    await pipeline.exec();
     logger.info(`[REDIS]: pet added to pets:{id} and pets cache`);
     return null;
   }
 
-  async getPet(id: string): Promise<Pet[] | null> {
+  async getPet(id: string): Promise<Pet | null> {
     const db = this.redis.getInstance();
     const cachedPet = await db.get(`pets:${id}`);
 
@@ -100,5 +108,9 @@ export default class PetCacheRepository {
     }
 
     return JSON.parse(data);
+  }
+
+  private getByKeyName(...args: string[]) {
+    return `${args.join(':')}`;
   }
 }

@@ -24,8 +24,7 @@ test.describe('createPet', () => {
       birthDate: '2024-08-02',
       description: faker.animal.cat(),
       images: [
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
       ],
       status: 'AVAILABLE',
       tags: ['pet', 'cat', 'tag'],
@@ -84,11 +83,13 @@ test.describe('createPet', () => {
       totalResults: expect.any(Number),
     });
 
-    const allPetIds = allPetsResponse.pets.map((pet: { id: string }) => pet.id);
+    const allPetIds = allPetsResponse.results.map(
+      (pet: { id: string }) => pet.id,
+    );
     const matches = allPetIds.filter((id: string) => id === response.id);
     expect(matches.length).toEqual(1);
 
-    expect(allPetsResponse.pets).toContainEqual(response);
+    expect(allPetsResponse.results).toContainEqual(response);
   });
 
   test('returns validation error if not authenticated', async ({ request }) => {
@@ -99,8 +100,7 @@ test.describe('createPet', () => {
       birthDate: '2024-08-02',
       description: faker.animal.cat(),
       images: [
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
       ],
       status: 'AVAILABLE',
       tags: ['pet', 'cat', 'tag'],

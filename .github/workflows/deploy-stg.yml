@@ -1,10 +1,9 @@
-name: Deploy to staging (fly.io)
+name: Deploy to staging (fly.io & cloudflare pages)
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-      - feat/split-into-monorepo
 env:
   DATABASE_URL: postgres://pets:pets@localhost:5432/pets
   S3_ASSETS_BUCKET: pets-api-staging-assets
@@ -27,13 +26,12 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
-      - name: Build server
+      - name: Build
         uses: ./.github/actions/build
 
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: |
           flyctl deploy --dockerfile docker/api/Dockerfile --config fly.toml --push --build-arg GIT_SHA=${{ github.sha }} --build-arg DEPLOYED_AT=$(date -u +"%Y-%m-%dT%H:%M:%SZ") --build-arg DEPLOYED_BY=${{ github.actor }} --build-arg NEW_RELIC_APP_NAME=${{ env.NR_APP_NAME }} --build-arg NEW_RELIC_LICENSE_KEY=${{ env.NR_LICENSE_KEY }} --build-arg NEW_RELIC_APPLICATION_LOGGING_FORWARDING_ENABLED=true
-
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 

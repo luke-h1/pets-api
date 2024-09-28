@@ -1,5 +1,7 @@
 import Page from '@frontend/components/Page/Page';
 
+export const runtime = 'edge';
+
 interface Props {
   params: {
     id: string;

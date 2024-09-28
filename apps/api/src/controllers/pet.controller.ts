@@ -30,7 +30,7 @@ export default class PetController {
     const totalPages = pageSize > 0 ? Math.ceil(totalResults / pageSize) : 0;
 
     return res.status(200).json({
-      pets,
+      results: pets,
       _links: createLinks({
         self: {
           url: getFullRequestUrl(req),
