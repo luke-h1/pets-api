@@ -20,6 +20,27 @@ export default class AuthService {
     this.passwordService = new PasswordService();
   }
 
+  async me(id: string) {
+    const user = await db.user.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        firstName: true,
+        lastName: true,
+      },
+    });
+
+    if (!user) {
+      return authErrorCodes.UserNotFound;
+    }
+
+    return user;
+  }
+
   async register(user: CreateUserInput['body']) {
     const existingUser = await db.user.findFirst({
       where: {

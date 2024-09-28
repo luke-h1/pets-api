@@ -109,4 +109,36 @@ describe('AuthService', () => {
       expect(result).toEqual(true);
     });
   });
+
+  describe('me', () => {
+    test('returns existing user', async () => {
+      const user: CreateUserInput['body'] = {
+        email: 'bob@bob.com',
+        firstName: 'bob',
+        lastName: 'bob',
+        password: 'password12345',
+      };
+      const registerResult = await authService.register(user);
+
+      if (typeof registerResult === 'string') {
+        throw new Error('User registration failed');
+      }
+
+      const result = await authService.me(registerResult.id);
+
+      expect(result).toEqual({
+        email: 'bob@bob.com',
+        firstName: 'bob',
+        id: expect.any(String),
+        lastName: 'bob',
+        role: 'USER',
+      });
+    });
+
+    test('404s if user does not exist', async () => {
+      const result = await authService.me('123');
+
+      expect(result).toEqual(authErrorCodes.UserNotFound);
+    });
+  });
 });

@@ -1,8 +1,44 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
+import { userPayload } from '@validation/schema';
 import { responseSchema } from '@validation/schema/response.schema';
 import { z } from 'zod';
 
 const authPaths = (registry: OpenAPIRegistry) => {
+  registry.registerPath({
+    method: 'get',
+    path: '/api/auth/me',
+    description: 'Returns the current user',
+    summary: 'Get current user',
+    responses: {
+      200: {
+        description: 'Current user',
+        content: {
+          'application/json': {
+            schema: userPayload.body.extend({
+              role: z.enum(['USER', 'ADMIN', 'MODERATOR']),
+            }),
+          },
+        },
+      },
+      401: {
+        description: 'Unauthorized',
+        content: {
+          'application/json': {
+            schema: responseSchema,
+          },
+        },
+      },
+      404: {
+        description: 'User not found',
+        content: {
+          'application/json': {
+            schema: responseSchema,
+          },
+        },
+      },
+    },
+    tags: ['auth'],
+  });
   registry.registerPath({
     method: 'get',
     path: '/api/auth',

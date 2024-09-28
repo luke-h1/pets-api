@@ -40,10 +40,10 @@ Frontend:
 
 ## Environments
 
-| Environment | API                                   | Frontend                    |
-| ----------- | ------------------------------------- | --------------------------- |
-| Production  | TBD                                   | TBD                         |
-| Staging     | https://pets-staging.lhowsam.com/docs | ui-pets-staging.lhowsam.com |
+| Environment | API                                   | Frontend                            |
+| ----------- | ------------------------------------- | ----------------------------------- |
+| Production  | TBD                                   | TBD                                 |
+| Staging     | https://pets-staging.lhowsam.com/docs | https://ui-pets-staging.lhowsam.com |
 
 ## Getting Started
 

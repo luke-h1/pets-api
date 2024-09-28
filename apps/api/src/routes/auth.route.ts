@@ -1,4 +1,5 @@
 import AuthController from '@api/controllers/auth.controller';
+import isAuth from '@api/middleware/isAuth';
 import validateResource from '@api/middleware/validateResource';
 import {
   createUserSchema,
@@ -51,6 +52,10 @@ export default class AuthRoutes {
 
     this.app.get('/api/auth', (req, res) => {
       return this.authController.isAuthenticated(req, res);
+    });
+
+    this.app.get('/api/auth/me', isAuth(), (req, res) => {
+      return this.authController.me(req, res);
     });
   }
 }

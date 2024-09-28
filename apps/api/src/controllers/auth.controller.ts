@@ -96,6 +96,30 @@ export default class AuthController {
     });
   }
 
+  async me(req: Request, res: Response) {
+    const result = await this.authService.me(req.session.userId);
+
+    if (result === authErrorCodes.UserNotFound) {
+      throw new NotFoundError({
+        code: authErrorCodes.UserNotFound,
+        title: 'User not found',
+        statusCode: 404,
+        message: 'User not found',
+        errors: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            received: 'undefined',
+            path: ['body', 'email'],
+            message: 'User not found',
+          },
+        ],
+      });
+    }
+
+    return res.status(200).json(result);
+  }
+
   // async resetPassword(req: ResetPasswordRequest, res: Response) {
   //   const result = await this.authService.resetPassword(req.body);
 
