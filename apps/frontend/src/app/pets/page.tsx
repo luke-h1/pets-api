@@ -9,12 +9,21 @@ import petQueries from '@frontend/queries/petQueries';
 import { SortOrder } from '@frontend/services/petService';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useCallback, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 function PetsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [sortBy, setSortBy] = useState<'asc' | 'desc'>('asc');
+  const [sortBy, setSortBy] = useState<'asc' | 'desc'>(
+    (searchParams.get('order') as 'asc' | 'desc') || 'asc',
+  );
+
+  useEffect(() => {
+    const order = searchParams.get('order') as 'asc' | 'desc';
+    if (order && order !== sortBy) {
+      setSortBy(order);
+    }
+  }, [searchParams, sortBy]);
 
   const {
     data: petsData,
