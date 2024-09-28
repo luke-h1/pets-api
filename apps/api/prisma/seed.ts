@@ -37,7 +37,7 @@ function generatePetData(
     age: '1',
     birthDate: '1',
     breed: 'breed',
-    description: 'description',
+    description: 'A cute cat',
     images: testImages,
     tags: ['tag1', 'tag2'],
     creatorId,

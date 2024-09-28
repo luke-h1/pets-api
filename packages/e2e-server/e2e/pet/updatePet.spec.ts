@@ -24,8 +24,7 @@ test.describe('updatePet', () => {
       birthDate: '2024-08-02',
       description: faker.animal.cat(),
       images: [
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
       ],
       status: 'AVAILABLE',
       tags: ['pet', 'cat', 'tag'],
@@ -75,7 +74,7 @@ test.describe('updatePet', () => {
     expect(allPets.status()).toEqual(200);
     const allPetsResponse = await allPets.json();
 
-    const updatedPet = allPetsResponse.pets.find(
+    const updatedPet = allPetsResponse.results.find(
       (pet: Pet) => pet.id === body.id,
     );
 
@@ -101,8 +100,7 @@ test.describe('updatePet', () => {
       birthDate: '2024-08-02',
       description: faker.animal.cat(),
       images: [
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
       ],
       status: 'AVAILABLE',
       tags: ['pet', 'cat', 'tag'],
@@ -149,8 +147,7 @@ test.describe('updatePet', () => {
       birthDate: '2024-08-02',
       description: faker.animal.cat(),
       images: [
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
+        'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
       ],
       status: 'AVAILABLE',
       tags: ['pet', 'cat', 'tag'],

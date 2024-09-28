@@ -1,5 +1,5 @@
+import Providers from '@frontend/components/Providers';
 import type { Metadata } from 'next';
-import '@frontend/styles/main.scss';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -13,7 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

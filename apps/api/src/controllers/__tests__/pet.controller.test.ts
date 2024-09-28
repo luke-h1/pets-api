@@ -86,7 +86,7 @@ describe('pet', () => {
 
       const { body, statusCode } = await supertest(app).get('/api/pets');
       expect(statusCode).toBe(200);
-      expect(body.pets).toHaveLength(6);
+      expect(body.results).toHaveLength(6);
     });
   });
 
@@ -120,7 +120,7 @@ describe('pet', () => {
         totalPages: 6,
         totalResults: 6,
       },
-      pets: [
+      results: [
         {
           age: '12',
           birthDate: '2022',
@@ -163,7 +163,7 @@ describe('pet', () => {
         totalPages: 6,
         totalResults: 6,
       },
-      pets: [
+      results: [
         {
           age: '12',
           birthDate: '2022',
@@ -201,7 +201,7 @@ describe('pet', () => {
         totalPages: 6,
         totalResults: 6,
       },
-      pets: [
+      results: [
         {
           age: '12',
           birthDate: '2022',
@@ -238,7 +238,7 @@ describe('pet', () => {
         totalPages: 6,
         totalResults: 6,
       },
-      pets: [
+      results: [
         {
           age: '12',
           birthDate: '2022',
@@ -275,7 +275,7 @@ describe('pet', () => {
         totalPages: 6,
         totalResults: 6,
       },
-      pets: [
+      results: [
         {
           age: '12',
           birthDate: '2022',
@@ -315,7 +315,7 @@ describe('pet', () => {
         totalPages: 6,
         totalResults: 6,
       },
-      pets: [],
+      results: [],
     });
   });
 
@@ -367,7 +367,7 @@ describe('pet', () => {
         totalPages: 1,
         totalResults: 2,
       },
-      pets: [
+      results: [
         {
           age: '12',
           birthDate: '2022',
@@ -447,7 +447,7 @@ describe('pet', () => {
         totalPages: 1,
         totalResults: 2,
       },
-      pets: [
+      results: [
         {
           age: '12',
           birthDate: '2022',

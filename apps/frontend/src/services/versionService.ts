@@ -5,6 +5,6 @@ const versionService = {
   getVersion: async (): Promise<VersionSchema> => {
     return petApi.get('/version');
   },
-};
+} as const;
 
 export default versionService;

@@ -18,6 +18,8 @@
 
 ## tech stack
 
+Server:
+
 - [Node.js](https://nodejs.org/en/) - runtime environment
 - [Express](https://expressjs.com/) - web framework
 - [PostgreSQL](https://www.postgresql.org/) - persistence layer
@@ -29,6 +31,20 @@
 - [Docker](https://www.docker.com/) - Containerization and deployment
 - [AWS](https://aws.amazon.com/) - Cloud provider (ECR, ECS, ELB, Route 53)
 - [Terraform](https://www.terraform.io/) - Infrastructure as code
+
+Frontend:
+
+- [Next.js](https://nextjs.org/) - Frontend framework
+- [React](https://reactjs.org/) - Frontend library
+- [Cloudflare](https://www.cloudflare.com/) - CDN + deployment
+
+## Environments
+
+| Environment | API                                   | Frontend                                  |
+| ----------- | ------------------------------------- | ----------------------------------------- |
+| Production  | TBD                                   | TBD                                       |
+| Staging     | https://pets-staging.lhowsam.com/docs | ui-pets-staging.lhowsam.com               |
+| Preview     | https://pets-staging.lhowsam.com/docs | <branch-name>-ui-pets-staging.lhowsam.com |
 
 ## Getting Started
 

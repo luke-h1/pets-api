@@ -5,6 +5,8 @@ const packageJsonPaths = [
   'package.json',
   'apps/api/package.json',
   'apps/frontend/package.json',
+  'packages/e2e-server/package.json',
+  'packages/validation/package.json',
 ];
 
 packageJsonPaths.forEach(packageJsonPath => {

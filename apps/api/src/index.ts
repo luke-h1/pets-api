@@ -1,6 +1,11 @@
 import { envSchema } from '@api/utils/env';
+import isDbAvailable from '@api/utils/isDbAvailable';
 import logger from '@api/utils/logger';
+import { exec as execCb } from 'node:child_process';
+import { promisify } from 'node:util';
 import CreateServer from './server';
+
+const exec = promisify(execCb);
 
 class Main {
   private validateEnvironmentVariables() {
@@ -38,11 +43,46 @@ class Main {
       );
       throw new Error('issue reading environment variables');
     } else {
-      logger.info('parsed env variables succesfully');
+      logger.info('parsed env variables successfully');
     }
   }
 
-  public start() {
+  private async runMigrations() {
+    // only run migrations in a production setting
+    // for development we can just use the CLI manually
+    const shouldRunMigrations =
+      process.env.NODE_ENV === 'production' &&
+      !process.env.API_BASE_URL.includes('localhost');
+
+    if (!shouldRunMigrations) {
+      return;
+    }
+
+    if (!process.env.DATABASE_URL) {
+      throw new Error('no DATABASE_URL env variable supplied!');
+    }
+
+    const dbReady = await isDbAvailable();
+
+    if (!dbReady) {
+      throw new Error('DB cannot be reached');
+    }
+
+    const { stdout, stderr } = await exec('pnpm db:migrate-dev', {
+      env: {
+        ...process.env,
+      },
+    });
+
+    logger.info('-------------------');
+    logger.info('Migrations');
+    logger.info('stdout ->', stdout);
+    logger.info('stderr ->', stderr);
+    logger.info('-------------------');
+  }
+
+  public async start() {
+    await this.runMigrations();
     this.validateEnvironmentVariables();
     const app = CreateServer.init();
     const port = process.env.PORT ?? 8000;
@@ -54,4 +94,4 @@ class Main {
 }
 
 const main = new Main();
-main.start();
+main.start().then(r => r);

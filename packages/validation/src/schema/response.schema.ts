@@ -8,3 +8,4 @@ export const responseSchema = z.object({
   message: z.string(),
   errors: z.array(z.object({})).optional(),
 });
+export type ServerValidationError = z.infer<typeof responseSchema>;
