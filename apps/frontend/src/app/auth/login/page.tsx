@@ -7,6 +7,7 @@ import {
   Button,
   Flex,
   FormControl,
+  FormErrorMessage,
   Heading,
   Input,
   InputGroup,
@@ -102,7 +103,9 @@ export default function LoginPage() {
         <Heading color="teal.400">Login</Heading>
         <Box minW={{ base: '90%', md: '468px' }}>
           {Boolean(Object.keys(errors)?.length) && (
-            <Alert>There are errors in the form.</Alert>
+            <Alert backgroundColor="red" color="#ececee">
+              There are errors in the form.
+            </Alert>
           )}
           <form onSubmit={handleSubmit(onSubmit)}>
             <Stack
