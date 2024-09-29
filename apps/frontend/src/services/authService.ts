@@ -16,8 +16,11 @@ const authService = {
   register: async (input: CreateUserInput): Promise<RegisterResponse> => {
     return petApi.post('/auth/register', input);
   },
-  login: async (input: LoginUserInput): Promise<LoginResponse> => {
-    return petApi.post('/auth/login', input);
+  login: async (input: LoginUserInput['body']) => {
+    return petApi.post<Omit<User, 'password'> | ServerValidationError>(
+      '/auth/login',
+      input,
+    );
   },
   logout: async (): Promise<void> => {
     return petApi.post('/auth/logout');

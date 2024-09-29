@@ -3,6 +3,7 @@ import Axios, {
   AxiosRequestConfig,
   AxiosResponse,
   CustomParamsSerializer,
+  isAxiosError,
 } from 'axios';
 import omit from 'lodash/omit';
 import qs from 'qs';
@@ -49,12 +50,19 @@ export default class Client {
       method: AxiosRequestConfig['method'];
     },
   ): Promise<TValue> {
-    const response = await this.axios(config);
+    try {
+      const response = await this.axios(config);
 
-    if ('rawResponse' in config && config.rawResponse) {
-      return omit(response, ['config', 'request']) as TValue;
+      if ('rawResponse' in config && config.rawResponse) {
+        return omit(response, ['config', 'request']) as TValue;
+      }
+      return response.data;
+    } catch (error) {
+      if (isAxiosError(error)) {
+        return error.response?.data;
+      }
+      throw error;
     }
-    return response.data;
   }
 
   public get<TValue = unknown>(

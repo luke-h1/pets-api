@@ -1,12 +1,12 @@
 import { z } from '@validation/util/validation';
 import omit from 'lodash/omit';
 
-const loginPayload = {
+export const loginPayload = {
   email: z.string().email(),
   password: z.string().min(6),
 };
 
-const registerPayload = {
+export const registerPayload = {
   body: z.object({
     firstName: z.string(),
     lastName: z.string(),
