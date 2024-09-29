@@ -6,6 +6,7 @@ import composeProviders from '@frontend/hocs/composeProviders';
 import {
   QueryClient,
   QueryClientProvider as BaseQueryClientProvider,
+  HydrationBoundary,
 } from '@tanstack/react-query';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import { MotionConfig as FramerMotionConfig } from 'framer-motion';
@@ -44,7 +45,9 @@ function QueryClientProvider({ children }: { children: ReactNode }) {
 
   return (
     <BaseQueryClientProvider client={queryClient}>
-      <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+      <HydrationBoundary queryClient={queryClient}>
+        <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+      </HydrationBoundary>
     </BaseQueryClientProvider>
   );
 }
