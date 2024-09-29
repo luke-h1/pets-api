@@ -7,7 +7,6 @@ import { User } from '@validation/schema/user.schema';
 import { petApi } from './api';
 
 type RegisterResponse = User | ServerValidationError;
-type LoginResponse = Omit<User, 'password'> | ServerValidationError;
 
 const authService = {
   isAuth: async (): Promise<{ isAuth: boolean }> => {

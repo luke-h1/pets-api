@@ -14,12 +14,13 @@ import {
   InputRightElement,
   Link,
   Stack,
+  useToast,
 } from '@chakra-ui/react';
 import AlertInput from '@frontend/components/form/AlertInput';
 import authService from '@frontend/services/authService';
+import toErrorMap from '@frontend/util/form/toErrorMap';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginPayload, LoginUserInput } from '@validation/schema/auth.schema';
-import toErrorMap from '@validation/util/toErrorMap';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Path, SubmitHandler, useForm } from 'react-hook-form';
@@ -27,7 +28,9 @@ import z from 'zod';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const router = useRouter();
+  const toast = useToast();
 
   const handleShowClick = () => {
     setShowPassword(!showPassword);
@@ -50,16 +53,33 @@ export default function LoginPage() {
     const result = await authService.login(data);
 
     if ('errors' in result) {
-      const errs = toErrorMap(result.errors);
+      toast({
+        title: 'Login',
+        description: 'Error logging in',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        colorScheme: 'red',
+      });
 
-      if (errs) {
-        errs.forEach(({ field, message }) => {
+      const formattedErrors = toErrorMap(result.errors);
+
+      if (formattedErrors) {
+        formattedErrors.forEach(({ field, message }) => {
           setError(field as Path<LoginUserInput['body']>, { message });
         });
       }
     } else {
-      console.log('result', result);
-      router.push('/pets');
+      setTimeout(() => {
+        toast({
+          title: 'Login',
+          description: 'Login succesfull!...',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        router.push('/pets');
+      }, 3000);
     }
   };
 
