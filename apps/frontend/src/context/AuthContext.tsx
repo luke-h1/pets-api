@@ -49,7 +49,7 @@ export function AuthContextProvider({ children }: Props) {
     })();
   }, []);
 
-  const login = async (input: LoginUserInput) => {
+  const login = async (input: LoginUserInput['body']) => {
     const result = await authService.login(input);
 
     if ('id' in result) {
