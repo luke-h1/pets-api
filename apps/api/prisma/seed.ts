@@ -8,7 +8,7 @@ import { db } from '../src/db/prisma';
 import { testImages } from '../src/test/testImages';
 
 const USER_BATCH_SIZE = 10;
-const PETS_PER_USER = 1000;
+const PETS_PER_USER = 10;
 const TOTAL_USERS = 50;
 
 type UserWithoutPrismaKeys = Omit<User, 'id' | 'createdAt' | 'updatedAt'>;

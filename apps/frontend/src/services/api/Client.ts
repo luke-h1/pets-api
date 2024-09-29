@@ -176,4 +176,8 @@ export default class Client {
   public get baseURL(): string {
     return this.axios.defaults.baseURL ?? '';
   }
+
+  public setCookie(name: string, value: string): void {
+    this.axios.defaults.headers.Cookie = `${name}=${value}`;
+  }
 }

@@ -1,11 +1,7 @@
-'use client';
-
 import { Box, Heading, Image, Text } from '@chakra-ui/react';
 import Page from '@frontend/components/Page/Page';
-import petQueries from '@frontend/queries/petQueries';
-import { isServer, useQuery } from '@tanstack/react-query';
+import petService from '@frontend/services/petService';
 import { notFound } from 'next/navigation';
-import PhotoGallery from 'react-photo-gallery';
 
 export const runtime = 'edge';
 
@@ -15,26 +11,10 @@ interface Props {
   };
 }
 
-export default function PetPage({ params }: Props) {
+export default async function PetPage({ params }: Props) {
   const { id } = params;
 
-  const {
-    data: pet,
-    isError,
-    isFetching,
-    isLoading,
-  } = useQuery({
-    ...petQueries.get(id),
-    enabled: !!id && !isServer,
-  });
-
-  if (isError) {
-    return <Page>Error</Page>;
-  }
-
-  if (isLoading || isFetching) {
-    return <Page>Loading...</Page>;
-  }
+  const pet = await petService.getPet(id);
 
   if (!pet) {
     notFound();
@@ -67,8 +47,8 @@ export default function PetPage({ params }: Props) {
             </Box>
           ))}
         </Box>
-        <Text>
-          <strong>Description:</strong> {pet.description}
+        <Text fontSize="22px" marginTop="0.75rem">
+          {pet.description}
         </Text>
       </Box>
     </Page>

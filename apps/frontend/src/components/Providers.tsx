@@ -2,6 +2,7 @@
 
 import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider } from '@chakra-ui/react';
+import { AuthContextProvider } from '@frontend/context/AuthContext';
 import composeProviders from '@frontend/hocs/composeProviders';
 import {
   QueryClient,
@@ -52,10 +53,15 @@ function QueryClientProvider({ children }: { children: ReactNode }) {
   );
 }
 
+function AuthContext({ children }: { children: ReactNode }) {
+  return <AuthContextProvider>{children}</AuthContextProvider>;
+}
+
 const ComposedProviders = composeProviders(
   ThemeProvider,
   MotionConfig,
   QueryClientProvider,
+  AuthContext,
 );
 
 export default function Providers({ children }: Props) {

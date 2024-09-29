@@ -76,7 +76,6 @@ export default function WithAction() {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack spacing={8} alignItems="center">
-          <Box>Logo</Box>
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
             {links &&
               links.map(link => (

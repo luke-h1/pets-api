@@ -7,7 +7,7 @@ import { User } from '@validation/schema/user.schema';
 import { petApi } from './api';
 
 type RegisterResponse = User | ServerValidationError;
-type LoginResponse = Pick<User, 'id' | 'email'> | ServerValidationError;
+type LoginResponse = Omit<User, 'password'> | ServerValidationError;
 
 const authService = {
   isAuth: async (): Promise<{ isAuth: boolean }> => {
@@ -21,6 +21,9 @@ const authService = {
   },
   logout: async (): Promise<void> => {
     return petApi.post('/auth/logout');
+  },
+  me: async (): Promise<User> => {
+    return petApi.get('/auth/me');
   },
 } as const;
 
