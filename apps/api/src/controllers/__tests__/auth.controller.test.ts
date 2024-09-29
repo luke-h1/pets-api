@@ -123,9 +123,9 @@ describe('auth', () => {
           },
         ],
         message: 'User not found',
-        statusCode: 404,
+        statusCode: 400,
         title: 'User not found',
-        type: 'Not Found',
+        type: 'Bad request',
       });
       expect(statusCode).toEqual(404);
     });
