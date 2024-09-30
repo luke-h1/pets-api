@@ -56,6 +56,7 @@ export default class Client {
       if ('rawResponse' in config && config.rawResponse) {
         return omit(response, ['config', 'request']) as TValue;
       }
+
       return response.data;
     } catch (error) {
       if (isAxiosError(error)) {

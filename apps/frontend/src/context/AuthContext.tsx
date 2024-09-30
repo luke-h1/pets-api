@@ -13,6 +13,8 @@ import {
   useState,
 } from 'react';
 
+// TODO: set cookie when login, clear cookie on logout
+
 interface AuthContextState {
   user?: User;
   isAuth: boolean;
