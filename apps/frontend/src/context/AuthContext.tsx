@@ -64,7 +64,7 @@ export function AuthContextProvider({ children }: Props) {
       await isAuth();
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [state]);
 
   const login = async (input: LoginUserInput['body']) => {
     const result = await authService.login(input);
