@@ -223,7 +223,6 @@ describe('auth', () => {
 
     test('returns false if user is unauthenticated', async () => {
       const { body } = await supertest(app).get('/api/auth');
-
       expect(body).toEqual({ isAuth: false });
     });
   });

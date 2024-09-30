@@ -70,7 +70,7 @@ class CreateServer {
     this.app.use(
       cors({
         credentials: true,
-        origin: ['*'],
+        origin: ['http://localhost:3000'],
       }),
     );
     this.app.use(compression());

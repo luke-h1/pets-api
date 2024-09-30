@@ -56,13 +56,6 @@ export default class Client {
       // Check for cookie in config and set it
       const response = await this.axios(config);
 
-      console.log('response', response);
-      const cookieName = 'connect.sid';
-
-      const cookie = (response.headers['set-cookie'] as string[])
-        .find(cookie => cookie.includes(cookieName))
-        ?.match(new RegExp(`^${cookieName}=(.+?);`))?.[1];
-
       if ('rawResponse' in config && config.rawResponse) {
         return omit(response, ['config', 'request']) as TValue;
       }
@@ -88,7 +81,9 @@ export default class Client {
 
   public get<TValue = unknown>(
     url: string,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
@@ -112,7 +107,9 @@ export default class Client {
   public post<TValue = unknown>(
     url: string,
     data: unknown,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
@@ -137,7 +134,9 @@ export default class Client {
   public put<TValue = unknown>(
     url: string,
     data: unknown,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({ ...config, url, data, method: 'PUT' });
   }
@@ -157,7 +156,9 @@ export default class Client {
   public patch<TValue = unknown>(
     url: string,
     data: unknown,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
@@ -179,7 +180,9 @@ export default class Client {
 
   public delete<TValue = unknown>(
     url: string,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
