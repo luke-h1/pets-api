@@ -1,6 +1,7 @@
 import { pets as mockPets } from '@api/controllers/__mocks__/pet';
 import { user } from '@api/controllers/__mocks__/user';
 import { db } from '@api/db/prisma';
+import { testImages } from '@api/test/testImages';
 import { PetStatus } from '@prisma/client';
 import { CreatePetInput } from '@validation/schema/pet.schema';
 import PetService from '../pet.service';
@@ -36,9 +37,7 @@ describe('petService', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Buddy',
           status: 'AVAILABLE',
           tags: ['dog'],
@@ -52,9 +51,7 @@ describe('petService', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Mittens',
           status: 'ADOPTED',
           tags: ['dog'],
@@ -68,9 +65,7 @@ describe('petService', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Charlie',
           status: 'AVAILABLE',
           tags: ['dog'],
@@ -84,9 +79,7 @@ describe('petService', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Whiskers',
           status: 'PENDING',
           tags: ['dog'],
@@ -100,9 +93,7 @@ describe('petService', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Max',
           status: 'ADOPTED',
           tags: ['dog'],
@@ -116,9 +107,7 @@ describe('petService', () => {
           creatorId: u.id,
           description: 'dog',
           id: expect.any(String),
-          images: [
-            'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/GTgYHDgWsAAX4HO.png',
-          ],
+          images: testImages,
           name: 'Luna',
           status: 'AVAILABLE',
           tags: ['dog'],
@@ -166,9 +155,7 @@ describe('petService', () => {
         age: '2',
         birthDate: '2022-02-02',
         breed: 'cat :)',
-        images: [
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        ],
+        images: testImages,
         status: PetStatus.AVAILABLE,
         tags: ['cute', 'indoor'],
       };
@@ -197,9 +184,7 @@ describe('petService', () => {
         age: '2',
         birthDate: '2022-02-02',
         breed: 'cat :)',
-        images: [
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        ],
+        images: testImages,
         status: PetStatus.AVAILABLE,
         tags: ['cute', 'indoor'],
       };
@@ -234,9 +219,7 @@ describe('petService', () => {
         age: '2',
         birthDate: '2022-02-02',
         breed: 'cat :)',
-        images: [
-          'https://pets-api-staging-assets.s3.eu-west-2.amazonaws.com/1723990567355-GTgYHDgWsAAX4HO.png',
-        ],
+        images: testImages,
         status: PetStatus.AVAILABLE,
         tags: ['cute', 'indoor'],
       };

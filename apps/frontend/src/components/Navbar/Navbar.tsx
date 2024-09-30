@@ -1,10 +1,9 @@
 'use client';
 
-import { HamburgerIcon, CloseIcon, AddIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
   IconButton,
   Button,
@@ -15,8 +14,11 @@ import {
   MenuDivider,
   useDisclosure,
   useColorModeValue,
+  Avatar,
 } from '@chakra-ui/react';
+import { useAuthContext } from '@frontend/context/AuthContext';
 import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
 
 interface NavigationLink {
   id: number;
@@ -62,8 +64,10 @@ function NavLink(link: NavigationLink) {
   );
 }
 
-export default function WithAction() {
+export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isAuth, logout } = useAuthContext();
+  const router = useRouter();
 
   return (
     <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
@@ -76,7 +80,6 @@ export default function WithAction() {
           onClick={isOpen ? onClose : onOpen}
         />
         <HStack spacing={8} alignItems="center">
-          <Box>Logo</Box>
           <HStack as="nav" spacing={4} display={{ base: 'none', md: 'flex' }}>
             {links &&
               links.map(link => (
@@ -89,36 +92,49 @@ export default function WithAction() {
               ))}
           </HStack>
         </HStack>
+
         <Flex alignItems="center">
-          <Button
-            variant="solid"
-            colorScheme="teal"
-            size="sm"
-            mr={4}
-            leftIcon={<AddIcon />}
-          >
-            Action
-          </Button>
-          <Menu>
-            <MenuButton
-              as={Button}
-              rounded="full"
-              variant="link"
-              cursor="pointer"
-              minW={0}
+          {isAuth ? (
+            <Button
+              variant="solid"
+              colorScheme="teal"
+              size="sm"
+              mr={4}
+              onClick={() => logout()}
             >
-              <Avatar
-                size="sm"
-                src="https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-              />
-            </MenuButton>
-            <MenuList>
-              <MenuItem>Logout</MenuItem>
-              <MenuItem>My Pets</MenuItem>
-              <MenuDivider />
-              <MenuItem>Link 3</MenuItem>
-            </MenuList>
-          </Menu>
+              Logout
+            </Button>
+          ) : (
+            <Button
+              variant="solid"
+              colorScheme="teal"
+              size="sm"
+              mr={4}
+              onClick={() => router.push('/auth/login')}
+            >
+              Login
+            </Button>
+          )}
+
+          {isAuth ? (
+            <Menu>
+              <MenuButton
+                as={Button}
+                rounded="full"
+                variant="link"
+                cursor="pointer"
+                minW={0}
+              >
+                <Avatar size="sm" src="/static/avatar.png" />
+              </MenuButton>
+              <MenuList>
+                <MenuItem>My listings</MenuItem>
+                <MenuItem>Create pet</MenuItem>
+                <MenuDivider />
+                <MenuItem>pets</MenuItem>
+              </MenuList>
+            </Menu>
+          ) : null}
         </Flex>
       </Flex>
 

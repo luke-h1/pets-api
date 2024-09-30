@@ -67,7 +67,12 @@ class CreateServer {
 
     this.app.disable('x-powered-by');
     this.app.set('json spaces', 2);
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        credentials: true,
+        origin: ['http://localhost:3000'],
+      }),
+    );
     this.app.use(compression());
 
     const RedisStore = connectRedis(session);
