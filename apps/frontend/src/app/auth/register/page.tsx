@@ -19,13 +19,16 @@ import AlertInput from '@frontend/components/form/AlertInput';
 import authService from '@frontend/services/authService';
 import toErrorMap from '@frontend/util/form/toErrorMap';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginPayload, LoginUserInput } from '@validation/schema/auth.schema';
+import {
+  CreateUserInput,
+  registerPayload,
+} from '@validation/schema/auth.schema';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Path, SubmitHandler, useForm } from 'react-hook-form';
 import z from 'zod';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const router = useRouter();
@@ -40,47 +43,49 @@ export default function LoginPage() {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting, isValid },
-  } = useForm<LoginUserInput['body']>({
-    resolver: zodResolver(z.object({ ...loginPayload })),
+  } = useForm<CreateUserInput['body']>({
+    resolver: zodResolver(z.object(registerPayload)),
     defaultValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
     },
   });
 
-  const onSubmit: SubmitHandler<LoginUserInput['body']> = async data => {
-    const result = await authService.login(data);
+  const onSubmit: SubmitHandler<CreateUserInput['body']> = async data => {
+    const result = await authService.register(data);
 
     if ('errors' in result) {
       toast({
-        title: 'Login',
-        description: 'Error logging in',
+        title: 'Register',
+        description: 'Error registering',
         status: 'error',
         duration: 3000,
         isClosable: true,
         colorScheme: 'red',
       });
-
       const formattedErrors = toErrorMap(result.errors);
 
       if (formattedErrors) {
         formattedErrors.forEach(({ field, message }) => {
-          setError(field as Path<LoginUserInput['body']>, { message });
+          setError(field as Path<CreateUserInput['body']>, { message });
         });
       }
     } else {
       setTimeout(() => {
         toast({
-          title: 'Login',
-          description: 'Login succesfull!...',
+          title: 'Register',
+          description: 'Register successfull!',
           status: 'success',
           duration: 3000,
           isClosable: true,
         });
-        router.push('/pets');
+        router.push('/auth/login');
       }, 3000);
     }
   };
+  console.log('errors', errors);
 
   return (
     <>
@@ -91,7 +96,7 @@ export default function LoginPage() {
         alignItems="center"
       >
         <Avatar bg="teal.500" />
-        <Heading color="teal.400">Login</Heading>
+        <Heading color="teal.400">Register</Heading>
         <Box minW={{ base: '90%', md: '468px' }}>
           {Boolean(Object.keys(errors)?.length) && (
             <Alert backgroundColor="red" color="#ececee">
@@ -106,17 +111,53 @@ export default function LoginPage() {
               boxShadow="md"
             >
               <FormControl>
+                <InputGroup
+                  display="flex"
+                  flexDir="column"
+                  marginBottom="0.45rem"
+                >
+                  <InputLeftElement pointerEvents="none" />
+                  <Input
+                    type="text"
+                    placeholder="First name"
+                    {...register('firstName')}
+                    aria-invalid={Boolean(errors.firstName)}
+                  />
+                  {errors.firstName && (
+                    <Box>
+                      <AlertInput>{errors.firstName.message}</AlertInput>
+                    </Box>
+                  )}
+                </InputGroup>
+                <InputGroup display="flex" flexDir="column">
+                  <InputLeftElement pointerEvents="none" />
+                  <Input
+                    type="text"
+                    placeholder="last name"
+                    {...register('lastName')}
+                    aria-invalid={Boolean(errors.lastName)}
+                  />
+                  {errors.lastName && (
+                    <Box>
+                      <AlertInput>{errors.lastName.message}</AlertInput>
+                    </Box>
+                  )}{' '}
+                </InputGroup>
+              </FormControl>
+              <FormControl>
                 <InputGroup display="flex" flexDir="column">
                   <InputLeftElement pointerEvents="none" />
                   <Input
                     type="email"
-                    placeholder="email address"
+                    placeholder="email"
                     {...register('email')}
                     aria-invalid={Boolean(errors.email)}
                   />
-                  <Box>
-                    <AlertInput>{errors?.email?.message}</AlertInput>
-                  </Box>
+                  {errors.email && (
+                    <Box>
+                      <AlertInput>{errors.email.message}</AlertInput>
+                    </Box>
+                  )}{' '}
                 </InputGroup>
               </FormControl>
               <FormControl>
@@ -144,18 +185,18 @@ export default function LoginPage() {
                 width="full"
                 disabled={isSubmitting || !isValid}
               >
-                Login
+                Register
               </Button>
             </Stack>
           </form>
         </Box>
       </Stack>
       <Box>
-        New to us?{' '}
-        <Link color="teal.500" href="/auth/register">
-          Register
+        Already joined?{' '}
+        <Link color="teal.500" href="/auth/login">
+          Login
         </Link>
-      </Box>
+      </Box>{' '}
     </>
   );
 }

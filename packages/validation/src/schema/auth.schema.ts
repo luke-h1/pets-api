@@ -7,15 +7,15 @@ export const loginPayload = {
 };
 
 export const registerPayload = {
-  body: z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    ...loginPayload,
-  }),
+  ...loginPayload,
+  firstName: z.string(),
+  lastName: z.string(),
 };
 
 export const createUserSchema = z.object({
-  ...registerPayload,
+  body: z.object({
+    ...registerPayload,
+  }),
 });
 
 export const loginUserSchema = z.object({

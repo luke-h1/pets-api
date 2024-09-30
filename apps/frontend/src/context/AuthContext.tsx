@@ -3,6 +3,7 @@
 import authService from '@frontend/services/authService';
 import { LoginUserInput } from '@validation/schema/auth.schema';
 import { User } from '@validation/schema/user.schema';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   createContext,
   ReactNode,
@@ -16,6 +17,10 @@ interface AuthContextState {
   user?: User;
   isAuth: boolean;
   ready: boolean;
+  login: (
+    input: LoginUserInput['body'],
+  ) => Promise<ReturnType<typeof authService.login>>;
+  logout: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextState | undefined>(
@@ -26,8 +31,14 @@ interface Props {
   children?: ReactNode;
 }
 
+const protectedRoutes = ['/pets/create', '/pets/[id]/edit', '/users/me'];
+
 export function AuthContextProvider({ children }: Props) {
-  const [state, setState] = useState<AuthContextState>({
+  const router = useRouter();
+  const pathname = usePathname();
+  const [state, setState] = useState<
+    Omit<AuthContextState, 'login' | 'logout'>
+  >({
     isAuth: false,
     user: undefined,
     ready: false,
@@ -37,6 +48,9 @@ export function AuthContextProvider({ children }: Props) {
     const result = await authService.isAuth();
     if (!result.isAuth) {
       setState({ isAuth: false, user: undefined, ready: true });
+      if (protectedRoutes.includes(pathname)) {
+        router.push('/auth/login');
+      }
     } else {
       const user = await authService.me();
       setState({ isAuth: true, user, ready: true });
@@ -47,6 +61,7 @@ export function AuthContextProvider({ children }: Props) {
     (async () => {
       await isAuth();
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const login = async (input: LoginUserInput['body']) => {
@@ -54,7 +69,9 @@ export function AuthContextProvider({ children }: Props) {
 
     if ('id' in result) {
       setState({ isAuth: true, user: result, ready: true });
+      return result;
     }
+    return result;
   };
 
   const logout = async () => {
