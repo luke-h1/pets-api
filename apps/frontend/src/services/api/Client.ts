@@ -8,7 +8,9 @@ import Axios, {
 import omit from 'lodash/omit';
 import qs from 'qs';
 
-export type RequestConfig = Omit<AxiosRequestConfig, 'method' | 'url'>;
+export type RequestConfig = Omit<AxiosRequestConfig, 'method' | 'url'> & {
+  cookie?: { name: string; value: string };
+};
 
 interface ClientRequestConfig extends RequestConfig {
   rawResponse?: false;
@@ -51,7 +53,15 @@ export default class Client {
     },
   ): Promise<TValue> {
     try {
+      // Check for cookie in config and set it
       const response = await this.axios(config);
+
+      console.log('response', response);
+      const cookieName = 'connect.sid';
+
+      const cookie = (response.headers['set-cookie'] as string[])
+        .find(cookie => cookie.includes(cookieName))
+        ?.match(new RegExp(`^${cookieName}=(.+?);`))?.[1];
 
       if ('rawResponse' in config && config.rawResponse) {
         return omit(response, ['config', 'request']) as TValue;
