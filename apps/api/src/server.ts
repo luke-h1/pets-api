@@ -70,7 +70,11 @@ class CreateServer {
     this.app.use(
       cors({
         credentials: true,
-        origin: ['http://localhost:3000'],
+        origin: [
+          'http://localhost:3000',
+          'https://ui-pets-staging.lhowsam.com',
+          '*',
+        ],
       }),
     );
     this.app.use(compression());
