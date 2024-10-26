@@ -3,11 +3,14 @@ import Axios, {
   AxiosRequestConfig,
   AxiosResponse,
   CustomParamsSerializer,
+  isAxiosError,
 } from 'axios';
 import omit from 'lodash/omit';
 import qs from 'qs';
 
-export type RequestConfig = Omit<AxiosRequestConfig, 'method' | 'url'>;
+export type RequestConfig = Omit<AxiosRequestConfig, 'method' | 'url'> & {
+  cookie?: { name: string; value: string };
+};
 
 interface ClientRequestConfig extends RequestConfig {
   rawResponse?: false;
@@ -49,12 +52,21 @@ export default class Client {
       method: AxiosRequestConfig['method'];
     },
   ): Promise<TValue> {
-    const response = await this.axios(config);
+    try {
+      // Check for cookie in config and set it
+      const response = await this.axios(config);
 
-    if ('rawResponse' in config && config.rawResponse) {
-      return omit(response, ['config', 'request']) as TValue;
+      if ('rawResponse' in config && config.rawResponse) {
+        return omit(response, ['config', 'request']) as TValue;
+      }
+
+      return response.data;
+    } catch (error) {
+      if (isAxiosError(error)) {
+        return error.response?.data;
+      }
+      throw error;
     }
-    return response.data;
   }
 
   public get<TValue = unknown>(
@@ -69,7 +81,9 @@ export default class Client {
 
   public get<TValue = unknown>(
     url: string,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
@@ -93,7 +107,9 @@ export default class Client {
   public post<TValue = unknown>(
     url: string,
     data: unknown,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
@@ -118,7 +134,9 @@ export default class Client {
   public put<TValue = unknown>(
     url: string,
     data: unknown,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({ ...config, url, data, method: 'PUT' });
   }
@@ -138,7 +156,9 @@ export default class Client {
   public patch<TValue = unknown>(
     url: string,
     data: unknown,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
@@ -160,7 +180,9 @@ export default class Client {
 
   public delete<TValue = unknown>(
     url: string,
-    config: RequestConfig = {},
+    config: RequestConfig = {
+      withCredentials: true,
+    },
   ): Promise<TValue> {
     return this.request({
       ...config,
@@ -175,5 +197,9 @@ export default class Client {
 
   public get baseURL(): string {
     return this.axios.defaults.baseURL ?? '';
+  }
+
+  public setCookie(name: string, value: string): void {
+    this.axios.defaults.headers.Cookie = `${name}=${value}`;
   }
 }

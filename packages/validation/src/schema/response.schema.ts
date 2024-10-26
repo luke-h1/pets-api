@@ -6,6 +6,16 @@ export const responseSchema = z.object({
   statusCode: z.number(),
   code: z.string(),
   message: z.string(),
-  errors: z.array(z.object({})).optional(),
+  errors: z
+    .array(
+      z.object({
+        code: z.string(),
+        expected: z.string(),
+        message: z.string(),
+        path: z.array(z.string()),
+        received: z.string(),
+      }),
+    )
+    .optional(),
 });
 export type ServerValidationError = z.infer<typeof responseSchema>;

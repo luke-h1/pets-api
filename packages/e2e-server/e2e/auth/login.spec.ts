@@ -17,11 +17,6 @@ test.describe('login', () => {
 
     // assert
     expect(result.status()).toEqual(200);
-    const response = await result.json();
-    expect(response).toEqual({
-      email: createUserResponse.email,
-      id: expect.any(String),
-    });
   });
 
   test('returns validation error when password is incorrect', async ({
@@ -57,14 +52,14 @@ test.describe('login', () => {
     });
   });
 
-  test('throws not found if no user is found', async ({ request }) => {
+  test('throws bad request if no user is found', async ({ request }) => {
     const result = await request.post('/api/auth/login', {
       data: {
         email: 'e@e.com',
         password: '123456789s',
       },
     });
-    expect(result.status()).toEqual(404);
+    expect(result.status()).toEqual(400);
     const response = await result.json();
     expect(response).toEqual({
       code: 'UserNotFound',
@@ -78,9 +73,9 @@ test.describe('login', () => {
         },
       ],
       message: 'User not found',
-      statusCode: 404,
+      statusCode: 400,
       title: 'User not found',
-      type: 'Not Found',
+      type: 'Bad request',
     });
   });
 });

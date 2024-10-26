@@ -25,7 +25,7 @@ function PetCard({ pet }: Props) {
           <Image src={pet.images[0]} borderRadius="lg" alt={pet.name} />
           <Stack mt="6" spacing="3">
             <Heading size="md">{pet.name}</Heading>
-            <Text>{pet.description}</Text>
+            <Text>{pet.description.slice(0, 60)}</Text>
             <Text color="blue.600" fontSize="2xl">
               Age: {pet.age}
             </Text>

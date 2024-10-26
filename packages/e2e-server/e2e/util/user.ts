@@ -18,9 +18,9 @@ export const createUser = async (
   const randomPassword = crypto.randomBytes(20).toString('hex');
 
   const u: CreateUserInput['body'] = {
-    firstName: `TEST_USER-${faker.person.firstName()}`,
-    lastName: `TEST_USER-${faker.person.lastName()}`,
-    email: `TEST_USER-${v4()}em@email.com`,
+    firstName: `TEST_USER-${faker.person.firstName()}-${faker.animal.bear()}`,
+    lastName: `TEST_USER-${faker.person.lastName()}-${faker.animal.bear()}`,
+    email: `TEST_USER-${v4()}@test-email.com`,
     password: randomPassword,
   };
 

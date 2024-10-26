@@ -2,10 +2,12 @@
 
 import { CacheProvider } from '@chakra-ui/next-js';
 import { ChakraProvider } from '@chakra-ui/react';
+import { AuthContextProvider } from '@frontend/context/AuthContext';
 import composeProviders from '@frontend/hocs/composeProviders';
 import {
   QueryClient,
   QueryClientProvider as BaseQueryClientProvider,
+  HydrationBoundary,
 } from '@tanstack/react-query';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import { MotionConfig as FramerMotionConfig } from 'framer-motion';
@@ -44,15 +46,22 @@ function QueryClientProvider({ children }: { children: ReactNode }) {
 
   return (
     <BaseQueryClientProvider client={queryClient}>
-      <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+      <HydrationBoundary queryClient={queryClient}>
+        <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+      </HydrationBoundary>
     </BaseQueryClientProvider>
   );
+}
+
+function AuthContext({ children }: { children: ReactNode }) {
+  return <AuthContextProvider>{children}</AuthContextProvider>;
 }
 
 const ComposedProviders = composeProviders(
   ThemeProvider,
   MotionConfig,
   QueryClientProvider,
+  AuthContext,
 );
 
 export default function Providers({ children }: Props) {
