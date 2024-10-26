@@ -76,7 +76,7 @@ export function AuthContextProvider({ children }: Props) {
   const login = async (input: LoginUserInput['body']) => {
     const result = await authService.login(input);
 
-    if ('id' in result) {
+    if (result && 'id' in result) {
       setState({ isAuth: true, user: result, ready: true });
       return result;
     }

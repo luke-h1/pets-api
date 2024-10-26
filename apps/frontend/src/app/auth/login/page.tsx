@@ -16,7 +16,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import AlertInput from '@frontend/components/form/AlertInput';
-import authService from '@frontend/services/authService';
+import { useAuthContext } from '@frontend/context/AuthContext';
 import toErrorMap from '@frontend/util/form/toErrorMap';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginPayload, LoginUserInput } from '@validation/schema/auth.schema';
@@ -27,6 +27,7 @@ import z from 'zod';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { login } = useAuthContext();
 
   const router = useRouter();
   const toast = useToast();
@@ -49,7 +50,7 @@ export default function LoginPage() {
   });
 
   const onSubmit: SubmitHandler<LoginUserInput['body']> = async data => {
-    const result = await authService.login(data);
+    const result = await login(data);
 
     if (result && 'errors' in result) {
       toast({

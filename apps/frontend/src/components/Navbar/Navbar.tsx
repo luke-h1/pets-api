@@ -66,7 +66,7 @@ function NavLink(link: NavigationLink) {
 
 export default function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isAuth, logout } = useAuthContext();
+  const { user, logout } = useAuthContext();
   const router = useRouter();
 
   return (
@@ -94,7 +94,7 @@ export default function Navbar() {
         </HStack>
 
         <Flex alignItems="center">
-          {isAuth ? (
+          {user ? (
             <Button
               variant="solid"
               colorScheme="teal"
@@ -116,7 +116,7 @@ export default function Navbar() {
             </Button>
           )}
 
-          {isAuth ? (
+          {user ? (
             <Menu>
               <MenuButton
                 as={Button}
