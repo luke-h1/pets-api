@@ -62,7 +62,7 @@ export default class AuthController {
     }
 
     if (result === authErrorCodes.UserNotFound) {
-      throw new NotFoundError({
+      throw new BadRequestError({
         code: authErrorCodes.UserNotFound,
         title: 'User not found',
         statusCode: 404,

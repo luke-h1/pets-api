@@ -84,6 +84,10 @@ export default class AuthService {
         id: true,
         password: true,
         email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        createdAt: true,
       },
     });
 

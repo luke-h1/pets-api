@@ -54,6 +54,7 @@
       }
     ],
     "import/prefer-default-export": "off",
+    "react/jsx-props-no-spreading": "off",
     "class-methods-use-this": "off",
     "react/react-in-jsx-scope": "off",
     "import/extensions": "off",

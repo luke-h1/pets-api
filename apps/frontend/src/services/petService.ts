@@ -22,7 +22,7 @@ const petService = {
     });
   },
 
-  getPet: (id: string): Promise<Pet | ServerValidationError> => {
+  getPet: (id: string): Promise<Pet> => {
     return petApi.get(`/pets/${id}`);
   },
   createPet: (input: CreatePetInput): Promise<Pet> => {

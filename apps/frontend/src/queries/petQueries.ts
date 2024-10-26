@@ -14,6 +14,12 @@ const petQueries = {
       queryFn: () => petService.listPets(query),
     };
   },
+  get(petId: string): UseQueryOptions<Pet> {
+    return {
+      queryKey: ['getPet', petId],
+      queryFn: () => petService.getPet(petId),
+    };
+  },
 } as const;
 
 export default petQueries;

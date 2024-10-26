@@ -1,5 +1,6 @@
 import { db } from '@api/db/prisma';
 import { authErrorCodes } from '@api/errors/auth';
+import { faker } from '@faker-js/faker';
 import { CreateUserInput } from '@validation/schema/auth.schema';
 import AuthService from '../auth.service';
 
@@ -44,7 +45,7 @@ describe('AuthService', () => {
   describe('login', () => {
     test('authenticates existing user', async () => {
       const user: CreateUserInput['body'] = {
-        email: 'bob@bob.com',
+        email: faker.internet.email(),
         firstName: 'bob',
         lastName: 'bob',
         password: 'password12345',
@@ -57,14 +58,18 @@ describe('AuthService', () => {
       });
 
       expect(result).toEqual({
-        email: 'bob@bob.com',
+        createdAt: expect.anything(),
+        email: user.email,
+        firstName: user.firstName,
         id: expect.any(String),
+        lastName: user.lastName,
+        role: 'USER',
       });
     });
 
     test(`throws ${authErrorCodes.InvalidCredentials} error if bad credentials are supplied`, async () => {
       const user: CreateUserInput['body'] = {
-        email: 'bob@bob.com',
+        email: faker.internet.email(),
         firstName: 'bob',
         lastName: 'bob',
         password: 'password12345',

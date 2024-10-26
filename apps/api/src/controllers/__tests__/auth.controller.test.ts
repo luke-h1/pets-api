@@ -85,23 +85,30 @@ describe('auth', () => {
         .send(u);
 
       expect(statusCode).toBe(200);
-      expect(body).toEqual({ id: expect.any(String), email: 'bob@email.com' });
+      expect(body).toEqual({
+        createdAt: expect.any(String),
+        email: user.email,
+        firstName: user.firstName,
+        id: expect.any(String),
+        lastName: user.lastName,
+        role: 'USER',
+      });
 
       expect(headers).toEqual({
-        'access-control-allow-origin': '*',
-        connection: expect.any(String),
+        'access-control-allow-credentials': 'true',
+        connection: 'close',
         'content-length': expect.any(String),
-        'content-type': expect.any(String),
+        'content-type': 'application/json; charset=utf-8',
         date: expect.any(String),
         etag: expect.any(String),
+        vary: expect.any(String),
         'set-cookie': expect.arrayContaining([
           expect.stringMatching(/^connect.sid=/),
         ]),
-        vary: 'Accept-Encoding',
       });
     });
 
-    test('throws not found if no user is found', async () => {
+    test('throws 400 if no user is found', async () => {
       const user: LoginRequest['body'] = {
         email: `${v4()}@email.com`,
         password: v4(),
@@ -123,11 +130,11 @@ describe('auth', () => {
           },
         ],
         message: 'User not found',
-        statusCode: 404,
+        statusCode: 400,
         title: 'User not found',
-        type: 'Not Found',
+        type: 'Bad request',
       });
-      expect(statusCode).toEqual(404);
+      expect(statusCode).toEqual(400);
     });
 
     test('throws 400 when invalid password is supplied', async () => {
@@ -186,13 +193,14 @@ describe('auth', () => {
       expect(statusCode).toBe(200);
 
       expect(headers).toEqual({
-        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true',
         connection: expect.any(String),
         date: expect.any(String),
         'set-cookie': [
           'connect.sid=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT',
         ],
         'transfer-encoding': 'chunked',
+        vary: 'Origin',
       });
     });
   });
@@ -223,7 +231,6 @@ describe('auth', () => {
 
     test('returns false if user is unauthenticated', async () => {
       const { body } = await supertest(app).get('/api/auth');
-
       expect(body).toEqual({ isAuth: false });
     });
   });
