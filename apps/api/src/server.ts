@@ -73,6 +73,7 @@ class CreateServer {
         origin: [
           'http://localhost:3000',
           'https://ui-pets-staging.lhowsam.com',
+          'https://branches.lhowsam.com',
           '*',
         ],
       }),
