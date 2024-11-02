@@ -24,13 +24,13 @@
     "tsc": "pnpm -r --aggregate-output --reporter=append-only --no-bail tsc"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@types/node": "^20.8.6",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
     "check-node-version": "^4.2.1",
-    "commitizen": "4.3.0",
+    "commitizen": "4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.52.0",
     "eslint-config-airbnb": "^19.0.4",
