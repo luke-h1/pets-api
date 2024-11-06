@@ -6,7 +6,6 @@ export const queryStringOptions: Omit<
 > = {
   arrayFormat: 'comma',
   comma: true,
-  // @ts-expect-error - Not in type declaration, just ignore it for now.
   commaRoundTrip: true,
   encodeValuesOnly: true,
 };
