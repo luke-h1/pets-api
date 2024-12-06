@@ -49,17 +49,25 @@ export default function Header() {
     <>
       <header className={styles.header}>
         <div className={styles.container}>
-          <Link href="/" className={styles.logo}>
-            <Image
-              alt="pet logo"
-              src="/pet-logo.jpg"
-              placeholder="blur"
-              blurDataURL="/pet-logo.jpg"
-              width="45"
-              height="45"
-              priority
-            />
-          </Link>
+          <div
+            style={{
+              maxWidth: '45px',
+              maxHeight: '45px',
+            }}
+          >
+            <Link href="/" className={styles.logo}>
+              <Image
+                alt="pet logo"
+                src="/pet-logo.jpg"
+                placeholder="blur"
+                blurDataURL="/pet-logo.jpg"
+                width="45"
+                height="45"
+                priority
+              />
+            </Link>
+          </div>
+
           <nav className={styles.nav}>
             <ol className={styles.links}>
               {headerLinks.map(link => (
