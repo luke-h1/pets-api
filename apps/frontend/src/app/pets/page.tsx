@@ -1,6 +1,5 @@
 'use client';
 
-import { Heading, Box, Grid, Spinner, Stack, Text } from '@chakra-ui/react';
 import Page from '@frontend/components/Page/Page';
 import Pagination from '@frontend/components/Pagination';
 import PetCard from '@frontend/components/PetCard';
@@ -10,6 +9,7 @@ import { SortOrder } from '@frontend/services/petService';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import styles from './Pets.module.scss';
 
 function PetsContent() {
   const router = useRouter();
@@ -57,9 +57,9 @@ function PetsContent() {
   if (isLoading || isFetching) {
     return (
       <Page>
-        <Stack>
-          <Spinner size="xl" />
-        </Stack>
+        <div className={styles.stack}>
+          <div className={styles.spinner} />
+        </div>
       </Page>
     );
   }
@@ -71,15 +71,13 @@ function PetsContent() {
   return (
     <Suspense fallback={<p>loading</p>}>
       <Page>
-        <Heading as="h1" marginBottom={2}>
-          Pets
-        </Heading>
-        <Text fontSize="large" marginBottom="0.75rem">
+        <h1 className={styles.heading}>Pets</h1>
+        <p className={styles.text}>
           {paging?.totalResults} Total{' '}
           {paging?.totalResults === 1 ? 'result' : 'results'}
-        </Text>
+        </p>
 
-        <Box maxW={200}>
+        <div className={styles.sortControlsContainer}>
           {pets && pets.length > 0 && (
             <SortControls
               onChange={e => {
@@ -100,16 +98,14 @@ function PetsContent() {
               ]}
             />
           )}
-        </Box>
+        </div>
 
-        <Box paddingY="1rem">
-          <Grid templateColumns="repeat(auto-fill, minmax(200px, 1fr))" gap={6}>
-            {pets && pets.map(p => <PetCard pet={p} key={p.id} />)}
-          </Grid>
-        </Box>
-        <Box marginBottom="1rem">
+        <div className={styles.grid}>
+          {pets && pets.map(p => <PetCard pet={p} key={p.id} />)}
+        </div>
+        <div className={styles.paginationContainer}>
           <Pagination paging={paging} />
-        </Box>
+        </div>
       </Page>
     </Suspense>
   );

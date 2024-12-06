@@ -1,7 +1,5 @@
 'use client';
 
-import { CacheProvider } from '@chakra-ui/next-js';
-import { ChakraProvider } from '@chakra-ui/react';
 import { AuthContextProvider } from '@frontend/context/AuthContext';
 import composeProviders from '@frontend/hocs/composeProviders';
 import {
@@ -11,6 +9,7 @@ import {
 } from '@tanstack/react-query';
 import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental';
 import { MotionConfig as FramerMotionConfig } from 'framer-motion';
+import { ThemeProvider as NextThemeProvider } from 'next-themes';
 import { ReactNode, useState } from 'react';
 
 interface Props {
@@ -19,9 +18,7 @@ interface Props {
 
 function ThemeProvider({ children }: { children: ReactNode }) {
   return (
-    <CacheProvider>
-      <ChakraProvider>{children}</ChakraProvider>
-    </CacheProvider>
+    <NextThemeProvider defaultTheme="system">{children}</NextThemeProvider>
   );
 }
 

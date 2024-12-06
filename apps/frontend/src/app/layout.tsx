@@ -1,3 +1,4 @@
+import '@frontend/styles/global.scss';
 import Providers from '@frontend/components/Providers';
 import type { Metadata } from 'next';
 

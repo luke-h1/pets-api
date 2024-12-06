@@ -1,65 +1,34 @@
 'use client';
 
-import {
-  Button,
-  Heading,
-  Icon,
-  Link,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
 import Page from '@frontend/components/Page/Page';
 import { FiArrowUpRight } from 'react-icons/fi';
+import styles from './Home.module.scss';
 
 export default function Home() {
   return (
     <Page>
-      <Stack
-        as="section"
-        alignItems="center"
-        direction={{ base: 'column-reverse', md: 'row' }}
-        w="full"
-        spacing={12}
-      >
-        <VStack alignItems="flex-start" w="full" spacing={3}>
-          <Stack
-            alignItems="center"
-            justifyContent={{ base: 'center', md: 'flex-start' }}
-            direction={{ base: 'column', md: 'row' }}
-            w="full"
-            spacing={3}
-          >
-            <Heading as="h1" size="lg">
-              Welcome to Pets
-            </Heading>
-          </Stack>
-          <Text as="h2" lineHeight="175%">
-            Pets is a pet adoption platform
-          </Text>
-          <Stack direction={{ base: 'column', md: 'row' }} spacing={3}>
-            <Button
-              as={Link}
-              justifyContent={{ base: 'flex-start', md: 'center' }}
-              px={4}
+      <section className={styles.section}>
+        <div className={styles.flex}>
+          <div className={styles.headingContainer}>
+            <h1 className={styles.heading}>Welcome to Pets</h1>
+          </div>
+          <h2 className={styles.subheading}>Pets is a pet adoption platform</h2>
+          <div className={styles.buttonContainer}>
+            <a
+              className={`${styles.button} ${styles.ghostButton}`}
               href="https://github.com/luke-h1/pets-api"
-              rightIcon={<Icon as={FiArrowUpRight} />}
-              variant="ghost"
             >
-              Github
-            </Button>
-            <Button
-              as={Link}
-              justifyContent={{ base: 'flex-start', md: 'center' }}
-              px={4}
+              Github <FiArrowUpRight className={styles.icon} />
+            </a>
+            <a
+              className={`${styles.button} ${styles.ghostButton}`}
               href="/pets"
-              variant="ghost"
             >
               View pets
-            </Button>
-          </Stack>
-        </VStack>
-      </Stack>
+            </a>
+          </div>
+        </div>
+      </section>
     </Page>
   );
 }
