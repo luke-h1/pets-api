@@ -1,8 +1,8 @@
 'use client';
 
-import { Flex, Button } from '@chakra-ui/react';
 import { Paging } from '@frontend/services/types/pagination';
 import { useRouter, useSearchParams } from 'next/navigation';
+import styles from './Pagination.module.scss';
 
 interface Props {
   paging: Paging;
@@ -31,65 +31,65 @@ function Pagination({ paging }: Props) {
 
     if (startPage > 1) {
       pageNumbers.push(
-        <Button
+        <button
           key={1}
           onClick={() => handlePageChange(1)}
-          variant={currentPage === 1 ? 'solid' : 'outline'}
-          mx={1}
+          className={`${styles.button} ${currentPage === 1 ? styles.active : ''}`}
           aria-current={currentPage === 1 ? 'page' : undefined}
+          type="button"
         >
           1
-        </Button>,
+        </button>,
       );
       if (startPage > 2) {
         pageNumbers.push(
-          <Button
+          <button
             key="start-ellipsis"
             onClick={() => handlePageChange(startPage - 1)}
-            variant="outline"
-            mx={1}
+            className={styles.button}
+            type="button"
           >
             ...
-          </Button>,
+          </button>,
         );
       }
     }
 
     for (let i = startPage; i <= endPage; i += 1) {
       pageNumbers.push(
-        <Button
+        <button
           key={i}
           onClick={() => handlePageChange(i)}
-          variant={currentPage === i ? 'solid' : 'outline'}
-          mx={1}
+          className={`${styles.button} ${currentPage === i ? styles.active : ''}`}
+          type="button"
         >
           {i}
-        </Button>,
+        </button>,
       );
     }
 
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
         pageNumbers.push(
-          <Button
+          <button
             key="end-ellipsis"
             onClick={() => handlePageChange(endPage + 1)}
-            variant="outline"
-            mx={1}
+            className={styles.button}
+            type="button"
           >
             ...
-          </Button>,
+          </button>,
         );
       }
       pageNumbers.push(
-        <Button
+        <button
           key={totalPages}
           onClick={() => handlePageChange(totalPages)}
-          variant={currentPage === totalPages ? 'solid' : 'outline'}
-          mx={1}
+          className={`${styles.button} ${currentPage === totalPages ? styles.active : ''}`}
+          type="button"
         >
           {totalPages}
-        </Button>,
+        </button>,
       );
     }
 
@@ -98,29 +98,29 @@ function Pagination({ paging }: Props) {
 
   if (paging.totalPages > 1) {
     return (
-      <Flex justifyContent="center" mt={8}>
-        <Flex gap={4} alignItems="center">
+      <div className={styles.paginationContainer}>
+        <div className={styles.pagination}>
           {currentPage > 1 && (
-            <Button
+            <button
               onClick={() => handlePageChange(currentPage - 1)}
-              variant="outline"
-              mx={1}
+              className={styles.button}
+              type="button"
             >
               Previous
-            </Button>
+            </button>
           )}
           {renderPageNumbers()}
           {currentPage < totalPages && (
-            <Button
+            <button
               onClick={() => handlePageChange(currentPage + 1)}
-              variant="outline"
-              mx={1}
+              className={styles.button}
+              type="button"
             >
               Next
-            </Button>
+            </button>
           )}
-        </Flex>
-      </Flex>
+        </div>
+      </div>
     );
   }
   return null;

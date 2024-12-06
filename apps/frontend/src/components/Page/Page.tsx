@@ -1,20 +1,29 @@
-import { Box } from '@chakra-ui/react';
 import { ReactNode } from 'react';
-import Navbar from '../Navbar/Navbar';
+import Footer from '../Footer';
+import Header from '../Header';
+import PageTransition from '../PageTransition';
+import styles from './Page.module.scss';
 
 interface Props {
   children: ReactNode;
+  showHeader?: boolean;
+  showFooter?: boolean;
 }
 
-export default function Page({ children }: Props) {
+export default function Page({
+  children,
+  showFooter = true,
+  showHeader = true,
+}: Props) {
   return (
-    <Box>
-      <Navbar />
-      <Box marginX="auto" paddingX="6" maxW="8xl">
-        <Box as="main" id="content" position="relative" zIndex={1} paddingY={6}>
-          {children}
-        </Box>
-      </Box>
-    </Box>
+    <div className={styles.container}>
+      {showHeader && <Header />}
+
+      <main className={styles.main}>
+        <PageTransition>{children}</PageTransition>
+      </main>
+
+      {showFooter && <Footer />}
+    </div>
   );
 }

@@ -48,7 +48,7 @@ export function AuthContextProvider({ children }: Props) {
   const isAuth = async () => {
     const result = await authService.isAuth();
 
-    if (result.isAuth) {
+    if (result && result.isAuth) {
       const user = await authService.me();
       setState({ isAuth: true, user, ready: true });
     }

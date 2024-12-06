@@ -37,6 +37,9 @@ const petService = {
   deletePet: (id: string): Promise<void> => {
     return petApi.delete(`/pets/${id}`);
   },
+  searchPets: (text: string): Promise<{ results: Pet[] }> => {
+    return petApi.get(`/pets/search?name=${text}`);
+  },
 } as const;
 
 export default petService;

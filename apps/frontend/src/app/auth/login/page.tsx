@@ -1,21 +1,6 @@
 'use client';
 
-import {
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  FormControl,
-  Heading,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Link,
-  Stack,
-  useToast,
-} from '@chakra-ui/react';
-import AlertInput from '@frontend/components/form/AlertInput';
+import Page from '@frontend/components/Page/Page';
 import { useAuthContext } from '@frontend/context/AuthContext';
 import toErrorMap from '@frontend/util/form/toErrorMap';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,13 +9,13 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Path, SubmitHandler, useForm } from 'react-hook-form';
 import z from 'zod';
+import styles from './LoginPage.module.scss';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { login } = useAuthContext();
 
   const router = useRouter();
-  const toast = useToast();
 
   const handleShowClick = () => {
     setShowPassword(!showPassword);
@@ -53,15 +38,6 @@ export default function LoginPage() {
     const result = await login(data);
 
     if (result && 'errors' in result) {
-      toast({
-        title: 'Login',
-        description: 'Error logging in',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-        colorScheme: 'red',
-      });
-
       const formattedErrors = toErrorMap(result.errors);
 
       if (formattedErrors) {
@@ -71,92 +47,76 @@ export default function LoginPage() {
       }
     } else {
       setTimeout(() => {
-        toast({
-          title: 'Login',
-          description: 'Login succesfull!...',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
         router.push('/pets');
       }, 3000);
     }
   };
 
   return (
-    <>
-      <Stack
-        flexDir="column"
-        mb="2"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Avatar bg="teal.500" />
-        <Heading color="teal.400">Login</Heading>
-        <Box minW={{ base: '90%', md: '468px' }}>
+    <Page>
+      <div className={styles.stack}>
+        <div className={styles.avatar} />
+        <h1 className={styles.heading}>Login</h1>
+        <div className={styles.box}>
           {Boolean(Object.keys(errors)?.length) && (
-            <Alert backgroundColor="red" color="#ececee">
-              There are errors in the form.
-            </Alert>
+            <div className={styles.alert}>There are errors in the form.</div>
           )}
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Stack
-              spacing={4}
-              p="1rem"
-              backgroundColor="whiteAlpha.900"
-              boxShadow="md"
-            >
-              <FormControl>
-                <InputGroup display="flex" flexDir="column">
-                  <InputLeftElement pointerEvents="none" />
-                  <Input
+            <div className={styles.stack}>
+              <div className={styles.formControl}>
+                <div className={styles.inputGroup}>
+                  <input
                     type="email"
                     placeholder="email address"
                     {...register('email')}
                     aria-invalid={Boolean(errors.email)}
+                    className={styles.input}
                   />
-                  <Box>
-                    <AlertInput>{errors?.email?.message}</AlertInput>
-                  </Box>
-                </InputGroup>
-              </FormControl>
-              <FormControl>
-                <InputGroup display="flex" flexDir="column">
-                  <InputLeftElement pointerEvents="none" color="gray.300" />
-                  <Input
+                  <div className={styles.alertInput}>
+                    {errors?.email?.message}
+                  </div>
+                </div>
+              </div>
+              <div className={styles.formControl}>
+                <div className={styles.inputGroup}>
+                  <input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Password"
                     {...register('password')}
                     aria-invalid={Boolean(errors.password)}
+                    className={styles.input}
                   />
-                  <AlertInput>{errors?.password?.message}</AlertInput>
-                  <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleShowClick}>
+                  <div className={styles.alertInput}>
+                    {errors?.password?.message}
+                  </div>
+                  <div className={styles.inputRightElement}>
+                    <button
+                      type="button"
+                      onClick={handleShowClick}
+                      className={styles.showButton}
+                    >
                       {showPassword ? 'Hide' : 'Show'}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Button
-                borderRadius={0}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <button
                 type="submit"
-                variant="solid"
-                colorScheme="teal"
-                width="full"
+                className={styles.submitButton}
                 disabled={isSubmitting || !isValid}
               >
                 Login
-              </Button>
-            </Stack>
+              </button>
+            </div>
           </form>
-        </Box>
-      </Stack>
-      <Box>
+        </div>
+      </div>
+      <div className={styles.registerLink}>
         New to us?{' '}
-        <Link color="teal.500" href="/auth/register">
+        <a href="/auth/register" className={styles.link}>
           Register
-        </Link>
-      </Box>
-    </>
+        </a>
+      </div>
+    </Page>
   );
 }

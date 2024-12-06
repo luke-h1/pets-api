@@ -1,6 +1,6 @@
 'use client';
 
-import { Select } from '@chakra-ui/react';
+import styles from './SortControls.module.scss';
 
 const petSortOptions = ['asc', 'desc'] as const;
 
@@ -25,19 +25,22 @@ export default function SortControls({
   selected = false,
 }: Props) {
   return (
-    <Select
-      placeholder="Sort order"
+    <select
+      className={styles.sortSelect}
       value={sortBy}
       name="sortBy"
       aria-label="sort by"
       onChange={e => onChange(e.target.value as PetSortOption)}
     >
+      <option value="" disabled>
+        Sort order
+      </option>
       {options.map((option, idx) => (
         // eslint-disable-next-line react/no-array-index-key
         <option value={option.value} key={idx} selected={selected}>
           {option.label}
         </option>
       ))}
-    </Select>
+    </select>
   );
 }
