@@ -221,6 +221,7 @@ jobs:
 
       - name: Migrate database
         run: DATABASE_URL=${{ secrets.DATABASE_URL }} pnpm db:migrate-prod
+        working-directory: apps/api
 
   deploy-infra:
     name: Deploy infrastructure
