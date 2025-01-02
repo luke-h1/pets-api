@@ -1,7 +1,11 @@
-resource "aws_ecr_repository" "ecr_repo" {
-  name = "${var.project_name}-${var.env}-ecr-repo"
+resource "aws_ecr_repository" "application_ecr_repo" {
+  name = var.project_name
+
   # required if we need to do a full teardown
   force_delete = true
+  image_scanning_configuration {
+    scan_on_push = true
+  }
 
   tags = merge(var.tags, {
     "Name" = "${var.project_name}-${var.env}-ecr-repo"
@@ -9,8 +13,8 @@ resource "aws_ecr_repository" "ecr_repo" {
 }
 
 # keep last 10 images
-resource "aws_ecr_lifecycle_policy" "ecr_repo_policy" {
-  repository = aws_ecr_repository.ecr_repo.name
+resource "aws_ecr_lifecycle_policy" "application_ecr_repo_policy" {
+  repository = aws_ecr_repository.application_ecr_repo.name
   policy     = <<EOF
   {
     "rules": [
