@@ -29,7 +29,7 @@ Server:
 - [supertest](https://www.npmjs.com/package/supertest) - Integration testing
 - [Playwright](https://playwright.dev/) - end-to-end testing
 - [Docker](https://www.docker.com/) - Containerization and deployment
-- [AWS](https://aws.amazon.com/) - Cloud provider (ECR, ECS, ELB, Route 53)
+- [AWS](https://aws.amazon.com/) - Cloud provider (App runner, ECR, Route 53)
 - [Terraform](https://www.terraform.io/) - Infrastructure as code
 
 Frontend:
@@ -42,7 +42,6 @@ Frontend:
 
 | Environment | API                                   | Frontend                            |
 | ----------- | ------------------------------------- | ----------------------------------- |
-| Production  | TBD                                   | TBD                                 |
 | Staging     | https://pets-staging.lhowsam.com/docs | https://ui-pets-staging.lhowsam.com |
 
 ## Getting Started
