@@ -1,6 +1,9 @@
-name: Deploy to staging (aws)
+name: Deploy to staging AWS
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 env:
   TERRAFORM_ROOT: terraform
   DOCKER_ENV: production
@@ -23,6 +26,7 @@ env:
   TF_VAR_s3_assets_secret_access_key: ${{ secrets.ASSETS_SECRET }}
   TF_VAR_git_sha: ${{ github.sha }}
   TF_VAR_session_domain: pets-staging.lhowsam.com
+
   # needed for tests
   S3_ASSETS_BUCKET: pets-api-staging-assets
   S3_ASSETS_REGION: eu-west-2
@@ -178,9 +182,29 @@ jobs:
            -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.TF_VAR_docker_image_tag }} -f Dockerfile .
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.TF_VAR_docker_image_tag }}
 
+  get-current-version:
+    name: Get current API version
+    needs: [build-and-push-docker]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Get current version
+        run: |
+          response=$(curl -s https://pets-staging.lhowsam.com/api/version)
+          echo "Response: $response"
+          gitSha=$(echo $response | jq -r '.gitSha')
+          echo "gitSha: $gitSha"
+          echo "GIT_SHA=$gitSha" >> $GITHUB_ENV
+
   migrate-db:
     name: Migrate database
-    needs: [build-and-push-docker]
+    needs: [build-and-push-docker, get-current-version]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     concurrency:
@@ -251,13 +275,44 @@ jobs:
         run: terraform apply ./app.out
         working-directory: ${{ env.TERRAFORM_ROOT }}
 
-      # TODO: add a script that polls /version
-      # and looks for the GIT_SHA to match what we have in ci
-      # so we know when the containers
-      # have finished swapping over during
-      # blue green deployment rollouts
-      # otherwise we'll be testing the old container :)
-      # - name: e2e-staging
-      #   uses: ./.github/actions/e2e
-      #   with:
-      #     target: e2e-staging
+  staging-e2e:
+    name: Staging e2e tests
+    needs: [get-current-version, deploy-infra]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Install moreutils
+        run: sudo apt install moreutils
+
+      # https://github.com/actions/virtual-environments/issues/1187
+      - name: tune linux network
+        run: sudo ethtool -K eth0 tx off rx off
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+
+      - name: Check for new version
+        id: check_version
+        run: |
+          while true; do
+            response=$(curl -s https://pets-staging.lhowsam.com/api/version)
+            echo "Response: $response"
+            newGitSha=$(echo $response | jq -r '.gitSha')
+            echo "newGitSha: $newGitSha"
+            if [ "$newGitSha" != "${{ env.GIT_SHA }}" ]; then
+              echo "New version detected: $newGitSha"
+              echo "NEW_GIT_SHA=$newGitSha" >> $GITHUB_ENV
+              echo "running e2e tests"
+              break
+            fi
+            echo "No new version detected. Retrying in 5 seconds..."
+            sleep 5
+          done
+
+      - name: e2e staging
+        uses: ./.github/actions/e2e
+        with:
+          target: e2e-staging

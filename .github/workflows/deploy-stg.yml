@@ -1,9 +1,6 @@
 name: Deploy to staging (fly.io & cloudflare pages)
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 env:
   DATABASE_URL: postgres://pets:pets@localhost:5432/pets
   S3_ASSETS_BUCKET: pets-api-staging-assets
