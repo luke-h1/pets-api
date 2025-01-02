@@ -90,7 +90,7 @@ resource "aws_apprunner_service" "app_runner_service" {
           MY_VARIABLE = "hello!"
         }
       }
-      image_identifier      = "${aws_ecr_repository.application_ecr_repo.repository_url}:${var.docker_image_tag}"
+      image_identifier      = "${aws_ecr_repository.ecr_repo.repository_url}:${var.docker_image_tag}"
       image_repository_type = "ECR"
     }
   }
