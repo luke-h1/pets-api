@@ -179,7 +179,7 @@ jobs:
         run: |
           docker build \
            --build-arg NODE_ENV=${{ env.DOCKER_ENV }} \
-           -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.TF_VAR_docker_image_tag }} -f Dockerfile .
+           -t $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.TF_VAR_docker_image_tag }} -f docker/api/Dockerfile .
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:${{ env.TF_VAR_docker_image_tag }}
 
   get-current-version:
