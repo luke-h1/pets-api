@@ -17,24 +17,6 @@ resource "aws_default_subnet" "application_subnet_c" {
   availability_zone = "eu-west-2c"
 }
 
-resource "aws_security_group" "sg" {
-  name   = "${var.project_name}-${var.env}-app-runner-security-group"
-  vpc_id = aws_default_vpc.default_vpc.id
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_iam_role" "app_runner_role" {
   name = "app-runner-poc"
 
@@ -122,13 +104,3 @@ resource "aws_apprunner_service" "app_runner_service" {
   }
 }
 
-resource "aws_apprunner_vpc_connector" "app_runner_vpc_connector" {
-  vpc_connector_name = "${var.project_name}-vpc-connector"
-  subnets = [
-    aws_default_subnet.application_subnet_a.id,
-    aws_default_subnet.application_subnet_b.id,
-    aws_default_subnet.application_subnet_c.id
-  ]
-  security_groups = [aws_security_group.sg.id]
-
-}
